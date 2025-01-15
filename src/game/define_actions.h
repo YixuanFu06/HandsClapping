@@ -4,7 +4,44 @@
 
 namespace Game {
 
-enum ActionName { PRODUCE, PISTOL, CHOP_CROSS, ICEAGE };
+enum ActionName {
+  PRODUCE,
+  PISTOL,
+  CHOP_HORIZONTAL,
+  CHOP_VERTICAL,
+  CHOP_INCLINE1,
+  CHOP_INCLINE2,
+  CHOP_UPPER,
+  CHOP_LOWER,
+  CHOP_LEFT,
+  CHOP_RIGHT,
+  VISION,
+  HAMMER,
+  HAWKEYE,
+  CHOP_CROSS,
+  ICEAGE,
+  EARTHQUAKE,
+  EDITH,
+  DOOMSDAY,
+  SHIELD,
+  REMOTE_SHIELD,
+  DODGE_UPLEFT,
+  DODGE_UPMID,
+  DODGE_UPRIGHT,
+  DODGE_GROUNDLEFT,
+  DODGE_GROUNDMID,
+  DODGE_GROUNDRIGHT,
+  DODGE_DOWNLEFT,
+  DODGE_DOWNMID,
+  DODGE_DOWNRIGHT,
+  ARTIFACT_SOUL,
+  ARTIFACT_TIME,
+  ARTIFACT_SPACE,
+  ARTIFACT_MIND,
+  ARTIFACT_REALITY,
+  ARTIFACT_STRENGTH,
+  DUPLICATOR
+};
 
 std::vector<Action> actions;
 
@@ -40,8 +77,10 @@ void DefineAction(float energy,
                   ActionType type,
                   uint32_t id);
 
-void DefineAction(float dodge_position_, uint32_t id_);
+void DefineAction(float energy, float effect, uint32_t id);
 
-void DefineAction(float energy, float damage, uint32_t id);
+void DefineAction(PlayerPosition dodge_position, uint32_t id);
+
+void DefineAction(float energy, uint32_t id);
 
 }  // namespace Game

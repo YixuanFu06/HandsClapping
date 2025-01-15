@@ -1,14 +1,51 @@
 #include "define_actions.h"
 
+#include <cmath>
+
 #include "action.h"
 
 namespace Game {
 
 void InitActions() {
   DefineAction(-1, 0, PRODUCE);
-  DefineAction(1, 1, ActionType::ATTACK, PISTOL);
-  DefineAction(4, {0, 1, 0, 1, 2, 1, 0, 1, 0}, ActionType::ATTACK, CHOP_CROSS);
-  DefineAction(4, 1, {0, 1, 2, 3, 4, 5}, ActionType::ATTACK, ICEAGE);
+  DefineAction(1, 1, ATTACK, PISTOL);
+  DefineAction(2, 1, {3, 4, 5}, ATTACK, CHOP_HORIZONTAL);
+  DefineAction(2, 1, {1, 4, 7}, ATTACK, CHOP_VERTICAL);
+  DefineAction(2, 1, {0, 4, 8}, ATTACK, CHOP_INCLINE1);
+  DefineAction(2, 1, {2, 4, 6}, ATTACK, CHOP_INCLINE2);
+  DefineAction(2, 1, {0, 1, 2}, ATTACK, CHOP_UPPER);
+  DefineAction(2, 1, {6, 7, 8}, ATTACK, CHOP_LOWER);
+  DefineAction(2, 1, {0, 3, 6}, ATTACK, CHOP_LEFT);
+  DefineAction(2, 1, {2, 5, 8}, ATTACK, CHOP_RIGHT);
+  DefineAction(2, 1, {0, 1, 2, 4}, 1, {0, 1, 2, 4}, ATTACK, VISION);
+  DefineAction(2, 1, {4, 6, 7, 8}, 1, {4, 6, 7, 8}, ATTACK, HAMMER);
+  DefineAction(4, {1, 1, 1, 1, 0, 1, 1, 1, 1}, {1, 1, 1, 1, 0, 1, 1, 1, 1},
+               ATTACK, HAWKEYE);
+  DefineAction(4, {0, 1, 0, 1, 2, 1, 0, 1, 0}, ATTACK, CHOP_CROSS);
+  DefineAction(4, 1, {0, 1, 2, 3, 4, 5}, ATTACK, ICEAGE);
+  DefineAction(4, 1, {3, 4, 5, 6, 7, 8}, ATTACK, EARTHQUAKE);
+  DefineAction(5, std::pow(10, 5), {0, 1, 2, 3, 4, 5, 6, 7, 8}, std::pow(10, 5),
+               {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, EDITH);
+  DefineAction(10, std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8},
+               std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, DOOMSDAY);
+  DefineAction(0, -1, SHIELD);
+  DefineAction(1, -2, REMOTE_SHIELD);
+  DefineAction(UpLeft, DODGE_UPLEFT);
+  DefineAction(UpMid, DODGE_UPMID);
+  DefineAction(UpRight, DODGE_UPRIGHT);
+  DefineAction(GroundLeft, DODGE_GROUNDLEFT);
+  DefineAction(GroundMid, DODGE_GROUNDMID);
+  DefineAction(GroundRight, DODGE_GROUNDRIGHT);
+  DefineAction(DownLeft, DODGE_DOWNLEFT);
+  DefineAction(DownMid, DODGE_DOWNMID);
+  DefineAction(DownRight, DODGE_DOWNRIGHT);
+  DefineAction(2, ARTIFACT_SOUL);
+  DefineAction(2, ARTIFACT_TIME);
+  DefineAction(2, ARTIFACT_SPACE);
+  DefineAction(2, ARTIFACT_MIND);
+  DefineAction(4, ARTIFACT_REALITY);
+  DefineAction(3, ARTIFACT_STRENGTH);
+  DefineAction(3, DUPLICATOR);
 }
 
 void DefineAction(float energy,
@@ -57,12 +94,16 @@ void DefineAction(float energy,
   actions.push_back(Action(energy, damage, range, type, id));
 }
 
-void DefineAction(float dodge_position_, uint32_t id_) {
-  actions.push_back(Action(dodge_position_, id_));
+void DefineAction(float energy, float effect, uint32_t id) {
+  actions.push_back(Action(energy, effect, id));
 }
 
-void DefineAction(float energy, float damage, uint32_t id) {
-  actions.push_back(Action(energy, damage, id));
+void DefineAction(PlayerPosition dodge_position, uint32_t id) {
+  actions.push_back(Action(dodge_position, id));
+}
+
+void DefineAction(float energy, uint32_t id) {
+  actions.push_back(Action(energy, id));
 }
 
 }  // namespace Game

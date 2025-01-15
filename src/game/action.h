@@ -6,10 +6,11 @@
 #include <vector>
 
 #include "battle_field.h"
+#include "player.h"
 
 namespace Game {
 
-enum class ActionType { ATTACK, DEFEND, DODGE, EQUIP };
+enum ActionType { ATTACK, DEFEND, DODGE, EQUIP };
 
 class Action {
  private:
@@ -49,9 +50,11 @@ class Action {
          ActionType type,
          uint32_t id);
 
-  Action(float dodge_position_, uint32_t id_);
+  Action(float energy, float effect, uint32_t id);
 
-  Action(float energy, float damage, uint32_t id);
+  Action(PlayerPosition dodge_position, uint32_t id);
+
+  Action(float energy, uint32_t id);
 
   inline float GetEnergy();
   inline void SetEnergy(float energy);

@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "player.h"
-
 namespace Game {
 
 Action::Action(float energy,
@@ -109,16 +107,22 @@ Action::Action(float energy,
   id_ = id;
 }
 
-Action::Action(float dodge_position, uint32_t id) {
+Action::Action(float energy, float effect, uint32_t id) {
+  energy_ = energy;
+  effect_.resize(POSITION_NUM, 0.0f);
+  effect_[CENTER] = effect;
+  type_ = ActionType::DEFEND;
+  id = id_;
+}
+
+Action::Action(PlayerPosition dodge_position, uint32_t id) {
   dodge_position_ = dodge_position;
   type_ = ActionType::DODGE;
   id_ = id;
 }
 
-Action::Action(float energy, float damage, uint32_t id) {
+Action::Action(float energy, uint32_t id) {
   energy_ = energy;
-  damage_.resize(POSITION_NUM, 0.0f);
-  damage_[CENTER] = damage;
   type_ = ActionType::EQUIP;
   id_ = id;
 }
