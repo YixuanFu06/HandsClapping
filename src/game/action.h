@@ -4,20 +4,35 @@
 
 #include <cstdint>
 #include <vector>
-
-#include "battle_field.h"
-#include "player.h"
+#include <cmath>
+#include <iostream>
 
 namespace Game {
 
 enum ActionType { ATTACK, DEFEND, DODGE, EQUIP };
+
+uint32_t DIMENSION = 2;
+uint32_t POSITION_NUM = std::pow(3, DIMENSION);
+uint32_t CENTER = POSITION_NUM / 2;
+
+enum PlayerPosition {
+  UpLeft = 0,
+  UpMid = 1,
+  UpRight = 2,
+  GroundLeft = 3,
+  GroundMid = 4,
+  GroundRight = 5,
+  DownLeft = 6,
+  DownMid = 7,
+  DownRight = 8
+};
 
 class Action {
  private:
   float energy_;
   std::vector<float> damage_;
   std::vector<float> effect_;
-  uint32_t dodge_position_;
+  PlayerPosition dodge_position_;
 
   ActionType type_;
   uint32_t id_;
@@ -56,12 +71,20 @@ class Action {
 
   Action(float energy, uint32_t id);
 
-  inline float GetEnergy();
-  inline void SetEnergy(float energy);
+  inline float GetEnergy() { return energy_; }
+  inline void SetEnergy(float energy) { energy_ = energy; }
 
-  inline float GetDamage(int position);
+  inline float GetDamage(int position) { return damage_[position]; }
 
-  inline float GetEffect(int position);
+  inline float GetEffect(int position) { return effect_[position]; }
+
+  inline PlayerPosition GetDodgePosition() { return dodge_position_; }
+
+  inline ActionType GetType() { return type_; }
+
+  inline uint32_t GetId() { return id_; }
+
+  void PrintAction();
 };
 
 }  // namespace Game

@@ -5,6 +5,7 @@
 namespace Game {
 
 enum ActionName {
+  NONE,
   PRODUCE,
   PISTOL,
   CHOP_HORIZONTAL,
@@ -25,6 +26,7 @@ enum ActionName {
   DOOMSDAY,
   SHIELD,
   REMOTE_SHIELD,
+  REBOUNDER,
   DODGE_UPLEFT,
   DODGE_UPMID,
   DODGE_UPRIGHT,
@@ -34,6 +36,7 @@ enum ActionName {
   DODGE_DOWNLEFT,
   DODGE_DOWNMID,
   DODGE_DOWNRIGHT,
+  SUICIDE,
   ARTIFACT_SOUL,
   ARTIFACT_TIME,
   ARTIFACT_SPACE,

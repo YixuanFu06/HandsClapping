@@ -3,11 +3,13 @@
 #include <cmath>
 
 #include "action.h"
+#include "player.h"
 
 namespace Game {
 
 void InitActions() {
-  DefineAction(-1, 0, PRODUCE);
+  DefineAction(0, 0, NONE);
+  DefineAction(-1, PRODUCE);
   DefineAction(1, 1, ATTACK, PISTOL);
   DefineAction(2, 1, {3, 4, 5}, ATTACK, CHOP_HORIZONTAL);
   DefineAction(2, 1, {1, 4, 7}, ATTACK, CHOP_VERTICAL);
@@ -30,6 +32,7 @@ void InitActions() {
                std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, DOOMSDAY);
   DefineAction(0, -1, SHIELD);
   DefineAction(1, -2, REMOTE_SHIELD);
+  DefineAction(1, -2, REBOUNDER);
   DefineAction(UpLeft, DODGE_UPLEFT);
   DefineAction(UpMid, DODGE_UPMID);
   DefineAction(UpRight, DODGE_UPRIGHT);
@@ -39,6 +42,7 @@ void InitActions() {
   DefineAction(DownLeft, DODGE_DOWNLEFT);
   DefineAction(DownMid, DODGE_DOWNMID);
   DefineAction(DownRight, DODGE_DOWNRIGHT);
+  DefineAction(0, SUICIDE);
   DefineAction(2, ARTIFACT_SOUL);
   DefineAction(2, ARTIFACT_TIME);
   DefineAction(2, ARTIFACT_SPACE);

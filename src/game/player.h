@@ -1,42 +1,66 @@
 #pragma once
 
-#include <cmath>
 #include <cstdint>
 
-#include "battle_field.h"
+#include "action.h"
+#include "define_actions.h"
 
 namespace Game {
 
-uint32_t DIMENSION = 2;
-uint32_t POSITION_NUM = std::pow(3, DIMENSION);
-uint32_t CENTER = POSITION_NUM / 2;
-
-enum PlayerPosition {
-  UpLeft = 0,
-  UpMid = 1,
-  UpRight = 2,
-  GroundLeft = 3,
-  GroundMid = 4,
-  GroundRight = 5,
-  DownLeft = 6,
-  DownMid = 7,
-  DownRight = 8
+enum DeathType {
+  EXAUHSTED,
+  KILLED,
+  SUICIDED,
+  ATTACK_REBOUNDED,
+  BACKFIRED
 };
 
 class Player {
  private:
   float health_;
   float energy_;
+  std::string name_;
+  bool ShouldDie_{false};
+  DeathType death_type_;
+
   PlayerPosition position_;
+  ActionName action_name_;
+  Action *action_;
 
  public:
-  inline float GetHealth();
-  inline void SetHealth(float health);
+  Player(float health, float energy, std::string name, PlayerPosition position, ActionName action_name, Action *action);
+  Player(float health, float energy, std::string name, PlayerPosition position);
 
-  inline float GetEnegy();
-  inline void SetEnergy(float energy);
+  inline float GetHealth() { return health_; }
+  inline void SetHealth(float health) { health_ = health; }
 
-  inline PlayerPosition GetPosition();
+  inline float GetEnergy() { return energy_; }
+  inline void SetEnergy(float energy) { energy_ = energy; }
+
+  inline std::string GetName() { return name_; }
+  inline void SetName(std::string name) { name_ = name; }
+
+  inline void GoDie(DeathType death_type) {
+    ShouldDie_ = true;
+    death_type_ = death_type;
+  }
+  inline void GoDie() { ShouldDie_ = true; }
+  inline bool IsDead() { return ShouldDie_; }
+  inline DeathType GetDeathType() { return death_type_; }
+  inline void SetDeathType(DeathType death_type) { death_type_ = death_type; }
+
+  inline PlayerPosition GetPosition() { return position_; }
+  inline void SetPosition(PlayerPosition position) { position_ = position; }
+  inline void SetPosition() { position_ = static_cast<PlayerPosition>(action_->GetDodgePosition()); }
+
+  inline ActionName GetActionName() { return action_name_; }
+  inline void SetActionName(ActionName action_name) { action_name_ = action_name; }
+
+  inline Action *GetAction() { return action_; }
+  inline void SetAction(Action *action) { action_ = action; }
+  void SetAction();
+
+  void PrintPlayer(uint32_t type = 0); // type = 0 for normal, 1 for detailed
 };
 
 }  // namespace Game

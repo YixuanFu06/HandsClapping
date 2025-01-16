@@ -1,7 +1,5 @@
 #include "action.h"
 
-#include <iostream>
-
 namespace Game {
 
 Action::Action(float energy,
@@ -18,6 +16,7 @@ Action::Action(float energy,
   energy_ = energy;
   damage_ = damage;
   effect_ = effect;
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = type;
   id_ = id;
 }
@@ -35,6 +34,7 @@ Action::Action(float energy,
   energy_ = energy;
   damage_ = damage;
   effect_ = damage;
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = type;
   id_ = id;
 }
@@ -49,6 +49,7 @@ Action::Action(float energy,
   damage_[CENTER] = damage;
   effect_.resize(POSITION_NUM, 0.0f);
   effect_[CENTER] = effect;
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = type;
   id_ = id;
 }
@@ -64,6 +65,7 @@ Action::Action(float energy, float damage, ActionType type, uint32_t id) {
       effect_[pos] = 0;
     }
   }
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = type;
   id_ = id;
 }
@@ -82,6 +84,7 @@ Action::Action(float energy,
     damage_[damage_range[i]] = damage;
     effect_[effect_range[i]] = effect;
   }
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = type;
   id_ = id;
 }
@@ -103,6 +106,7 @@ Action::Action(float energy,
       effect_[pos] = 0;
     }
   }
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = type;
   id_ = id;
 }
@@ -111,6 +115,7 @@ Action::Action(float energy, float effect, uint32_t id) {
   energy_ = energy;
   effect_.resize(POSITION_NUM, 0.0f);
   effect_[CENTER] = effect;
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = ActionType::DEFEND;
   id = id_;
 }
@@ -123,24 +128,26 @@ Action::Action(PlayerPosition dodge_position, uint32_t id) {
 
 Action::Action(float energy, uint32_t id) {
   energy_ = energy;
+  dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = ActionType::EQUIP;
   id_ = id;
 }
 
-inline float Action::GetEnergy() {
-  return energy_;
-}
-
-inline void Action::SetEnergy(float energy) {
-  energy_ = energy;
-}
-
-inline float Action::GetDamage(int position) {
-  return damage_[position];
-}
-
-inline float Action::GetEffect(int position) {
-  return effect_[position];
+void Action::PrintAction() {
+  std::cout << "Action " << id_ << ":\n";
+  std::cout << "Energy: " << energy_ << std::endl;
+  std::cout << "Damage: ";
+  for (int pos = 0; pos < POSITION_NUM; pos++) {
+    std::cout << "position: " << static_cast<PlayerPosition>(pos) << " " << damage_[pos] << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << "Effect: ";
+  for (int pos = 0; pos < POSITION_NUM; pos++) {
+    std::cout << "position: " << static_cast<PlayerPosition>(pos) << " " << effect_[pos] << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << "Dodge Position: " << dodge_position_ << std::endl;
+  std::cout << "Type: " << type_ << std::endl;
 }
 
 }  // namespace Game
