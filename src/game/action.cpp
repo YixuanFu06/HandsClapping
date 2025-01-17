@@ -2,6 +2,10 @@
 
 namespace Game {
 
+uint32_t DIMENSION = 2;
+uint32_t POSITION_NUM = std::pow(3, DIMENSION);
+uint32_t CENTER = POSITION_NUM / 2;
+
 Action::Action(float energy,
                std::vector<float> damage,
                std::vector<float> effect,
@@ -58,6 +62,7 @@ Action::Action(float energy, float damage, ActionType type, uint32_t id) {
   energy_ = energy;
   damage_.resize(POSITION_NUM, 0.0f);
   damage_[CENTER] = damage;
+  effect_.resize(POSITION_NUM, 0.0f);
   for (int pos = 0; pos < POSITION_NUM; pos++) {
     if (damage_[pos] != 0) {
       effect_[pos] = energy_;
@@ -99,6 +104,7 @@ Action::Action(float energy,
   for (uint32_t i = 0; i < range.size(); i++) {
     damage_[range[i]] = damage;
   }
+  effect_.resize(POSITION_NUM, 0.0f);
   for (int pos = 0; pos < POSITION_NUM; pos++) {
     if (damage_[pos] != 0) {
       effect_[pos] = energy_;
@@ -113,14 +119,18 @@ Action::Action(float energy,
 
 Action::Action(float energy, float effect, uint32_t id) {
   energy_ = energy;
+  damage_.resize(POSITION_NUM, 0.0f);
   effect_.resize(POSITION_NUM, 0.0f);
   effect_[CENTER] = effect;
   dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = ActionType::DEFEND;
-  id = id_;
+  id_ = id;
 }
 
 Action::Action(PlayerPosition dodge_position, uint32_t id) {
+  energy_ = 0;
+  damage_.resize(POSITION_NUM, 0.0f);
+  effect_.resize(POSITION_NUM, 0.0f);
   dodge_position_ = dodge_position;
   type_ = ActionType::DODGE;
   id_ = id;
@@ -128,6 +138,8 @@ Action::Action(PlayerPosition dodge_position, uint32_t id) {
 
 Action::Action(float energy, uint32_t id) {
   energy_ = energy;
+  damage_.resize(POSITION_NUM, 0.0f);
+  effect_.resize(POSITION_NUM, 0.0f);
   dodge_position_ = static_cast<PlayerPosition>(CENTER);
   type_ = ActionType::EQUIP;
   id_ = id;
@@ -136,14 +148,16 @@ Action::Action(float energy, uint32_t id) {
 void Action::PrintAction() {
   std::cout << "Action " << id_ << ":\n";
   std::cout << "Energy: " << energy_ << std::endl;
-  std::cout << "Damage: ";
+  std::cout << "Damage:\n";
   for (int pos = 0; pos < POSITION_NUM; pos++) {
-    std::cout << "position: " << static_cast<PlayerPosition>(pos) << " " << damage_[pos] << std::endl;
+    std::cout << "position: " << static_cast<PlayerPosition>(pos) << " "
+              << damage_[pos] << std::endl;
   }
   std::cout << std::endl;
-  std::cout << "Effect: ";
+  std::cout << "Effect:\n";
   for (int pos = 0; pos < POSITION_NUM; pos++) {
-    std::cout << "position: " << static_cast<PlayerPosition>(pos) << " " << effect_[pos] << std::endl;
+    std::cout << "position: " << static_cast<PlayerPosition>(pos) << " "
+              << effect_[pos] << std::endl;
   }
   std::cout << std::endl;
   std::cout << "Dodge Position: " << dodge_position_ << std::endl;

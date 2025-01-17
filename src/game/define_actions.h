@@ -46,7 +46,7 @@ enum ActionName {
   DUPLICATOR
 };
 
-std::vector<Action> actions;
+extern std::vector<Action> actions;
 
 void InitActions();
 

@@ -2,18 +2,18 @@
 
 #include <bits/stdint-uintn.h>
 
-#include <cstdint>
-#include <vector>
 #include <cmath>
+#include <cstdint>
 #include <iostream>
+#include <vector>
 
 namespace Game {
 
-enum ActionType { ATTACK, DEFEND, DODGE, EQUIP };
+extern uint32_t DIMENSION;
+extern uint32_t POSITION_NUM;
+extern uint32_t CENTER;
 
-uint32_t DIMENSION = 2;
-uint32_t POSITION_NUM = std::pow(3, DIMENSION);
-uint32_t CENTER = POSITION_NUM / 2;
+enum ActionType { ATTACK, DEFEND, DODGE, EQUIP };
 
 enum PlayerPosition {
   UpLeft = 0,
@@ -71,18 +71,32 @@ class Action {
 
   Action(float energy, uint32_t id);
 
-  inline float GetEnergy() { return energy_; }
-  inline void SetEnergy(float energy) { energy_ = energy; }
+  inline float GetEnergy() {
+    return energy_;
+  }
+  inline void SetEnergy(float energy) {
+    energy_ = energy;
+  }
 
-  inline float GetDamage(int position) { return damage_[position]; }
+  inline float GetDamage(int position) {
+    return damage_[position];
+  }
 
-  inline float GetEffect(int position) { return effect_[position]; }
+  inline float GetEffect(int position) {
+    return effect_[position];
+  }
 
-  inline PlayerPosition GetDodgePosition() { return dodge_position_; }
+  inline PlayerPosition GetDodgePosition() {
+    return dodge_position_;
+  }
 
-  inline ActionType GetType() { return type_; }
+  inline ActionType GetType() {
+    return type_;
+  }
 
-  inline uint32_t GetId() { return id_; }
+  inline uint32_t GetId() {
+    return id_;
+  }
 
   void PrintAction();
 };

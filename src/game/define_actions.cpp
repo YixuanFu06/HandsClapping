@@ -7,6 +7,8 @@
 
 namespace Game {
 
+std::vector<Action> actions;
+
 void InitActions() {
   DefineAction(0, 0, NONE);
   DefineAction(-1, PRODUCE);
