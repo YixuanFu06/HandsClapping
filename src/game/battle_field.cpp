@@ -167,12 +167,24 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
 void BattleField::ActionUpdate() {
   for (uint32_t i = 0; i < players_.size(); i++) {
     std::cout << players_[i].GetName() << "'s action name: " << std::endl;
-    uint32_t player_action_name;
+    std::string player_action_name;
     std::cin >> player_action_name;
-    ActionName action_name;
+    ActionName action_name = NONE;
 
-    action_name = static_cast<ActionName>(player_action_name);
+    bool IsFound = false;
+    for (Action &it : actions) {
+      for (std::string &nickname : it.GetNicknames()) {
+        if (nickname == player_action_name) {
+          action_name = static_cast<ActionName>(it.GetId());
+          IsFound = true;
+          break;
+        }
+      }
+    }
 
+    if (!IsFound) {
+      std::cout << "Error: action " << player_action_name << " not found. Set as NONE." << std::endl;
+    }
     players_[i].SetActionName(action_name);
   }
 

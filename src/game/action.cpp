@@ -10,56 +10,42 @@ Action::Action(float energy,
                std::vector<float> damage,
                std::vector<float> effect,
                ActionType type,
-               uint32_t id) {
+               uint32_t id,
+               std::vector<std::string> nicknames) : energy_(energy), damage_(damage), effect_(effect), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(type), id_(id), nicknames_(nicknames) {
   if (damage.size() != POSITION_NUM || effect.size() != POSITION_NUM) {
     std::cout
         << "Error: damage vector size is not equal to POSITION_NUM in action "
         << id << std::endl;
     exit(1);
   }
-  energy_ = energy;
-  damage_ = damage;
-  effect_ = effect;
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = type;
-  id_ = id;
 }
 
 Action::Action(float energy,
                std::vector<float> damage,
                ActionType type,
-               uint32_t id) {
+               uint32_t id,
+               std::vector<std::string> nicknames) : energy_(energy), damage_(damage), effect_(damage), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(type), id_(id), nicknames_(nicknames) {
   if (damage.size() != POSITION_NUM) {
     std::cout
         << "Error: damage vector size is not equal to POSITION_NUM in action "
         << id << std::endl;
     exit(1);
   }
-  energy_ = energy;
-  damage_ = damage;
-  effect_ = damage;
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = type;
-  id_ = id;
 }
 
 Action::Action(float energy,
                float damage,
                float effect,
                ActionType type,
-               uint32_t id) {
-  energy_ = energy;
+               uint32_t id,
+               std::vector<std::string> nicknames) : energy_(energy), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(type), id_(id), nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
   damage_[CENTER] = damage;
   effect_.resize(POSITION_NUM, 0.0f);
   effect_[CENTER] = effect;
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = type;
-  id_ = id;
 }
 
-Action::Action(float energy, float damage, ActionType type, uint32_t id) {
-  energy_ = energy;
+Action::Action(float energy, float damage, ActionType type, uint32_t id, std::vector<std::string> nicknames) : energy_(energy), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(type), id_(id), nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
   damage_[CENTER] = damage;
   effect_.resize(POSITION_NUM, 0.0f);
@@ -70,9 +56,6 @@ Action::Action(float energy, float damage, ActionType type, uint32_t id) {
       effect_[pos] = 0;
     }
   }
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = type;
-  id_ = id;
 }
 
 Action::Action(float energy,
@@ -81,25 +64,22 @@ Action::Action(float energy,
                float effect,
                std::vector<uint32_t> effect_range,
                ActionType type,
-               uint32_t id) {
-  energy_ = energy;
+               uint32_t id,
+               std::vector<std::string> nicknames) : energy_(energy), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(type), id_(id), nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
   effect_.resize(POSITION_NUM, 0.0f);
   for (uint32_t i = 0; i < damage_range.size(); i++) {
     damage_[damage_range[i]] = damage;
     effect_[effect_range[i]] = effect;
   }
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = type;
-  id_ = id;
 }
 
 Action::Action(float energy,
                float damage,
                std::vector<uint32_t> range,
                ActionType type,
-               uint32_t id) {
-  energy_ = energy;
+               uint32_t id,
+               std::vector<std::string> nicknames) : energy_(energy), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(type), id_(id), nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
   for (uint32_t i = 0; i < range.size(); i++) {
     damage_[range[i]] = damage;
@@ -112,41 +92,30 @@ Action::Action(float energy,
       effect_[pos] = 0;
     }
   }
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = type;
-  id_ = id;
 }
 
-Action::Action(float energy, float effect, uint32_t id) {
-  energy_ = energy;
+Action::Action(float energy, float effect, uint32_t id, std::vector<std::string> nicknames) : energy_(energy), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(ActionType::DEFEND), id_(id), nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
   effect_.resize(POSITION_NUM, 0.0f);
   effect_[CENTER] = effect;
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = ActionType::DEFEND;
-  id_ = id;
 }
 
-Action::Action(PlayerPosition dodge_position, uint32_t id) {
-  energy_ = 0;
+Action::Action(PlayerPosition dodge_position, uint32_t id, std::vector<std::string> nicknames) : energy_(0), dodge_position_(dodge_position), type_(ActionType::DODGE), id_(id), nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
   effect_.resize(POSITION_NUM, 0.0f);
-  dodge_position_ = dodge_position;
-  type_ = ActionType::DODGE;
-  id_ = id;
 }
 
-Action::Action(float energy, uint32_t id) {
-  energy_ = energy;
+Action::Action(float energy, uint32_t id, std::vector<std::string> nicknames) : energy_(energy), dodge_position_(static_cast<PlayerPosition>(CENTER)), type_(ActionType::EQUIP), id_(id), nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
   effect_.resize(POSITION_NUM, 0.0f);
-  dodge_position_ = static_cast<PlayerPosition>(CENTER);
-  type_ = ActionType::EQUIP;
-  id_ = id;
 }
 
 void Action::PrintAction() {
-  std::cout << "Action " << id_ << ":\n";
+  std::cout << "Action " << id_ << ": ";
+  for (int i = 0; i < nicknames_.size(); i++) {
+    std::cout << nicknames_[i] << "  ";
+  }
+  std::cout << std::endl;
   std::cout << "Energy: " << energy_ << std::endl;
   std::cout << "Damage:\n";
   for (int pos = 0; pos < POSITION_NUM; pos++) {
