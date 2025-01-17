@@ -73,7 +73,11 @@ void DefineAction(float energy,
                   ActionType type,
                   uint32_t id,
                   std::vector<std::string> nicknames);
-void DefineAction(float energy, float damage, ActionType type, uint32_t id, std::vector<std::string> nicknames);
+void DefineAction(float energy,
+                  float damage,
+                  ActionType type,
+                  uint32_t id,
+                  std::vector<std::string> nicknames);
 
 void DefineAction(float energy,
                   float damage,
@@ -90,10 +94,17 @@ void DefineAction(float energy,
                   uint32_t id,
                   std::vector<std::string> nicknames);
 
-void DefineAction(float energy, float effect, uint32_t id, std::vector<std::string> nicknames);
+void DefineAction(float energy,
+                  float effect,
+                  uint32_t id,
+                  std::vector<std::string> nicknames);
 
-void DefineAction(PlayerPosition dodge_position, uint32_t id, std::vector<std::string> nicknames);
+void DefineAction(PlayerPosition dodge_position,
+                  uint32_t id,
+                  std::vector<std::string> nicknames);
 
-void DefineAction(float energy, uint32_t id, std::vector<std::string> nicknames);
+void DefineAction(float energy,
+                  uint32_t id,
+                  std::vector<std::string> nicknames);
 
 }  // namespace Game

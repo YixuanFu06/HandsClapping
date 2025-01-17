@@ -183,7 +183,8 @@ void BattleField::ActionUpdate() {
     }
 
     if (!IsFound) {
-      std::cout << "Error: action " << player_action_name << " not found. Set as NONE." << std::endl;
+      std::cout << "Error: action " << player_action_name
+                << " not found. Set as NONE." << std::endl;
     }
     players_[i].SetActionName(action_name);
   }

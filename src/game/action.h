@@ -1,7 +1,5 @@
 #pragma once
 
-#include <bits/stdint-uintn.h>
-
 #include <cmath>
 #include <cstdint>
 #include <iostream>
@@ -46,7 +44,11 @@ class Action {
          ActionType type,
          uint32_t id,
          std::vector<std::string> nicknames);
-  Action(float energy, std::vector<float> damage, ActionType type, uint32_t id, std::vector<std::string> nicknames);
+  Action(float energy,
+         std::vector<float> damage,
+         ActionType type,
+         uint32_t id,
+         std::vector<std::string> nicknames);
 
   Action(float energy,
          float damage,
@@ -54,7 +56,11 @@ class Action {
          ActionType type,
          uint32_t id,
          std::vector<std::string> nicknames);
-  Action(float energy, float damage, ActionType type, uint32_t id, std::vector<std::string> nicknames);
+  Action(float energy,
+         float damage,
+         ActionType type,
+         uint32_t id,
+         std::vector<std::string> nicknames);
 
   Action(float energy,
          float damage,
@@ -71,9 +77,14 @@ class Action {
          uint32_t id,
          std::vector<std::string> nicknames);
 
-  Action(float energy, float effect, uint32_t id, std::vector<std::string> nicknames);
+  Action(float energy,
+         float effect,
+         uint32_t id,
+         std::vector<std::string> nicknames);
 
-  Action(PlayerPosition dodge_position, uint32_t id, std::vector<std::string> nicknames);
+  Action(PlayerPosition dodge_position,
+         uint32_t id,
+         std::vector<std::string> nicknames);
 
   Action(float energy, uint32_t id, std::vector<std::string> nicknames);
 
@@ -100,7 +111,7 @@ class Action {
     return nicknames_[0];
   }
 
-  inline std::string GetNkieName(int index) {
+  inline std::string GetNickName(int index) {
     if (index < nicknames_.size()) {
       return nicknames_[index];
     }
