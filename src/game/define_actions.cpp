@@ -87,7 +87,7 @@ void InitActions() {
   DefineAction(10, std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8},
                std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, DOOMSDAY,
                {"DOOMSDAY", "mori", "末日"});
-  DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "xiaofang", "盾"});
+  DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang", "盾"});
   DefineAction(1, -2, REMOTE_SHIELD,
                {"REMOTE_SHIELD", "~", "lang", "langzi", "遥控盾"});
   DefineAction(1, -2, REBOUNDER, {"REBOUNDER", "tan", "xiaotan", "小弹"});

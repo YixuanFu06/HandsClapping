@@ -1,7 +1,5 @@
 #include "battle_field.h"
 
-#include <ios>
-
 #include "action.h"
 #include "define_actions.h"
 #include "player.h"
@@ -107,7 +105,8 @@ void BattleField::PrintBattleField(uint32_t type) {
       std::cout << std::endl;
       break;
     case 2:
-      std::cout << "The " << turn_ << " turn. " << member_num_ << " players: ";
+      std::cout << std::endl
+                << "The " << turn_ << " turn. " << member_num_ << " players: ";
       for (uint32_t i = 0; i < players_.size(); i++) {
         std::cout << players_[i].GetName() << " ";
       }
@@ -118,6 +117,7 @@ void BattleField::PrintBattleField(uint32_t type) {
         players_[i].PrintPlayer(3);
       }
       std::cout << std::endl;
+      break;
     case 0:
     default:
       std::cout << "The " << turn_ << " turn. " << member_num_
@@ -131,6 +131,16 @@ void BattleField::PrintBattleField(uint32_t type) {
 
 void BattleField::BattleFieldUpdate(uint32_t type) {
   switch (type) {
+    case 1: {
+      turn_++;
+      PrintBattleField(1);
+      ActionUpdate();
+      PrintBattleField(1);
+      PositionUpdate();
+      EnergyUpdate();
+      HealthUpdate();
+      member_num_ = players_.size();
+    } break;
     case 3: {
       std::vector<float> healths;
       std::vector<float> energies;
@@ -152,11 +162,13 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
         std::cout << std::noshowpos;
       }
     } break;
+    case 0:
+    case 2:
     default:
       turn_++;
-      PrintBattleField(type);
+      PrintBattleField(2);
       ActionUpdate();
-      PrintBattleField(0);
+      PrintBattleField(type);
       PositionUpdate();
       EnergyUpdate();
       HealthUpdate();
@@ -250,7 +262,6 @@ void Referee::JudgeBattle(Player *player) {
             it.owner_->GetAction()->GetType() != ATTACK) {
           continue;
         }
-        std::cout << "Called.\n";
         total_damage +=
             it.owner_->GetAction()->GetDamage(player->GetPosition());
         total_effect +=
@@ -268,8 +279,6 @@ void Referee::JudgeBattle(Player *player) {
         }
         break;
       }
-      std::cout << player->GetName() << " defended " << total_damage
-                << " damage and " << total_effect << " effect." << std::endl;
       DamageLogAdd(
           player, total_damage,
           total_effect + player->GetAction()->GetEffect(player->GetPosition()));
@@ -361,14 +370,30 @@ void Referee::DamageCommit() {
 void BattleField::RemoveDead() {
   for (uint32_t i = 0; i < players_.size(); i++) {
     if (players_[i].IsDead()) {
-      std::cout << players_[i].GetName() << " is dead because of "
-                << players_[i].GetDeathType() << std::endl;
+      std::cout << players_[i].GetName() << " is dead because of ";
+      switch (players_[i].GetDeathType()) {
+        case EXAUHSTED:
+          std::cout << "getting exauhsted." << std::endl;
+          break;
+        case KILLED:
+          std::cout << "being killed." << std::endl;
+          break;
+        case SUICIDED:
+          std::cout << "commit suicide." << std::endl;
+          break;
+        case ATTACK_REBOUNDED:
+          std::cout << "the attack is rebounded." << std::endl;
+          break;
+        case BACKFIRED:
+          std::cout << "been backfired" << std::endl;
+          break;
+      }
     }
   }
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     if (players_[i].IsDead()) {
-      std::string name = RemovePlayer(i);
+      std::string name = RemovePlayer(i--);
       std::cout << name << " is removed from the battle field." << std::endl;
     }
   }

@@ -27,8 +27,8 @@ Player::Player(float health,
       energy_(energy),
       name_(name),
       position_(position),
-      action_name_(NONE),
-      action_(nullptr) {
+      action_name_(NONE) {
+  SetAction();
 }
 
 void Player::SetAction() {
@@ -46,7 +46,7 @@ void Player::SetAction() {
 
 void Player::PrintPlayer(uint32_t type) {
   std::cout << "Player " << name_ << ".  ";
-  std::cout << "Action: " << action_name_ << ".  ";
+  std::cout << "Action: " << action_->GetFormalName() << ".  ";
   switch (type) {
     case 1:
       std::cout << "Health: " << health_ << ".  ";
