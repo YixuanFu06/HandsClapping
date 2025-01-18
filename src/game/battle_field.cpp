@@ -139,7 +139,7 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
       PositionUpdate();
       EnergyUpdate();
       HealthUpdate();
-      member_num_ = players_.size();
+      MemberNumUpdate();
     } break;
     case 3: {
       std::vector<float> healths;
@@ -172,7 +172,7 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
       PositionUpdate();
       EnergyUpdate();
       HealthUpdate();
-      member_num_ = players_.size();
+      MemberNumUpdate();
   }
 }
 

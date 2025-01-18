@@ -104,6 +104,10 @@ class BattleField {
 
   void HealthUpdate();
 
+  inline void MemberNumUpdate() {
+    member_num_ = players_.size();
+  }
+
   void RemoveDead();
 };
 

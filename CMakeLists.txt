@@ -1,16 +1,23 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 
 # Project name and languages
-project(HandsClappingGame LANGUAGES CXX)
+project(HandsClappingGame)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Set pybind11 path
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
+set(pybind11_DIR /home/yixuanfu/anaconda3/lib/python3.11/site-packages/pybind11/share/cmake/pybind11)
+find_package(pybind11 REQUIRED)
+
 # Source and head files
-set(APP_DIR "${CMAKE_SOURCE_DIR}/src/app")
-set(GAME_DIR "${CMAKE_SOURCE_DIR}/src/game")
+set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
+set(GAME_DIR "${SOURCE_DIR}/game")
+set(APP_DIR "${SOURCE_DIR}/app")
+set(ONLINE_DIR "${SOURCE_DIR}/online")
 
 # Collect files
 file(GLOB_RECURSE GAME_SOURCES "${GAME_DIR}/*.cpp")
@@ -19,6 +26,12 @@ file(GLOB_RECURSE GAME_SOURCES "${GAME_DIR}/*.cpp")
 set(Main_Game "${APP_DIR}/handsclapping_game.cpp")
 set(Game_Debug_Mode "${APP_DIR}/handsclapping_game_debug.cpp")
 set(Referee_Mode "${APP_DIR}/handsclapping_referee.cpp")
+set(Binding_File "${SOURCE_DIR}/handsclapping_pylib.cpp")
+
+# Generate python binding
+pybind11_add_module(handsclapping ${Binding_File} ${GAME_SOURCES})
+target_include_directories(handsclapping PRIVATE ${ONLINE_DIR} ${GAME_DIR})
+set_target_properties(handsclapping PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/lib")
 
 # Main game executable file
 add_executable(handsclapping_game ${Main_Game} ${GAME_SOURCES})
