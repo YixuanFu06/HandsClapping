@@ -2,7 +2,7 @@ import sys
 import os
 
 # 自定义库目录名称
-handsclapping_lib_dir = '../../build/lib'
+handsclapping_lib_dir = '../../build/lib' # use '../../build/lib/Release' instead in Windows
 
 # 获取脚本所在目录
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,5 +20,7 @@ for i in range(4):
     print(battlefield.GetPlayerName(i)) # should print player_names[i]
 
 print(battlefield.GetMemberNum())
+
+battlefield.ActionUpdate()
 
 battlefield.PrintBattleField(1)
