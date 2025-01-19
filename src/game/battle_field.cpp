@@ -132,7 +132,7 @@ void BattleField::PrintBattleField(uint32_t type) {
 void BattleField::BattleFieldUpdate(uint32_t type) {
   switch (type) {
     case 1: {
-      turn_++;
+      TurnUpdate();
       PrintBattleField(1);
       ActionUpdate();
       PrintBattleField(1);
@@ -165,7 +165,7 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
     case 0:
     case 2:
     default:
-      turn_++;
+      TurnUpdate();
       PrintBattleField(2);
       ActionUpdate();
       PrintBattleField(type);
@@ -176,9 +176,18 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
   }
 }
 
+void BattleField::BattleFieldUpdate(std::vector<std::string> player_actions) {
+  ActionUpdate(player_actions);
+  PrintBattleField(0);
+  PositionUpdate();
+  EnergyUpdate();
+  HealthUpdate();
+  MemberNumUpdate();
+}
+
 void BattleField::ActionUpdate() {
   for (uint32_t i = 0; i < players_.size(); i++) {
-    std::cout << players_[i].GetName() << "'s action name: " << std::endl;
+    std::cout << players_[i].GetName() << "'s action name: ";
     std::string player_action_name;
     std::cin >> player_action_name;
     ActionName action_name = NONE;
@@ -196,6 +205,45 @@ void BattleField::ActionUpdate() {
 
     if (!IsFound) {
       std::cout << "Error: action " << player_action_name
+                << " not found. Set as NONE." << std::endl;
+    }
+    players_[i].SetActionName(action_name);
+  }
+
+  for (uint32_t i = 0; i < players_.size(); i++) {
+    players_[i].SetAction();
+  }
+}
+
+void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
+  if (player_actions.size() > players_.size()) {
+    std::cout << "Error: too many actions. Only the first " << players_.size()
+              << " actions are used." << std::endl;
+  } else if (player_actions.size() < players_.size()) {
+    std::cout << "Error: too few actions. The last " << players_.size() -
+                     player_actions.size()
+              << " players' actions are set as NONE." << std::endl;
+    for (uint32_t i = player_actions.size(); i < players_.size(); i++) {
+      player_actions.push_back("NONE");
+    }
+  }
+
+  for (uint32_t i = 0; i < players_.size(); i++) {
+    ActionName action_name = NONE;
+
+    bool IsFound = false;
+    for (Action &it : actions) {
+      for (std::string &nickname : it.GetNicknames()) {
+        if (nickname == player_actions[i]) {
+          action_name = static_cast<ActionName>(it.GetId());
+          IsFound = true;
+          break;
+        }
+      }
+    }
+
+    if (!IsFound) {
+      std::cout << "Error: action " << player_actions[i]
                 << " not found. Set as NONE." << std::endl;
     }
     players_[i].SetActionName(action_name);
