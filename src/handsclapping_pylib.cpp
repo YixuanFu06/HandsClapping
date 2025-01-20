@@ -13,8 +13,13 @@ PYBIND11_MODULE(handsclapping, m) {
            "Constructor with player names", py::arg("player_names"))
       .def("GetMemberNum", &Game::BattleField::GetMemberNum,
            "Get the number of players")
+      .def("GetTurn", &Game::BattleField::GetTurn, "Get the turn")
       .def("GetPlayerName", &Game::BattleField::GetPlayerName,
            "Get the name of the player")
+      .def("GetPlayerHealth", &Game::BattleField::GetPlayerHealth,
+           "Get the health of the player")
+      .def("GetPlayerEnergy", &Game::BattleField::GetPlayerEnergy,
+           "Get the energy of the player")
       .def("PrintBattleField", &Game::BattleField::PrintBattleField,
            "Print the battle field")
       .def("BattleFieldUpdate", py::overload_cast<uint32_t>(&Game::BattleField::BattleFieldUpdate),

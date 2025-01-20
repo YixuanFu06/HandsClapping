@@ -98,6 +98,14 @@ class BattleField {
   void BattleFieldUpdate(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
                            // names, 3 for referee mode when printing
+
+  inline float GetPlayerHealth(uint32_t player_id) {
+    return players_[player_id].GetHealth();
+  }
+
+  inline float GetPlayerEnergy(uint32_t player_id) {
+    return players_[player_id].GetEnergy();
+  }
                         
   void BattleFieldUpdate(std::vector<std::string> player_actions);
 

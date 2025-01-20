@@ -36,7 +36,7 @@ def waiting_for_confirmation(client_socket, addr, name):
     global registered_clients
     global registered_clients_lock
     client_socket.send("Enter y/n to confirm to the game...\n".encode('utf-8'))
-    client_socket.send("RESPOND\n".encode('utf-8'))
+    client_socket.send("CONFIRM\n".encode('utf-8'))
     response = client_socket.recv(1024).decode('utf-8')
     if (response == 'n'):
         client_socket.send("You have refused to confirm to the game.\n".encode('utf-8'))
@@ -128,10 +128,10 @@ def start_server():
     server_socket.bind(('0.0.0.0', 38921))  # 0.0.0.0 means all available interfaces
     
     ip_address = get_ip_address()
-    print(f"服务器已启动，IP地址: {ip_address}, 端口号: 12345")
+    print(f"Server starts with IP: {ip_address}, port: 38921")
     
     server_socket.listen(5)
-    print("等待连接...")
+    print("Waiting to be connected...")
 
     server_socket.settimeout(30.0)
     
@@ -157,7 +157,7 @@ def start_server():
                     print("No more players are joining the game. Server entry is closed.")
                     break
     except KeyboardInterrupt:
-        print("Server has been enforced to terminate...")
+        print("Server has been forced to terminate...")
     finally:
         server_running = False
         server_socket.close()
@@ -180,9 +180,12 @@ if __name__ == "__main__":
     for player in registered_clients:
         player[0].send(player[1].encode('utf-8') + ": Getting ready for the game...\n".encode('utf-8'))
         print(f"Contact {player[1]} to start the game...")
-        player[0].send("END\n".encode('utf-8'))
     print("Game is starting...")
 
     '''Game starts here'''
+
+    from handsclapping_game_online import game_core
+
+    game_core(registered_clients)
     
     start_server_thread.join()
