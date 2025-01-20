@@ -6,7 +6,7 @@
 
 namespace Game {
 
-enum DeathType { EXAUHSTED, KILLED, SUICIDED, ATTACK_REBOUNDED, BACKFIRED };
+enum DeathType { EXHAUSTED, KILLED, SUICIDED, ATTACK_REBOUNDED, BACKFIRED };
 
 class Player {
  private:

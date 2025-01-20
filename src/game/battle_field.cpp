@@ -265,7 +265,7 @@ void BattleField::EnergyUpdate() {
     players_[i].SetEnergy(players_[i].GetEnergy() -
                           players_[i].GetAction()->GetEnergy());
     if (players_[i].GetEnergy() < 0) {
-      players_[i].GoDie(EXAUHSTED);
+      players_[i].GoDie(EXHAUSTED);
     }
   }
   RemoveDead();
@@ -420,8 +420,8 @@ void BattleField::RemoveDead() {
     if (players_[i].IsDead()) {
       std::cout << players_[i].GetName() << " is dead because of ";
       switch (players_[i].GetDeathType()) {
-        case EXAUHSTED:
-          std::cout << "getting exauhsted." << std::endl;
+        case EXHAUSTED:
+          std::cout << "getting exhausted." << std::endl;
           break;
         case KILLED:
           std::cout << "being killed." << std::endl;
