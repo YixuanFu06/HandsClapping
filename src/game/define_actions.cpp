@@ -33,108 +33,107 @@ std::vector<std::string> NickNameProcess(std::vector<std::string> nicknames) {
 
 void InitActions() {
   DefineAction(0, 0, NONE, {"NONE", "0"});
-  DefineAction(-1, PRODUCE, {"PRODUCE", "qi", "1", "气"});
-  DefineAction(1, 1, ATTACK, PISTOL, {"PISTOL", "dia", "gun", "枪"});
+  DefineAction(-1, PRODUCE, {"PRODUCE", "qi", "1"});
+  DefineAction(1, 1, ATTACK, PISTOL, {"PISTOL", "dia", "gun"});
   DefineAction(1, 1, {1, 1}, ATTACK, PISTOL_UPPER,
-               {"PISTOL_UPPER", "^dia", "dia^", "shangda", "上打"});
+               {"PISTOL_UPPER", "^dia", "dia^", "shangda"});
   DefineAction(
       1, 1, {7, 7}, ATTACK, PISTOL_LOWER,
-      {"PISTOL_LOWER", "vdia", "diav", "Vdia", "diaV", "xiada", "下打"});
+      {"PISTOL_LOWER", "vdia", "diav", "Vdia", "diaV", "xiada"});
   DefineAction(1, 1, {3, 3}, ATTACK, PISTOL_LEFT,
-               {"PISTOL_LEFT", "<dia", "dia<", "zuoda", "左打"});
+               {"PISTOL_LEFT", "<dia", "dia<", "zuoda"});
   DefineAction(1, 1, {5, 5}, ATTACK, PISTOL_RIGHT,
-               {"PISTOL_RIGHT", ">dia", "dia>", "youda", "右打"});
+               {"PISTOL_RIGHT", ">dia", "dia>", "youda"});
   DefineAction(2, 1, {3, 4, 5}, ATTACK, CHOP_HORIZONTAL,
-               {"CHOP_HORIZONTAL", "-", "——", "hengpi", "hengdun", "hengsao",
-                "heng", "横扫"});
+               {"CHOP_HORIZONTAL", "-", "hengpi", "hengdun", "hengsao",
+                "heng"});
   DefineAction(2, 1, {1, 4, 7}, ATTACK, CHOP_VERTICAL,
-               {"CHOP_VERTICAL", "|", "shupi", "shudun", "shu", "竖劈"});
+               {"CHOP_VERTICAL", "|", "shupi", "shudun", "shu"});
   DefineAction(
       2, 1, {0, 4, 8}, ATTACK, CHOP_INCLINE1,
-      {"CHOP_INCLINE1", "\\", "、", "xiepi1", "xiedun1", "xie1", "斜劈1"});
+      {"CHOP_INCLINE\\", "\\", "xiepi\\", "xiedun\\", "xie\\"});
   DefineAction(2, 1, {2, 4, 6}, ATTACK, CHOP_INCLINE2,
-               {"CHOP_INCLINE2", "/", "xiepi2", "xiedun2", "xie2", "斜劈2"});
+               {"CHOP_INCLINE/", "/", "xiepi/", "xiedun/", "xie/"});
   DefineAction(2, 1, {0, 1, 2}, ATTACK, CHOP_UPPER,
-               {"CHOP_UPPER", "shangsao", "上扫"});
+               {"CHOP_UPPER", "shangsao"});
   DefineAction(2, 1, {6, 7, 8}, ATTACK, CHOP_LOWER,
-               {"CHOP_LOWER", "xiasao", "下扫"});
+               {"CHOP_LOWER", "xiasao"});
   DefineAction(2, 1, {0, 3, 6}, ATTACK, CHOP_LEFT,
-               {"CHOP_LEFT", "zuopi", "zuosao", "左劈"});
+               {"CHOP_LEFT", "zuopi", "zuosao"});
   DefineAction(2, 1, {2, 5, 8}, ATTACK, CHOP_RIGHT,
-               {"CHOP_RIGHT", "youpi", "yousao", "右劈"});
+               {"CHOP_RIGHT", "youpi", "yousao"});
   DefineAction(2, 1, {0, 1, 2, 4}, 1, {0, 1, 2, 4}, ATTACK, VISION,
                {"VISION", "T", "t", "huanshi"});
   DefineAction(2, 1, {4, 6, 7, 8}, 1, {4, 6, 7, 8}, ATTACK, HAMMER,
-               {"HAMMER", "leichui", "chuizi", "langtou", "chui", "锤子", "⊥"});
+               {"HAMMER", "leichui", "chuizi", "langtou", "chui"});
   DefineAction(4, {1, 1, 1, 1, 0, 1, 1, 1, 1}, {1, 1, 1, 1, 0, 1, 1, 1, 1},
                ATTACK, HAWKEYE,
                {"HAWKEYE", "o", "O", "yan", "yingyan", "ying"});
   DefineAction(4, {0, 1, 0, 1, 2, 1, 0, 1, 0}, ATTACK, CHOP_CROSS,
                {"CHOP_CROSS", "+", "hengshu", "hengshusao", "hengshupi",
-                "hengshudun", "横竖扫"});
+                "hengshudun"});
   DefineAction(4, {1, 0, 1, 0, 2, 0, 1, 0, 1}, ATTACK, CHOP_X,
-               {"CHOP_X", "x", "X", "xpi", "xdun", "xsao", "双斜扫"});
+               {"CHOP_X", "x", "X", "xpi", "xdun", "xsao"});
   DefineAction(4, 1, {0, 1, 2, 3, 4, 5}, ATTACK, ICEAGE,
-               {"ICEAGE", "bing", "bingtian", "tianbeng", "冰天"});
+               {"ICEAGE", "bing", "bingtian", "tianbeng"});
   DefineAction(4, 1, {3, 4, 5, 6, 7, 8}, ATTACK, EARTHQUAKE,
-               {"EARTHQUAKE", "dilie", "liedi", "地裂"});
+               {"EARTHQUAKE", "dilie", "liedi"});
   DefineAction(5, std::pow(10, 5), {0, 1, 2, 3, 4, 5, 6, 7, 8}, std::pow(10, 5),
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, EDITH,
                {"EDITH", "yidisi", "e", "E"});
   DefineAction(7, std::pow(10, 7), {0, 1, 2, 3, 4, 5, 6, 7, 8}, std::pow(10, 7),
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, BLACKHOLE,
-               {"BLACKHOLE", "heidong", "黑洞"});
+               {"BLACKHOLE", "heidong"});
   DefineAction(10, std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8},
                std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, DOOMSDAY,
-               {"DOOMSDAY", "mori", "末日"});
-  DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang", "盾"});
+               {"DOOMSDAY", "mori"});
+  DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang"});
   DefineAction(1, -2, REMOTE_SHIELD,
-               {"REMOTE_SHIELD", "~", "lang", "langzi", "遥控盾"});
-  DefineAction(1, -2, REBOUNDER, {"REBOUNDER", "tan", "xiaotan", "小弹"});
+               {"REMOTE_SHIELD", "~", "lang", "langzi"});
+  DefineAction(1, -2, REBOUNDER, {"REBOUNDER", "tan", "xiaotan"});
   DefineAction(UpLeft, DODGE_UPLEFT,
                {"DODGE_UPLEFT", "^<", "<^", "zuoshang", "shangzuo",
                 "zuoshangduo", "shangzuoduo", "zuoshangshan", "shangzuoshan",
-                "upleft", "leftup", "左上躲"});
+                "upleft", "leftup"});
   DefineAction(
       UpMid, DODGE_UPMID,
-      {"DODGE_UPMID", "^", "shang", "shangduo", "shangshan", "up", "上躲"});
+      {"DODGE_UPMID", "^", "shang", "shangduo", "shangshan", "up"});
   DefineAction(UpRight, DODGE_UPRIGHT,
                {"DODGE_UPRIGHT", "^>", ">^", "youshang", "shangyou",
                 "youshangduo", "shangyouduo", "youshangshan", "shangyoushan",
-                "upright", "rightup", "右上躲"});
+                "upright", "rightup"});
   DefineAction(
       GroundLeft, DODGE_GROUNDLEFT,
-      {"DODGE_GROUNDLEFT", "<", "zuo", "zuoduo", "zuoshan", "left", "左躲"});
+      {"DODGE_GROUNDLEFT", "<", "zuo", "zuoduo", "zuoshan", "left"});
   DefineAction(
       GroundRight, DODGE_GROUNDRIGHT,
-      {"DODGE_GROUNDRIGHT", ">", "you", "youduo", "youshan", "right", "右躲"});
-  DefineAction(DownLeft, DODGE_DOWNLEFT,
+      {"DODGE_GROUNDRIGHT", ">", "you", "youduo", "youshan", "right"}); DefineAction(DownLeft, DODGE_DOWNLEFT,
                {"DODGE_DOWNLEFT", "v<", "<v", "V<", "<V", "zuoxia", "xiazuo",
                 "zuoxiaduo", "xiazuoduo", "zuoxiashan", "xiazuoshan",
-                "downleft", "leftdown", "左下躲"});
+                "downleft", "leftdown"});
   DefineAction(
       DownMid, DODGE_DOWNMID,
-      {"DODGE_DOWNMID", "v", "V", "xia", "xiaduo", "xiashan", "down", "下躲"});
+      {"DODGE_DOWNMID", "v", "V", "xia", "xiaduo", "xiashan", "down"});
   DefineAction(DownRight, DODGE_DOWNRIGHT,
                {"DODGE_DOWNRIGHT", "v>", ">v", "V>", ">V", "youxia", "xiayou",
                 "youxiaduo", "xiayouduo", "youxiashan", "xiayoushan",
-                "downright", "rightdown", "右下躲"});
-  DefineAction(0, SUICIDE, {"SUICIDE", "Q", "q", "#", "zisha", "bong", "自杀"});
+                "downright", "rightdown"});
+  DefineAction(0, SUICIDE, {"SUICIDE", "Q", "q", "#", "zisha", "bong"});
   DefineAction(2, ARTIFACT_SOUL,
-               {"ARTIFACT_SOUL", "soul", "linghun", "@", "灵魂"});
+               {"ARTIFACT_SOUL", "soul", "linghun", "@"});
   DefineAction(
       2, ARTIFACT_TIME,
-      {"ARTIFACT_TIME", "time", "shijian", "jiu", "lanihuilai", "时间"});
+      {"ARTIFACT_TIME", "time", "shijian", "jiu", "lanihuilai"});
   DefineAction(2, ARTIFACT_SPACE,
-               {"ARTIFACT_SPACE", "space", "kongjian", "空间"});
+               {"ARTIFACT_SPACE", "space", "kongjian"});
   DefineAction(2, ARTIFACT_MIND,
-               {"ARTIFACT_MIND", "mind", "spirit", "jingshen", "精神"});
+               {"ARTIFACT_MIND", "mind", "spirit", "jingshen"});
   DefineAction(4, ARTIFACT_REALITY,
-               {"ARTIFACT_REALITY", "reality", "xianshi", "现实"});
+               {"ARTIFACT_REALITY", "reality", "xianshi"});
   DefineAction(3, ARTIFACT_STRENGTH,
-               {"ARTIFACT_STRENGTH", "strength", "liliang", "力量"});
+               {"ARTIFACT_STRENGTH", "strength", "liliang"});
   DefineAction(3, DUPLICATOR,
-               {"DUPLICATOR", "$", "￥", "papapa", "papapapapa", "kexing"});
+               {"DUPLICATOR", "$", "papapa", "papapapapa", "kexing"});
 }
 
 void DefineAction(float energy,
