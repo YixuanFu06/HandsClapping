@@ -131,6 +131,8 @@ class Action {
   }
 
   void PrintAction();
+
+  std::string GetActionMessage();
 };
 
 }  // namespace Game

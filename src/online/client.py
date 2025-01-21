@@ -1,17 +1,43 @@
 import socket
 import threading
 import sys
+import time
+import tkinter as tk
 
 def client_confirm(client_socket):
     response = input()
-    if (response != 'n' and response != 'y'):
+    if response != 'n' and response != 'y':
         print("Invalid response. Please enter 'y' or 'n'.")
         response = input()
     client_socket.send(response.encode('utf-8'))
 
 def client_action(client_socket):
+    message_sent = False
+    def countdown_timer(label):
+        for remaining in range(15, 0, -1):
+            if (message_sent):
+                return
+            label.config(text=f"Enter action in {remaining:02d} seconds")
+            time.sleep(1)
+        label.config(text="Time's up! Please enter your action now!")
+
+    # root = tk.Tk()
+    # root.title("Countdown Timer")
+
+    # label = tk.Label(root, text="", font=("Helvetica", 16))
+    # label.pack(padx=20, pady=20)
+
+    # timer_thread = threading.Thread(target=countdown_timer, args=(label,))
+    # timer_thread.start()
+
     response = input()
+    if response == '':
+        print("Invalid action. Please enter a valid action.")
+        response = input()
+    message_sent = True
     client_socket.send(response.encode('utf-8'))
+
+    # root.destroy()
 
 def start_client(server_ip, client_name):
     # create a socket object
@@ -42,6 +68,8 @@ def start_client(server_ip, client_name):
                 elif message == "ACTION":
                     client_response_thread = threading.Thread(target=client_action, args=(client_socket,))
                     client_response_thread.start()
+                elif message == "":
+                    print("")
                 else:
                     print(f"[server] {message}")
     except Exception as e:

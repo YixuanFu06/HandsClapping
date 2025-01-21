@@ -191,4 +191,28 @@ void Action::PrintAction() {
   std::cout << "Type: " << type_ << std::endl;
 }
 
+std::string Action::GetActionMessage() {
+  std::string message = "Action " + std::to_string(id_) + ": ";
+  for (int i = 0; i < nicknames_.size(); i++) {
+    message += nicknames_[i] + "  ";
+  }
+  message += "\n";
+  message += "Energy: " + std::to_string(energy_) + "\n";
+  message += "Damage:\n";
+  for (int pos = 0; pos < POSITION_NUM; pos++) {
+    message += "position: " + std::to_string(pos) + " " +
+               std::to_string(damage_[pos]) + "\n";
+  }
+  message += "\n";
+  message += "Effect:\n";
+  for (int pos = 0; pos < POSITION_NUM; pos++) {
+    message += "position: " + std::to_string(pos) + " " +
+               std::to_string(effect_[pos]) + "\n";
+  }
+  message += "\n";
+  message += "Dodge Position: " + std::to_string(dodge_position_) + "\n";
+  message += "Type: " + std::to_string(type_) + "\n";
+  return message;
+}
+
 }  // namespace Game

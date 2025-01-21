@@ -10,16 +10,6 @@ confirmed_players = 0
 registered_clients = []
 registered_clients_lock = threading.Lock()
 
-if len(sys.argv) > 1:
-    try:
-        max_players = int(sys.argv[1])
-        print("Setting max_players to " + str(max_players) + ".")
-    except ValueError:
-        print("Invalid max_players value. Using default value 10.")
-        max_players = 10
-else:
-    max_players = 10
-
 def get_ip_address():
     try:
         # get the hostname
@@ -161,6 +151,16 @@ def start_server():
     finally:
         server_running = False
         server_socket.close()
+
+if len(sys.argv) > 1:
+    try:
+        max_players = int(sys.argv[1])
+        print("Setting max_players to " + str(max_players) + ".")
+    except ValueError:
+        print("Invalid max_players value. Using default value 10.")
+        max_players = 10
+else:
+    max_players = 10
 
 if __name__ == "__main__":
     start_server_thread = threading.Thread(target=start_server)

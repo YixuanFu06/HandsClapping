@@ -48,7 +48,8 @@ enum ActionName {
   ARTIFACT_MIND,
   ARTIFACT_REALITY,
   ARTIFACT_STRENGTH,
-  DUPLICATOR
+  DUPLICATOR,
+  TIMEOUT
 };
 
 extern std::vector<Action> actions;

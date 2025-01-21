@@ -97,7 +97,7 @@ void BattleField::RemovePlayer(std::string name) {
 void BattleField::PrintBattleField(uint32_t type) {
   switch (type) {
     case 1:
-      std::cout << "The " << turn_ << " turn. " << member_num_
+      std::cout << "The " << turn_ << "th turn. " << member_num_
                 << " players: \n";
       for (uint32_t i = 0; i < players_.size(); i++) {
         players_[i].PrintPlayer(1);
@@ -106,7 +106,7 @@ void BattleField::PrintBattleField(uint32_t type) {
       break;
     case 2:
       std::cout << std::endl
-                << "The " << turn_ << " turn. " << member_num_ << " players: ";
+                << "The " << turn_ << "th turn. " << member_num_ << " players: ";
       for (uint32_t i = 0; i < players_.size(); i++) {
         std::cout << players_[i].GetName() << " ";
       }
@@ -120,13 +120,50 @@ void BattleField::PrintBattleField(uint32_t type) {
       break;
     case 0:
     default:
-      std::cout << "The " << turn_ << " turn. " << member_num_
+      std::cout << "The " << turn_ << "th turn. " << member_num_
                 << " players: \n";
       for (uint32_t i = 0; i < players_.size(); i++) {
         players_[i].PrintPlayer(0);
       }
       std::cout << std::endl;
   }
+}
+
+std::string BattleField::GetBattleFieldMessage(uint32_t type) {
+  std::string output;
+  switch (type) {
+    case 1:
+      output += "The " + std::to_string(turn_) + "th turn. " +
+                std::to_string(member_num_) + " players: \n";
+      for (uint32_t i = 0; i < players_.size(); i++) {
+        output += players_[i].GetPlayerMessage(1);
+      }
+      output += "\n";
+      break;
+    case 2:
+      output += "\nThe " + std::to_string(turn_) + "th turn. " +
+                std::to_string(member_num_) + " players: ";
+      for (uint32_t i = 0; i < players_.size(); i++) {
+        output += players_[i].GetName() + " ";
+      }
+      output += "\n";
+      break;
+    case 3:
+      for (uint32_t i = 0; i < players_.size(); i++) {
+        output += players_[i].GetPlayerMessage(3);
+      }
+      output += "\n";
+      break;
+    case 0:
+    default:
+      output += "The " + std::to_string(turn_) + "th turn. " +
+                std::to_string(member_num_) + " players: \n";
+      for (uint32_t i = 0; i < players_.size(); i++) {
+        output += players_[i].GetPlayerMessage(0);
+      }
+      output += "\n";
+  }
+  return output;
 }
 
 void BattleField::BattleFieldUpdate(uint32_t type) {
@@ -212,7 +249,14 @@ void BattleField::ActionUpdate() {
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
+    if (players_[i].GetAction()->GetFormalName() == "TIMEOUT") {
+      players_[i].SetHealth(players_[i].GetHealth() - 1);
+      if (players_[i].GetHealth() <= 0) {
+        players_[i].GoDie(TIMEOUTED);
+      }
+    }
   }
+  RemoveDead();
 }
 
 void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
@@ -251,7 +295,14 @@ void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
+    if (players_[i].GetAction()->GetFormalName() == "TIMEOUT") {
+      players_[i].SetHealth(players_[i].GetHealth() - 1);
+      if (players_[i].GetHealth() <= 0) {
+        players_[i].GoDie(TIMEOUTED);
+      }
+    }
   }
+  RemoveDead();
 }
 
 void BattleField::PositionUpdate() {
@@ -420,6 +471,9 @@ void BattleField::RemoveDead() {
     if (players_[i].IsDead()) {
       std::cout << players_[i].GetName() << " is dead because of ";
       switch (players_[i].GetDeathType()) {
+        case TIMEOUTED:
+          std::cout << "being timeout." << std::endl;
+          break;
         case EXHAUSTED:
           std::cout << "getting exhausted." << std::endl;
           break;

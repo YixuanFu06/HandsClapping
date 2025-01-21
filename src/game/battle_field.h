@@ -94,6 +94,10 @@ class BattleField {
   void PrintBattleField(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
                            // names, 3 for referee mode
+              
+  std::string GetBattleFieldMessage(
+      uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
+                           // names, 3 for referee mode when printing
 
   void BattleFieldUpdate(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only

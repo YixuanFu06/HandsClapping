@@ -13,13 +13,32 @@ import threading
 import queue
 import handsclapping as hc
 
+'''
+TODO:
+- Add time limit for each round 
+'''
+
+def send_global_message(client_socket, message):
+    client_socket.send(message.encode('utf-8'))
+
 def get_player_action(action_name, client_socket, name):
-    client_socket.send(name.encode('utf-8') + ", please enter your action:\n".encode('utf-8'))
-    client_socket.send("ACTION\n".encode('utf-8'))
-    action = client_socket.recv(1024).decode('utf-8')
-    action_name.put(action)
-    client_socket.send(f"Your action: {action}, is committed.\n".encode('utf-8'))
-    print(f"[client] {name} action received: {action}")
+    try:
+        # wait for 15 seconds for the player to respond
+        # client_socket.settimeout(15.0)
+        
+        client_socket.send(name.encode('utf-8') + ", please enter your action:\n".encode('utf-8'))
+        client_socket.send("ACTION\n".encode('utf-8'))
+        action = client_socket.recv(1024).decode('utf-8')
+        action_name.put(action)
+        client_socket.send(f"Your action: {action}, is committed.\n".encode('utf-8'))
+        print(f"[client] {name} action received: {action}")
+    except socket.timeout:
+        print(f"[client] {name} did not respond in time. Set action to NONE and health -1.")
+        client_socket.send("Timeout: No action received.\n".encode('utf-8'))
+        client_socket.send("Your action: NONE, is committed and health -1.\n".encode('utf-8'))
+        action_name.put("TIMEOUT")
+    finally:
+        client_socket.settimeout(None)
 
 def game_core(registered_clients):
     hc.InitActions()
@@ -34,7 +53,15 @@ def game_core(registered_clients):
         battle_field.TurnUpdate()
         print("Round", battle_field.GetTurn())
 
+        global_message = battle_field.GetBattleFieldMessage(2)
+        send_global_message_thread = [None] * battle_field.GetMemberNum()
+        for i in range(battle_field.GetMemberNum()):
+            send_global_message_thread[i] = threading.Thread(target=send_global_message, args=(registered_clients[i][0], global_message))
+            send_global_message_thread[i].start()
         battle_field.PrintBattleField(2)
+        for i in range(battle_field.GetMemberNum()):
+            send_global_message_thread[i].join()
+            print(f"[client] Global message received: {registered_clients[i][1]}")
 
         print("Collecting actions...")
         player_actions = [""] * battle_field.GetMemberNum()
@@ -51,14 +78,24 @@ def game_core(registered_clients):
             get_player_action_thread[i].join()
             player_actions[i] = action_name_queue[i].get()
 
-
         battle_field.ActionUpdate(player_actions)
-        battle_field.PrintBattleField(0)
+
+        global_message = battle_field.GetBattleFieldMessage(0)
+        send_global_message_thread = [None] * battle_field.GetMemberNum()
+        for i in range(battle_field.GetMemberNum()):
+            send_global_message_thread[i] = threading.Thread(target=send_global_message, args=(registered_clients[i][0], global_message))
+            send_global_message_thread[i].start()
+        battle_field.PrintBattleField(1)
+        for i in range(battle_field.GetMemberNum()):
+            send_global_message_thread[i].join()
+            print(f"[client] Global message received: {registered_clients[i][1]}")
+
         battle_field.PositionUpdate()
         battle_field.EnergyUpdate()
         battle_field.HealthUpdate()
         battle_field.MemberNumUpdate()
 
+        dead_players = []
         for player in registered_clients:
             name = player[1]
             IsDie = True
@@ -71,7 +108,9 @@ def game_core(registered_clients):
             if IsDie:
                 player[0].send("You are dead!\n".encode('utf-8'))
                 player[0].send("END\n".encode('utf-8'))
-                registered_clients.remove(player)
+                dead_players.append(player)
+        for player in dead_players:
+            registered_clients.remove(player)
 
     if battle_field.GetMemberNum() == 1:
         print("Game over! Winner is:", battle_field.GetPlayerName(0))
