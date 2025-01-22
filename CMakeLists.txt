@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Project name and languages
-project(HandsClappingGame)
+project(HandsClappingGame LANGUAGES CXX)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -10,7 +10,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set pybind11 path
 set(Python_EXECUTABLE "D:/Program Files/Python/Python313/python.exe") # Replace it with your python executable path
-set(Python_LIBRARIES "D:/Program Files/Python/Python313/include") # Replace it with your python library path
+set(Python_LIBRARIES "D:/Program Files/Python/Python313/libs") # Replace it with your python library path
 set(Python_INCLUDE_DIRS "D:/Program Files/Python/Python313/include") # Replace it with your python include path
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
 set(pybind11_DIR C:/Users/yixua/AppData/Roaming/Python/Python313/site-packages/pybind11/share/cmake/pybind11) # Replace it with your pybind11 path

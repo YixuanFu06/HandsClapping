@@ -83,6 +83,9 @@ class BattleField {
   inline void SetTurn(uint32_t turn) {
     turn_ = turn;
   }
+  inline void TurnUpdate() {
+    turn_++;
+  }
 
   inline uint32_t GetMemberNum() {
     return member_num_;
@@ -91,12 +94,28 @@ class BattleField {
   void PrintBattleField(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
                            // names, 3 for referee mode
+              
+  std::string GetBattleFieldMessage(
+      uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
+                           // names, 3 for referee mode when printing
 
   void BattleFieldUpdate(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
                            // names, 3 for referee mode when printing
 
+  inline float GetPlayerHealth(uint32_t player_id) {
+    return players_[player_id].GetHealth();
+  }
+
+  inline float GetPlayerEnergy(uint32_t player_id) {
+    return players_[player_id].GetEnergy();
+  }
+                        
+  void BattleFieldUpdate(std::vector<std::string> player_actions);
+
   void ActionUpdate();
+
+  void ActionUpdate(std::vector<std::string> player_actions);
 
   void PositionUpdate();
 

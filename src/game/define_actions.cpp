@@ -134,6 +134,7 @@ void InitActions() {
                {"ARTIFACT_STRENGTH", "strength", "liliang"});
   DefineAction(3, DUPLICATOR,
                {"DUPLICATOR", "$", "papapa", "papapapapa", "kexing"});
+  DefineAction(0, TIMEOUT, {"TIMEOUT", "-1"});
 }
 
 void DefineAction(float energy,

@@ -59,4 +59,20 @@ void Player::PrintPlayer(uint32_t type) {
   std::cout << std::endl;
 }
 
+std::string Player::GetPlayerMessage(uint32_t type) {
+  std::string message = "Player " + name_ + ".  ";
+  message += "Action: " + action_->GetFormalName() + ".  ";
+  switch (type) {
+    case 1:
+      message += "Health: " + std::to_string(health_) + ".  ";
+      message += "Energy: " + std::to_string(energy_) + ".  ";
+      break;
+    case 3:
+      message += "\n";
+      message += action_->GetActionMessage();
+  }
+  message += "\n";
+  return message;
+}
+
 }  // namespace Game

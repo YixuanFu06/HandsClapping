@@ -6,7 +6,7 @@
 
 namespace Game {
 
-enum DeathType { EXAUHSTED, KILLED, SUICIDED, ATTACK_REBOUNDED, BACKFIRED };
+enum DeathType { TIMEOUTED, EXHAUSTED, KILLED, SUICIDED, ATTACK_REBOUNDED, BACKFIRED };
 
 class Player {
  private:
@@ -93,6 +93,8 @@ class Player {
   void SetAction();
 
   void PrintPlayer(uint32_t type = 0);  // type = 0 for normal, 1 for detailed
+
+  std::string GetPlayerMessage(uint32_t type = 0);  // type = 0 for normal, 1 for detailed
 };
 
 }  // namespace Game
