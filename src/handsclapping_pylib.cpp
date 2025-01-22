@@ -24,13 +24,19 @@ PYBIND11_MODULE(handsclapping, m) {
            "Print the battle field")
       .def("GetBattleFieldMessage", &Game::BattleField::GetBattleFieldMessage,
            "Print the battle field message")
-      .def("BattleFieldUpdate", py::overload_cast<uint32_t>(&Game::BattleField::BattleFieldUpdate),
+      .def("BattleFieldUpdate",
+           py::overload_cast<uint32_t>(&Game::BattleField::BattleFieldUpdate),
            "Update the battle field")
-      .def("BattleFieldUpdate", py::overload_cast<std::vector<std::string>>(&Game::BattleField::BattleFieldUpdate),
+      .def("BattleFieldUpdate",
+           py::overload_cast<std::vector<std::string>>(
+               &Game::BattleField::BattleFieldUpdate),
            "Update the battle field with input action names")
-      .def("ActionUpdate", py::overload_cast<>(&Game::BattleField::ActionUpdate),
+      .def("ActionUpdate",
+           py::overload_cast<>(&Game::BattleField::ActionUpdate),
            "Update the action")
-      .def("ActionUpdate", py::overload_cast<std::vector<std::string>>(&Game::BattleField::ActionUpdate),
+      .def("ActionUpdate",
+           py::overload_cast<std::vector<std::string>>(
+               &Game::BattleField::ActionUpdate),
            "Update the action with input action names")
       .def("PositionUpdate", &Game::BattleField::PositionUpdate,
            "Update the position")
@@ -40,6 +46,5 @@ PYBIND11_MODULE(handsclapping, m) {
            "Update the health")
       .def("MemberNumUpdate", &Game::BattleField::MemberNumUpdate,
            "Update the number of members")
-      .def("TurnUpdate", &Game::BattleField::TurnUpdate,
-           "Update the turn");
+      .def("TurnUpdate", &Game::BattleField::TurnUpdate, "Update the turn");
 }

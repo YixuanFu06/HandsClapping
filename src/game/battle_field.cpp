@@ -1,10 +1,81 @@
 #include "battle_field.h"
 
+#include <algorithm>
+
 #include "action.h"
 #include "define_actions.h"
 #include "player.h"
 
 namespace Game {
+
+void BattleField::DecodeInputString(std::string &player_action_name,
+                                    std::string &current_action_name,
+                                    int &target_name,
+                                    uint32_t &repeated_times) {
+  std::string sub_string;
+  size_t pos = player_action_name.find(',');
+  if (pos != std::string::npos) {
+    sub_string = player_action_name.substr(0, pos);
+    player_action_name.erase(0, pos + 1);
+  } else {
+    sub_string = player_action_name;
+    player_action_name.clear();
+  }
+
+  std::string repeated_times_string = "";
+  while (sub_string.size() > 0 && std::isdigit(sub_string[0])) {
+    repeated_times_string += sub_string[0];
+    sub_string.erase(0, 1);
+  }
+  if (repeated_times_string.size() > 0) {
+    repeated_times = std::stoi(repeated_times_string);
+  } else {
+    repeated_times = 1;
+  }
+
+  pos = sub_string.find("->");
+  if (pos != std::string::npos) {
+    current_action_name = sub_string.substr(0, pos);
+    sub_string.erase(0, pos + 2);
+    if (sub_string[0] != '#') {
+      bool IsFound = false;
+      for (uint32_t i = 0; i < players_.size(); i++) {
+        if (players_[i].GetName() == sub_string) {
+          target_name = i;
+          IsFound = true;
+          break;
+        }
+      }
+      if (!IsFound) {
+        std::cout << "Error: target name " << sub_string
+                  << " is not found. Ignored here." << std::endl;
+        target_name = -1;  // -1 for NONE
+      }
+    } else {
+      sub_string.erase(0, 1);
+      if (std::isdigit(sub_string[0])) {
+        uint32_t target_id = std::stoi(sub_string);
+        if (target_id < players_.size()) {
+          target_name = target_id;
+        } else {
+          std::cout << "Error: target id " << sub_string
+                    << " is out of range. Ignored here." << std::endl;
+          target_name = -1;
+        }
+      } else {
+        std::cout << "Error: target name " << sub_string
+                  << " is not a number. Ignored here." << std::endl;
+        target_name = -1;
+      }
+    }
+  } else {
+    current_action_name = sub_string;
+    sub_string.clear();
+    std::cout << "Warning: target name is not found. Set as to ALL."
+              << std::endl;
+    target_name = -2;  // -2 for ALL
+  }
+}
 
 BattleField::BattleField(std::vector<std::string> player_names) : turn_(0) {
   for (uint32_t i = 0; i < player_names.size(); i++) {
@@ -106,7 +177,8 @@ void BattleField::PrintBattleField(uint32_t type) {
       break;
     case 2:
       std::cout << std::endl
-                << "The " << turn_ << "th turn. " << member_num_ << " players: ";
+                << "The " << turn_ << "th turn. " << member_num_
+                << " players: ";
       for (uint32_t i = 0; i < players_.size(); i++) {
         std::cout << players_[i].GetName() << " ";
       }
@@ -227,24 +299,70 @@ void BattleField::ActionUpdate() {
     std::cout << players_[i].GetName() << "'s action name: ";
     std::string player_action_name;
     std::cin >> player_action_name;
-    ActionName action_name = NONE;
+    ActionName action = NONE;
+
+    player_action_name.erase(
+        std::remove_if(player_action_name.begin(), player_action_name.end(),
+                       ::isspace),
+        player_action_name.end());
 
     bool IsFound = false;
-    for (Action &it : actions) {
-      for (std::string &nickname : it.GetNicknames()) {
-        if (nickname == player_action_name) {
-          action_name = static_cast<ActionName>(it.GetId());
-          IsFound = true;
-          break;
+    while (player_action_name.size() > 0) {
+      std::string current_action_name;
+      int target_id;
+      uint32_t repeated_times;
+      DecodeInputString(player_action_name, current_action_name, target_id,
+                        repeated_times);
+
+      ActionName current_action;
+      bool current_IsFound = false;
+      for (Action &it : actions) {
+        for (std::string &nickname : it.GetNicknames()) {
+          if (nickname == current_action_name) {
+            current_action = static_cast<ActionName>(it.GetId());
+            current_IsFound = true;
+            break;
+          }
         }
+      }
+      if (!current_IsFound) {
+        std::cout << "Error: action " << current_action_name
+                  << " not found. Ignored here." << std::endl;
+      } else if (action != NONE && action != current_action) {
+        std::cout << "Error: action " << current_action_name
+                  << " is different from previous actions. The whole input is "
+                     "ignored."
+                  << std::endl;
+        break;
+      } else {
+        action = current_action;
+        players_[i].SetActionName(action);
+        players_[i].AddTarget(target_id, repeated_times);
+        IsFound = true;
       }
     }
 
     if (!IsFound) {
-      std::cout << "Error: action " << player_action_name
-                << " not found. Set as NONE." << std::endl;
+      std::cout << "No valid action found. Set as NONE." << std::endl;
     }
-    players_[i].SetActionName(action_name);
+    /*
+        bool IsFound = false;
+        for (Action &it : actions) {
+          for (std::string &nickname : it.GetNicknames()) {
+            if (nickname == player_action_name) {
+              action_name = static_cast<ActionName>(it.GetId());
+              IsFound = true;
+              break;
+            }
+          }
+        }
+
+        if (!IsFound) {
+          std::cout << "Error: action " << player_action_name
+                    << " not found. Set as NONE." << std::endl;
+        }
+        players_[i].SetActionName(action_name);
+    */
   }
 
   for (uint32_t i = 0; i < players_.size(); i++) {
@@ -258,8 +376,8 @@ void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
     std::cout << "Error: too many actions. Only the first " << players_.size()
               << " actions are used." << std::endl;
   } else if (player_actions.size() < players_.size()) {
-    std::cout << "Error: too few actions. The last " << players_.size() -
-                     player_actions.size()
+    std::cout << "Error: too few actions. The last "
+              << players_.size() - player_actions.size()
               << " players' actions are set as NONE." << std::endl;
     for (uint32_t i = player_actions.size(); i < players_.size(); i++) {
       player_actions.push_back("NONE");
@@ -301,8 +419,31 @@ void BattleField::PositionUpdate() {
 
 void BattleField::EnergyUpdate() {
   for (uint32_t i = 0; i < players_.size(); i++) {
-    players_[i].SetEnergy(players_[i].GetEnergy() -
-                          players_[i].GetAction()->GetEnergy());
+    for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
+      if (players_[i].GetTargets()[j].first == -1) {
+        continue;
+      } else if (players_[i].GetTargets()[j].first == -2) {
+        switch (players_[i].GetAction()->GetTargetType()) {
+          case SINGLE:
+            players_[i].SetEnergy(players_[i].GetEnergy() -
+                                  players_[i].GetAction()->GetEnergy() *
+                                      GetMemberNum() *
+                                      players_[i].GetTargets()[j].second);
+            break;
+          case ALL:
+          case SELF:
+            players_[i].SetEnergy(players_[i].GetEnergy() -
+                                  players_[i].GetAction()->GetEnergy() *
+                                      players_[i].GetTargets()[j].second);
+            break;
+        }
+      } else {
+        players_[i].SetEnergy(players_[i].GetEnergy() -
+                              players_[i].GetAction()->GetEnergy() *
+                                  players_[i].GetTargets()[j].second);
+      }
+    }
+
     if (players_[i].GetEnergy() < 0) {
       players_[i].GoDie(EXHAUSTED);
     }
@@ -319,20 +460,32 @@ void BattleField::HealthUpdate() {
   for (uint32_t i = 0; i < players_.size(); i++) {
     switch (players_[i].GetAction()->GetId()) {
       case DUPLICATOR:
-        players_[i].SetEnergy(players_[i].GetEnergy() + 5);
+        for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
+          players_[i].SetEnergy(players_[i].GetEnergy() +
+                                5 * players_[i].GetTargets()[j].second);
+        }
         break;
       case ARTIFACT_SOUL:
-        players_[i].SetHealth(players_[i].GetHealth() + 1);
+        for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
+          players_[i].SetHealth(players_[i].GetHealth() +
+                                1 * players_[i].GetTargets()[j].second);
+        }
         break;
     }
   }
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     referee_.ActionLogAdd(&players_[i], i);
+    /*
+    TODO: add action log
+    */
   }
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     referee_.JudgeBattle(&players_[i]);
+    /*
+    TODO: judge battle
+    */
   }
 
   referee_.ActionLogClear();
@@ -404,14 +557,17 @@ void Referee::JudgeBattle(Player *player) {
       if (player->GetAction()->GetId() == SUICIDE) {
         bool IsAttacked = false;
         for (ActionLog &it : action_log_) {
-          if (it.owner_->GetAction()->GetType() == ATTACK && it.owner_->GetAction()->GetEffect(player->GetPosition()) > 0 && 
-              it.owner_->GetAction()->GetId() != BLACKHOLE && it.owner_->GetAction()->GetId() != DOOMSDAY) {
+          if (it.owner_->GetAction()->GetType() == ATTACK &&
+              it.owner_->GetAction()->GetEffect(player->GetPosition()) > 0 &&
+              it.owner_->GetAction()->GetId() != BLACKHOLE &&
+              it.owner_->GetAction()->GetId() != DOOMSDAY) {
             DamageLogAdd(
                 it.owner_,
                 it.owner_->GetAction()->GetDamage(it.owner_->GetPosition()),
                 it.owner_->GetAction()->GetEffect(it.owner_->GetPosition()));
             IsAttacked = true;
-          } else if (it.owner_->GetAction()->GetId() == BLACKHOLE || it.owner_->GetAction()->GetId() == DOOMSDAY) {
+          } else if (it.owner_->GetAction()->GetId() == BLACKHOLE ||
+                     it.owner_->GetAction()->GetId() == DOOMSDAY) {
             DamageLogAdd(
                 player,
                 it.owner_->GetAction()->GetDamage(player->GetPosition()),

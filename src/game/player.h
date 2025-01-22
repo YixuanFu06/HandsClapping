@@ -6,7 +6,14 @@
 
 namespace Game {
 
-enum DeathType { TIMEOUTED, EXHAUSTED, KILLED, SUICIDED, ATTACK_REBOUNDED, BACKFIRED };
+enum DeathType {
+  TIMEOUTED,
+  EXHAUSTED,
+  KILLED,
+  SUICIDED,
+  ATTACK_REBOUNDED,
+  BACKFIRED
+};
 
 class Player {
  private:
@@ -19,6 +26,7 @@ class Player {
   PlayerPosition position_;
   ActionName action_name_;
   Action *action_;
+  std::vector<std::pair<int, uint32_t>> targets_;
 
  public:
   Player(float health,
@@ -92,9 +100,18 @@ class Player {
   }
   void SetAction();
 
+  inline void AddTarget(int target_id, uint32_t repeated_times) {
+    targets_.push_back(std::make_pair(target_id, repeated_times));
+  }
+
+  inline std::vector<std::pair<int, uint32_t>> GetTargets() {
+    return targets_;
+  }
+
   void PrintPlayer(uint32_t type = 0);  // type = 0 for normal, 1 for detailed
 
-  std::string GetPlayerMessage(uint32_t type = 0);  // type = 0 for normal, 1 for detailed
+  std::string GetPlayerMessage(
+      uint32_t type = 0);  // type = 0 for normal, 1 for detailed
 };
 
 }  // namespace Game

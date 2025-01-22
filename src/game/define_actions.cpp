@@ -33,31 +33,27 @@ std::vector<std::string> NickNameProcess(std::vector<std::string> nicknames) {
 
 void InitActions() {
   DefineAction(0, 0, NONE, {"NONE", "0"});
-  DefineAction(-1, PRODUCE, {"PRODUCE", "qi", "1"});
-  DefineAction(1, 1, ATTACK, PISTOL, {"PISTOL", "dia", "gun"});
-  DefineAction(1, 1, {1, 1}, ATTACK, PISTOL_UPPER,
+  DefineAction(-1, PRODUCE, {"PRODUCE", "qi", "."});
+  DefineAction(1, 1, ATTACK, SINGLE, PISTOL, {"PISTOL", "dia", "gun"});
+  DefineAction(1, 1, {1, 1}, ATTACK, SINGLE, PISTOL_UPPER,
                {"PISTOL_UPPER", "^dia", "dia^", "shangda"});
-  DefineAction(
-      1, 1, {7, 7}, ATTACK, PISTOL_LOWER,
-      {"PISTOL_LOWER", "vdia", "diav", "Vdia", "diaV", "xiada"});
-  DefineAction(1, 1, {3, 3}, ATTACK, PISTOL_LEFT,
+  DefineAction(1, 1, {7, 7}, ATTACK, SINGLE, PISTOL_LOWER,
+               {"PISTOL_LOWER", "vdia", "diav", "Vdia", "diaV", "xiada"});
+  DefineAction(1, 1, {3, 3}, ATTACK, SINGLE, PISTOL_LEFT,
                {"PISTOL_LEFT", "<dia", "dia<", "zuoda"});
-  DefineAction(1, 1, {5, 5}, ATTACK, PISTOL_RIGHT,
+  DefineAction(1, 1, {5, 5}, ATTACK, SINGLE, PISTOL_RIGHT,
                {"PISTOL_RIGHT", ">dia", "dia>", "youda"});
-  DefineAction(2, 1, {3, 4, 5}, ATTACK, CHOP_HORIZONTAL,
-               {"CHOP_HORIZONTAL", "-", "hengpi", "hengdun", "hengsao",
-                "heng"});
-  DefineAction(2, 1, {1, 4, 7}, ATTACK, CHOP_VERTICAL,
-               {"CHOP_VERTICAL", "|", "shupi", "shudun", "shu"});
   DefineAction(
-      2, 1, {0, 4, 8}, ATTACK, CHOP_INCLINE1,
-      {"CHOP_INCLINE\\", "\\", "xiepi\\", "xiedun\\", "xie\\"});
+      2, 1, {3, 4, 5}, ATTACK, ALL, CHOP_HORIZONTAL,
+      {"CHOP_HORIZONTAL", "-", "hengpi", "hengdun", "hengsao", "heng"});
+  DefineAction(2, 1, {1, 4, 7}, ATTACK, ALL, CHOP_VERTICAL,
+               {"CHOP_VERTICAL", "|", "shupi", "shudun", "shu"});
+  DefineAction(2, 1, {0, 4, 8}, ATTACK, CHOP_INCLINE1,
+               {"CHOP_INCLINE\\", "\\", "xiepi\\", "xiedun\\", "xie\\"});
   DefineAction(2, 1, {2, 4, 6}, ATTACK, CHOP_INCLINE2,
                {"CHOP_INCLINE/", "/", "xiepi/", "xiedun/", "xie/"});
-  DefineAction(2, 1, {0, 1, 2}, ATTACK, CHOP_UPPER,
-               {"CHOP_UPPER", "shangsao"});
-  DefineAction(2, 1, {6, 7, 8}, ATTACK, CHOP_LOWER,
-               {"CHOP_LOWER", "xiasao"});
+  DefineAction(2, 1, {0, 1, 2}, ATTACK, CHOP_UPPER, {"CHOP_UPPER", "shangsao"});
+  DefineAction(2, 1, {6, 7, 8}, ATTACK, CHOP_LOWER, {"CHOP_LOWER", "xiasao"});
   DefineAction(2, 1, {0, 3, 6}, ATTACK, CHOP_LEFT,
                {"CHOP_LEFT", "zuopi", "zuosao"});
   DefineAction(2, 1, {2, 5, 8}, ATTACK, CHOP_RIGHT,
@@ -69,9 +65,9 @@ void InitActions() {
   DefineAction(4, {1, 1, 1, 1, 0, 1, 1, 1, 1}, {1, 1, 1, 1, 0, 1, 1, 1, 1},
                ATTACK, HAWKEYE,
                {"HAWKEYE", "o", "O", "yan", "yingyan", "ying"});
-  DefineAction(4, {0, 1, 0, 1, 2, 1, 0, 1, 0}, ATTACK, CHOP_CROSS,
-               {"CHOP_CROSS", "+", "hengshu", "hengshusao", "hengshupi",
-                "hengshudun"});
+  DefineAction(
+      4, {0, 1, 0, 1, 2, 1, 0, 1, 0}, ATTACK, CHOP_CROSS,
+      {"CHOP_CROSS", "+", "hengshu", "hengshusao", "hengshupi", "hengshudun"});
   DefineAction(4, {1, 0, 1, 0, 2, 0, 1, 0, 1}, ATTACK, CHOP_X,
                {"CHOP_X", "x", "X", "xpi", "xdun", "xsao"});
   DefineAction(4, 1, {0, 1, 2, 3, 4, 5}, ATTACK, ICEAGE,
@@ -79,7 +75,7 @@ void InitActions() {
   DefineAction(4, 1, {3, 4, 5, 6, 7, 8}, ATTACK, EARTHQUAKE,
                {"EARTHQUAKE", "dilie", "liedi"});
   DefineAction(5, std::pow(10, 5), {0, 1, 2, 3, 4, 5, 6, 7, 8}, std::pow(10, 5),
-               {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, EDITH,
+               {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, SINGLE, EDITH,
                {"EDITH", "yidisi", "e", "E"});
   DefineAction(7, std::pow(10, 7), {0, 1, 2, 3, 4, 5, 6, 7, 8}, std::pow(10, 7),
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, BLACKHOLE,
@@ -88,50 +84,44 @@ void InitActions() {
                std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, DOOMSDAY,
                {"DOOMSDAY", "mori"});
   DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang"});
-  DefineAction(1, -2, REMOTE_SHIELD,
-               {"REMOTE_SHIELD", "~", "lang", "langzi"});
+  DefineAction(1, -2, REMOTE_SHIELD, {"REMOTE_SHIELD", "~", "lang", "langzi"});
   DefineAction(1, -2, REBOUNDER, {"REBOUNDER", "tan", "xiaotan"});
-  DefineAction(UpLeft, DODGE_UPLEFT,
-               {"DODGE_UPLEFT", "^<", "<^", "zuoshang", "shangzuo",
-                "zuoshangduo", "shangzuoduo", "zuoshangshan", "shangzuoshan",
-                "upleft", "leftup"});
   DefineAction(
-      UpMid, DODGE_UPMID,
-      {"DODGE_UPMID", "^", "shang", "shangduo", "shangshan", "up"});
-  DefineAction(UpRight, DODGE_UPRIGHT,
-               {"DODGE_UPRIGHT", "^>", ">^", "youshang", "shangyou",
-                "youshangduo", "shangyouduo", "youshangshan", "shangyoushan",
-                "upright", "rightup"});
+      UpLeft, DODGE_UPLEFT,
+      {"DODGE_UPLEFT", "^<", "<^", "zuoshang", "shangzuo", "zuoshangduo",
+       "shangzuoduo", "zuoshangshan", "shangzuoshan", "upleft", "leftup"});
+  DefineAction(UpMid, DODGE_UPMID,
+               {"DODGE_UPMID", "^", "shang", "shangduo", "shangshan", "up"});
   DefineAction(
-      GroundLeft, DODGE_GROUNDLEFT,
-      {"DODGE_GROUNDLEFT", "<", "zuo", "zuoduo", "zuoshan", "left"});
-  DefineAction(
-      GroundRight, DODGE_GROUNDRIGHT,
-      {"DODGE_GROUNDRIGHT", ">", "you", "youduo", "youshan", "right"}); DefineAction(DownLeft, DODGE_DOWNLEFT,
+      UpRight, DODGE_UPRIGHT,
+      {"DODGE_UPRIGHT", "^>", ">^", "youshang", "shangyou", "youshangduo",
+       "shangyouduo", "youshangshan", "shangyoushan", "upright", "rightup"});
+  DefineAction(GroundLeft, DODGE_GROUNDLEFT,
+               {"DODGE_GROUNDLEFT", "<", "zuo", "zuoduo", "zuoshan", "left"});
+  DefineAction(GroundRight, DODGE_GROUNDRIGHT,
+               {"DODGE_GROUNDRIGHT", ">", "you", "youduo", "youshan", "right"});
+  DefineAction(DownLeft, DODGE_DOWNLEFT,
                {"DODGE_DOWNLEFT", "v<", "<v", "V<", "<V", "zuoxia", "xiazuo",
                 "zuoxiaduo", "xiazuoduo", "zuoxiashan", "xiazuoshan",
                 "downleft", "leftdown"});
-  DefineAction(
-      DownMid, DODGE_DOWNMID,
-      {"DODGE_DOWNMID", "v", "V", "xia", "xiaduo", "xiashan", "down"});
+  DefineAction(DownMid, DODGE_DOWNMID,
+               {"DODGE_DOWNMID", "v", "V", "xia", "xiaduo", "xiashan", "down"});
   DefineAction(DownRight, DODGE_DOWNRIGHT,
                {"DODGE_DOWNRIGHT", "v>", ">v", "V>", ">V", "youxia", "xiayou",
                 "youxiaduo", "xiayouduo", "youxiashan", "xiayoushan",
                 "downright", "rightdown"});
-  DefineAction(0, SUICIDE, {"SUICIDE", "Q", "q", "#", "zisha", "bong"});
-  DefineAction(2, ARTIFACT_SOUL,
-               {"ARTIFACT_SOUL", "soul", "linghun", "@"});
-  DefineAction(
-      2, ARTIFACT_TIME,
-      {"ARTIFACT_TIME", "time", "shijian", "jiu", "lanihuilai"});
-  DefineAction(2, ARTIFACT_SPACE,
-               {"ARTIFACT_SPACE", "space", "kongjian"});
+  DefineAction(0, SUICIDE, {"SUICIDE", "Q", "q", "*", "zisha", "bong"});
+  DefineAction(2, ARTIFACT_SOUL, {"ARTIFACT_SOUL", "soul", "linghun", "@"});
+  /*
+  DefineAction(2, ARTIFACT_TIME,
+               {"ARTIFACT_TIME", "time", "shijian", "jiu", "lanihuilai"});
+  DefineAction(2, ARTIFACT_SPACE, {"ARTIFACT_SPACE", "space", "kongjian"});
   DefineAction(2, ARTIFACT_MIND,
                {"ARTIFACT_MIND", "mind", "spirit", "jingshen"});
-  DefineAction(4, ARTIFACT_REALITY,
-               {"ARTIFACT_REALITY", "reality", "xianshi"});
+  DefineAction(4, ARTIFACT_REALITY, {"ARTIFACT_REALITY", "reality", "xianshi"});
   DefineAction(3, ARTIFACT_STRENGTH,
                {"ARTIFACT_STRENGTH", "strength", "liliang"});
+  */
   DefineAction(3, DUPLICATOR,
                {"DUPLICATOR", "$", "papapa", "papapapapa", "kexing"});
   DefineAction(0, TIMEOUT, {"TIMEOUT", "-1"});
@@ -141,38 +131,42 @@ void DefineAction(float energy,
                   std::vector<float> damage,
                   std::vector<float> effect,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames) {
-  actions.push_back(
-      Action(energy, damage, effect, type, id, NickNameProcess(nicknames)));
+  actions.push_back(Action(energy, damage, effect, type, target_type, id,
+                           NickNameProcess(nicknames)));
 }
 
 void DefineAction(float energy,
                   std::vector<float> damage,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames) {
-  actions.push_back(
-      Action(energy, damage, type, id, NickNameProcess(nicknames)));
+  actions.push_back(Action(energy, damage, type, target_type, id,
+                           NickNameProcess(nicknames)));
 }
 
 void DefineAction(float energy,
                   float damage,
                   float effect,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames) {
-  actions.push_back(
-      Action(energy, damage, effect, type, id, NickNameProcess(nicknames)));
+  actions.push_back(Action(energy, damage, effect, type, target_type, id,
+                           NickNameProcess(nicknames)));
 }
 
 void DefineAction(float energy,
                   float damage,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames) {
-  actions.push_back(
-      Action(energy, damage, type, id, NickNameProcess(nicknames)));
+  actions.push_back(Action(energy, damage, type, target_type, id,
+                           NickNameProcess(nicknames)));
 }
 
 void DefineAction(float energy,
@@ -181,20 +175,22 @@ void DefineAction(float energy,
                   float effect,
                   std::vector<uint32_t> effect_range,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames) {
   actions.push_back(Action(energy, damage, damage_range, effect, effect_range,
-                           type, id, NickNameProcess(nicknames)));
+                           type, target_type, id, NickNameProcess(nicknames)));
 }
 
 void DefineAction(float energy,
                   float damage,
                   std::vector<uint32_t> range,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames) {
-  actions.push_back(
-      Action(energy, damage, range, type, id, NickNameProcess(nicknames)));
+  actions.push_back(Action(energy, damage, range, type, target_type, id,
+                           NickNameProcess(nicknames)));
 }
 
 void DefineAction(float energy,
