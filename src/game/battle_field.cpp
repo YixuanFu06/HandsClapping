@@ -249,12 +249,6 @@ void BattleField::ActionUpdate() {
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
-    if (players_[i].GetAction()->GetFormalName() == "TIMEOUT") {
-      players_[i].SetHealth(players_[i].GetHealth() - 1);
-      if (players_[i].GetHealth() <= 0) {
-        players_[i].GoDie(TIMEOUTED);
-      }
-    }
   }
   RemoveDead();
 }
@@ -295,12 +289,6 @@ void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
-    if (players_[i].GetAction()->GetFormalName() == "TIMEOUT") {
-      players_[i].SetHealth(players_[i].GetHealth() - 1);
-      if (players_[i].GetHealth() <= 0) {
-        players_[i].GoDie(TIMEOUTED);
-      }
-    }
   }
   RemoveDead();
 }
@@ -317,6 +305,10 @@ void BattleField::EnergyUpdate() {
                           players_[i].GetAction()->GetEnergy());
     if (players_[i].GetEnergy() < 0) {
       players_[i].GoDie(EXHAUSTED);
+    }
+    if (players_[i].GetAction()->GetFormalName() == "TIMEOUT") {
+      players_[i].SetHealth(0);
+      players_[i].GoDie(TIMEOUTED);
     }
   }
   RemoveDead();
@@ -412,14 +404,14 @@ void Referee::JudgeBattle(Player *player) {
       if (player->GetAction()->GetId() == SUICIDE) {
         bool IsAttacked = false;
         for (ActionLog &it : action_log_) {
-          if (it.owner_->GetAction()->GetType() == ATTACK &&
-              it.owner_->GetAction()->GetId() != DOOMSDAY) {
+          if (it.owner_->GetAction()->GetType() == ATTACK && it.owner_->GetAction()->GetEffect(player->GetPosition()) > 0 && 
+              it.owner_->GetAction()->GetId() != BLACKHOLE && it.owner_->GetAction()->GetId() != DOOMSDAY) {
             DamageLogAdd(
                 it.owner_,
                 it.owner_->GetAction()->GetDamage(it.owner_->GetPosition()),
                 it.owner_->GetAction()->GetEffect(it.owner_->GetPosition()));
             IsAttacked = true;
-          } else if (it.owner_->GetAction()->GetId() == DOOMSDAY) {
+          } else if (it.owner_->GetAction()->GetId() == BLACKHOLE || it.owner_->GetAction()->GetId() == DOOMSDAY) {
             DamageLogAdd(
                 player,
                 it.owner_->GetAction()->GetDamage(player->GetPosition()),

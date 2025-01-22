@@ -2,12 +2,14 @@ import time
 import socket
 import threading
 import sys
+import argparse
 
 server_running = True
 game_start = False
 current_players = 0
 confirmed_players = 0
 registered_clients = []
+registered_ip = [("127.0.0.1", 1)]
 registered_clients_lock = threading.Lock()
 
 def get_ip_address():
@@ -24,6 +26,9 @@ def waiting_for_confirmation(client_socket, addr, name):
     global current_players
     global confirmed_players
     global registered_clients
+    global registered_ip
+    global max_players
+    global max_ip_player
     global registered_clients_lock
     client_socket.send("Enter y/n to confirm to the game...\n".encode('utf-8'))
     client_socket.send("CONFIRM\n".encode('utf-8'))
@@ -36,6 +41,8 @@ def waiting_for_confirmation(client_socket, addr, name):
         client_socket.close()
         return
     
+    ip = addr[0]
+    
     with registered_clients_lock:
         if len(registered_clients) >= max_players:
             client_socket.send("The game is full. Please try again later.\n".encode('utf-8'))
@@ -44,7 +51,8 @@ def waiting_for_confirmation(client_socket, addr, name):
             current_players -= 1
             client_socket.close()
             return
-        for (player_socket, player_name) in registered_clients:
+        ip_is_registered = False
+        for (player_socket, player_name, player_ip) in registered_clients:
             if player_name == name:
                 client_socket.send("There is already a player with the same name ".encode('utf-8') + name.encode('utf-8') + ". Please log in with another name.\n".encode('utf-8'))
                 client_socket.send("END\n".encode('utf-8'))
@@ -52,7 +60,27 @@ def waiting_for_confirmation(client_socket, addr, name):
                 current_players -= 1
                 client_socket.close()
                 return
-    registered_clients.append((client_socket, name))
+            if player_ip == ip:
+                ip_is_registered = True
+                for (client_ip, num) in registered_ip:
+                    if client_ip == ip:
+                        if num >= max_ip_player:
+                            client_socket.send(f"There are too many players from the same IP address {ip}. Please try again later.\n".encode('utf-8'))
+                            client_socket.send("END\n".encode('utf-8'))
+                            print(f"[client] Player {name} is removed due to the same IP address with too many players.")
+                            current_players -= 1
+                            client_socket.close()
+                            return
+                        else:
+                            num += 1
+                            break
+                    else:
+                        print("Error: find the wrong IP address.")
+                        exit
+    if not ip_is_registered:
+        registered_ip.append((ip, 1))
+        print(f"{ip} is added to the registered IP list.")
+    registered_clients.append((client_socket, name, ip))
     client_socket.send(name.encode('utf-8') + " Confirmed\n".encode('utf-8'))
     confirmed_players += 1
     print(f"[client] Player {name} confirmed.")
@@ -87,10 +115,28 @@ def ClientRegistration(client_socket, addr):
     # receive the player's name
     name = client_socket.recv(1024).decode('utf-8')
     if not name:
+        client_socket.close()
         return
     print(f"[client] Player registration: {name}")
 
+    if len(name) > 16:
+        client_socket.send(f"The length of the player's name is too long. Please try again with a shorter name ({max_name_length} characters).\n".encode('utf-8'))
+        client_socket.send("END\n".encode('utf-8'))
+        print(f"[client] Player {name} is removed due to the long name.")
+        current_players -= 1
+        client_socket.close()
+        return
+
     client_socket.send("Hello, ".encode('utf-8') + name.encode('utf-8') + "\n".encode('utf-8'))
+    if waiting_time > 0:
+        client_socket.send("Waiting time for each action is set to ".encode('utf-8') + str(waiting_time).encode('utf-8') + " seconds.\n".encode('utf-8'))
+    else:
+        client_socket.send("Waiting time for each action is not set in this game.\n".encode('utf-8'))
+    client_socket.send("WAITING_TIME\n".encode('utf-8'))
+    get_ready_message = client_socket.recv(1024).decode('utf-8')
+    while get_ready_message != "GET_READY":
+        get_ready_message = client_socket.recv(1024).decode('utf-8')
+    client_socket.send(str(waiting_time).encode('utf-8') + "\n".encode('utf-8'))
     confirmation_thread = threading.Thread(target=waiting_for_confirmation, args=(client_socket, addr, name))
     confirmation_thread.start()
 
@@ -152,17 +198,25 @@ def start_server():
         server_running = False
         server_socket.close()
 
-if len(sys.argv) > 1:
-    try:
-        max_players = int(sys.argv[1])
-        print("Setting max_players to " + str(max_players) + ".")
-    except ValueError:
-        print("Invalid max_players value. Using default value 10.")
-        max_players = 10
-else:
-    max_players = 10
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Server configuration")
+    parser.add_argument('-player', type=int, default=10, help='Maximum number of players')
+    parser.add_argument('-ip', type=int, default=4, help='Maximum number of players per IP')
+    parser.add_argument('-wait', type=int, default=-1, help='Waiting time in seconds')
+    parser.add_argument('-name', type=int, default=16, help='Maximum length of the player name')
+    args = parser.parse_args()
+    return args
 
 if __name__ == "__main__":
+    args = parse_arguments()
+    max_players = args.player
+    max_ip_player = args.ip
+    waiting_time = args.wait
+    max_name_length = args.name
+    print(f"Setting max_players to {max_players}.")
+    print(f"Setting max_ip_player to {max_ip_player}.")
+    print(f"Setting waiting_time to {waiting_time} seconds.")
+
     start_server_thread = threading.Thread(target=start_server)
     start_server_thread.start()
     while (not game_start):
@@ -186,6 +240,6 @@ if __name__ == "__main__":
 
     from handsclapping_game_online import game_core
 
-    game_core(registered_clients)
+    game_core(registered_clients, waiting_time)
     
     start_server_thread.join()

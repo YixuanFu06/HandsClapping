@@ -13,18 +13,15 @@ import threading
 import queue
 import handsclapping as hc
 
-'''
-TODO:
-- Add time limit for each round 
-'''
-
 def send_global_message(client_socket, message):
     client_socket.send(message.encode('utf-8'))
 
-def get_player_action(action_name, client_socket, name):
+def get_player_action(action_name, client_socket, name, waiting_time):
     try:
-        # wait for 15 seconds for the player to respond
-        # client_socket.settimeout(15.0)
+        if waiting_time > 0:
+            client_socket.settimeout(waiting_time)
+        else:
+            client_socket.settimeout(None)
         
         client_socket.send(name.encode('utf-8') + ", please enter your action:\n".encode('utf-8'))
         client_socket.send("ACTION\n".encode('utf-8'))
@@ -33,14 +30,14 @@ def get_player_action(action_name, client_socket, name):
         client_socket.send(f"Your action: {action}, is committed.\n".encode('utf-8'))
         print(f"[client] {name} action received: {action}")
     except socket.timeout:
-        print(f"[client] {name} did not respond in time. Set action to NONE and health -1.")
+        print(f"[client] {name} did not respond in time. Set action to NONE and remove from battle field.")
         client_socket.send("Timeout: No action received.\n".encode('utf-8'))
-        client_socket.send("Your action: NONE, is committed and health -1.\n".encode('utf-8'))
+        client_socket.send("You are removed from the battle field.\n".encode('utf-8'))
         action_name.put("TIMEOUT")
     finally:
         client_socket.settimeout(None)
 
-def game_core(registered_clients):
+def game_core(registered_clients, waiting_time):
     hc.InitActions()
 
     player_names = []
@@ -72,7 +69,7 @@ def game_core(registered_clients):
             if player_name != registered_clients[i][1]:
                 print(f"Error: player name mismatch in name {player_name} and {registered_clients[i][1]}")
                 return
-            get_player_action_thread[i] = threading.Thread(target=get_player_action, args=(action_name_queue[i], registered_clients[i][0], player_name))
+            get_player_action_thread[i] = threading.Thread(target=get_player_action, args=(action_name_queue[i], registered_clients[i][0], player_name, waiting_time))
             get_player_action_thread[i].start()
         for i in range(battle_field.GetMemberNum()):
             get_player_action_thread[i].join()

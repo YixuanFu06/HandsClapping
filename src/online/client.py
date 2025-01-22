@@ -4,6 +4,8 @@ import sys
 import time
 import tkinter as tk
 
+global waiting_time
+
 def client_confirm(client_socket):
     response = input()
     if response != 'n' and response != 'y':
@@ -11,33 +13,44 @@ def client_confirm(client_socket):
         response = input()
     client_socket.send(response.encode('utf-8'))
 
-def client_action(client_socket):
-    message_sent = False
-    def countdown_timer(label):
-        for remaining in range(15, 0, -1):
-            if (message_sent):
-                return
-            label.config(text=f"Enter action in {remaining:02d} seconds")
-            time.sleep(1)
+def label_update(label, remaining):
+    if remaining > 0:
+        label.config(text=f"Enter action in {remaining:02d} seconds")
+        label.after(1000, label_update, label, remaining - 1)
+    else:
         label.config(text="Time's up! Please enter your action now!")
 
-    # root = tk.Tk()
-    # root.title("Countdown Timer")
-
-    # label = tk.Label(root, text="", font=("Helvetica", 16))
-    # label.pack(padx=20, pady=20)
-
-    # timer_thread = threading.Thread(target=countdown_timer, args=(label,))
-    # timer_thread.start()
-
-    response = input()
-    if response == '':
-        print("Invalid action. Please enter a valid action.")
+def client_action(client_socket):
+    global waiting_time
+    if waiting_time <= 0:
         response = input()
-    message_sent = True
+        while response == '':
+            print("Invalid action. Please enter a valid action.")
+            response = input()
+    else:
+        root = tk.Tk()
+        root.title("Countdown Timer")
+
+        label = tk.Label(root, text="", font=("Helvetica", 16))
+        label.pack(padx=20, pady=20)
+
+        label_update(label, waiting_time)
+
+        response = input()
+        while response == '':
+            print("Invalid action. Please enter a valid action.")
+            response = input()
+        try:
+            root.destroy()
+        except tk.TclError:
+            pass
+
     client_socket.send(response.encode('utf-8'))
 
-    # root.destroy()
+def client_set_waiting_time(client_socket):
+    global waiting_time
+    client_socket.send("GET_READY".encode('utf-8'))
+    waiting_time = int(client_socket.recv(1024).decode('utf-8'))
 
 def start_client(server_ip, client_name):
     # create a socket object
@@ -65,9 +78,10 @@ def start_client(server_ip, client_name):
                 elif message == "CONFIRM":
                     client_response_thread = threading.Thread(target=client_confirm, args=(client_socket,))
                     client_response_thread.start()
+                elif message == "WAITING_TIME":
+                    client_set_waiting_time(client_socket)
                 elif message == "ACTION":
-                    client_response_thread = threading.Thread(target=client_action, args=(client_socket,))
-                    client_response_thread.start()
+                    client_action(client_socket)
                 elif message == "":
                     print("")
                 else:
