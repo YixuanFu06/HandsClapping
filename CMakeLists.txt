@@ -9,11 +9,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set pybind11 path
-set(Python_EXECUTABLE "/home/yixuanfu/anaconda3/envs/HandsClapping/bin/python") # Replace it with your python executable path
-set(Python_LIBRARIES "/home/yixuanfu/anaconda3/envs/HandsClapping/libs") # Replace it with your python library path
-set(Python_INCLUDE_DIRS "/home/yixuanfu/anaconda3/envs/HandsClapping/include") # Replace it with your python include path
+set(Python_EXECUTABLE "D:/python3/python.exe") # Replace it with your python executable path
+set(Python_LIBRARIES "D:/python3/libs") # Replace it with your python library path
+set(Python_INCLUDE_DIRS "D:/python3/include") # Replace it with your python include path
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
-set(pybind11_DIR /home/yixuanfu/anaconda3/envs/HandsClapping/lib/python3.11/site-packages/pybind11/share/cmake/pybind11) # Replace it with your pybind11 path
+set(pybind11_DIR D:/python3/Lib/site-packages/pybind11/share/cmake/pybind11) # Replace it with your pybind11 path
 find_package(pybind11 REQUIRED)
 
 # Set compiler options for UTF-8
