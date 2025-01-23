@@ -26,7 +26,7 @@ class Player {
   PlayerPosition position_;
   ActionName action_name_;
   Action *action_;
-  std::vector<std::pair<int, uint32_t>> targets_;
+  std::vector<std::pair<std::string, uint32_t>> targets_;
 
  public:
   Player(float health,
@@ -51,7 +51,7 @@ class Player {
     energy_ = energy;
   }
 
-  inline std::string GetName() {
+  inline std::string GetName() const {
     return name_;
   }
   inline void SetName(std::string name) {
@@ -100,18 +100,24 @@ class Player {
   }
   void SetAction();
 
-  inline void AddTarget(int target_id, uint32_t repeated_times) {
+  inline void AddTarget(std::string target_id, uint32_t repeated_times) {
     targets_.push_back(std::make_pair(target_id, repeated_times));
   }
 
-  inline std::vector<std::pair<int, uint32_t>> GetTargets() {
+  inline std::vector<std::pair<std::string, uint32_t>> GetTargets() {
     return targets_;
+  }
+
+  inline void ClearTargets() {
+    targets_.clear();
   }
 
   void PrintPlayer(uint32_t type = 0);  // type = 0 for normal, 1 for detailed
 
   std::string GetPlayerMessage(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed
+
+  uint32_t IsAimedAt(const Player *target);
 };
 
 }  // namespace Game
