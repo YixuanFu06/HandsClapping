@@ -14,6 +14,8 @@ extern uint32_t CENTER;
 
 enum ActionType { ATTACK, DEFEND, DODGE, EQUIP };
 
+enum TargetType { ALL, SINGLE, SELF };
+
 enum PlayerPosition {
   UpLeft = 0,
   UpMid = 1,
@@ -35,6 +37,7 @@ class Action {
   std::vector<std::string> nicknames_;
 
   ActionType type_;
+  TargetType target_type_;
   uint32_t id_;
 
  public:
@@ -42,11 +45,13 @@ class Action {
          std::vector<float> damage,
          std::vector<float> effect,
          ActionType type,
+         TargetType target_type,
          uint32_t id,
          std::vector<std::string> nicknames);
   Action(float energy,
          std::vector<float> damage,
          ActionType type,
+         TargetType target_type,
          uint32_t id,
          std::vector<std::string> nicknames);
 
@@ -54,11 +59,13 @@ class Action {
          float damage,
          float effect,
          ActionType type,
+         TargetType target_type,
          uint32_t id,
          std::vector<std::string> nicknames);
   Action(float energy,
          float damage,
          ActionType type,
+         TargetType target_type,
          uint32_t id,
          std::vector<std::string> nicknames);
 
@@ -68,12 +75,14 @@ class Action {
          float effect,
          std::vector<uint32_t> effect_range,
          ActionType type,
+         TargetType target_type,
          uint32_t id,
          std::vector<std::string> nicknames);
   Action(float energy,
          float damage,
          std::vector<uint32_t> range,
          ActionType type,
+         TargetType target_type,
          uint32_t id,
          std::vector<std::string> nicknames);
 
@@ -124,6 +133,10 @@ class Action {
 
   inline ActionType GetType() {
     return type_;
+  }
+
+  inline TargetType GetTargetType() {
+    return target_type_;
   }
 
   inline uint32_t GetId() {

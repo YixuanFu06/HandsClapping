@@ -119,13 +119,22 @@ def ClientRegistration(client_socket, addr):
         return
     print(f"[client] Player registration: {name}")
 
-    if len(name) > 16:
+    if len(name) > max_name_length:
         client_socket.send(f"The length of the player's name is too long. Please try again with a shorter name ({max_name_length} characters).\n".encode('utf-8'))
         client_socket.send("END\n".encode('utf-8'))
         print(f"[client] Player {name} is removed due to the long name.")
         current_players -= 1
         client_socket.close()
         return
+
+    for char in name:
+        if char == ' ' or char == '&' or char == '#' or char == '\n':
+            client_socket.send("The player's name cannot contain space, enter, &, and #. Please try again with another name.\n".encode('utf-8'))
+            client_socket.send("END\n".encode('utf-8'))
+            print(f"[client] Player {name} is removed due to the space in the name.")
+            current_players -= 1
+            client_socket.close()
+            return
 
     client_socket.send("Hello, ".encode('utf-8') + name.encode('utf-8') + "\n".encode('utf-8'))
     if waiting_time > 0:

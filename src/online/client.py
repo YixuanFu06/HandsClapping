@@ -8,9 +8,11 @@ global waiting_time
 
 def client_confirm(client_socket):
     response = input()
-    if response != 'n' and response != 'y':
+    if response != 'n' and response != 'y' and response != '':
         print("Invalid response. Please enter 'y' or 'n'.")
         response = input()
+    if response == '':
+        response = 'y'
     client_socket.send(response.encode('utf-8'))
 
 def label_update(label, remaining):

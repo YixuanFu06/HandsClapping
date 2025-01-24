@@ -60,11 +60,13 @@ void DefineAction(float energy,
                   std::vector<float> damage,
                   std::vector<float> effect,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames);
 void DefineAction(float energy,
                   std::vector<float> damage,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames);
 
@@ -72,11 +74,13 @@ void DefineAction(float energy,
                   float damage,
                   float effect,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames);
 void DefineAction(float energy,
                   float damage,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames);
 
@@ -86,12 +90,14 @@ void DefineAction(float energy,
                   float effect,
                   std::vector<uint32_t> effect_range,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames);
 void DefineAction(float energy,
                   float damage,
                   std::vector<uint32_t> range,
                   ActionType type,
+                  TargetType target_type,
                   uint32_t id,
                   std::vector<std::string> nicknames);
 

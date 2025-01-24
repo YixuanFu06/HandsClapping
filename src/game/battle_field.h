@@ -6,8 +6,11 @@ namespace Game {
 
 struct ActionLog {
   Player *owner_;
+  Action *action_;
+  std::string target_;
   uint32_t id_;
-  ActionLog(Player *owner, uint32_t id) : owner_(owner), id_(id) {
+  ActionLog(Player *owner, Action *action, std::string target)
+      : owner_(owner), action_(action), target_(target) {
   }
 };
 
@@ -26,8 +29,8 @@ class Referee {
   std::vector<DamageLog> damage_log_;
 
  public:
-  inline void ActionLogAdd(Player *player, uint32_t id) {
-    action_log_.push_back(ActionLog(player, id));
+  inline void ActionLogAdd(Player *player, Action *action, std::string target) {
+    action_log_.push_back(ActionLog(player, action, target));
   }
   inline void DamageLogAdd(Player *object, float damage, float effect) {
     damage_log_.push_back(DamageLog(object, damage, effect));
@@ -38,7 +41,7 @@ class Referee {
   inline void DamageLogClear() {
     damage_log_.clear();
   }
-  void JudgeBattle(Player *player);
+  void JudgeBattle(std::vector<Player> &player_list, Player *player);
   void DamageCommit();
 };
 
@@ -94,7 +97,7 @@ class BattleField {
   void PrintBattleField(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
                            // names, 3 for referee mode
-              
+
   std::string GetBattleFieldMessage(
       uint32_t type = 0);  // type = 0 for normal, 1 for detailed, 2 for only
                            // names, 3 for referee mode when printing
@@ -110,7 +113,7 @@ class BattleField {
   inline float GetPlayerEnergy(uint32_t player_id) {
     return players_[player_id].GetEnergy();
   }
-                        
+
   void BattleFieldUpdate(std::vector<std::string> player_actions);
 
   void ActionUpdate();
@@ -128,6 +131,11 @@ class BattleField {
   }
 
   void RemoveDead();
+
+  void DecodeInputString(std::string &player_action_name,
+                         std::string &current_action_name,
+                         std::string &target_name,
+                         uint32_t &repeated_times);
 };
 
 }  // namespace Game
