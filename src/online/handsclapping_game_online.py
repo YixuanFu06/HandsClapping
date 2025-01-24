@@ -1,7 +1,7 @@
 import sys
 import os
 
-handsclapping_lib_dir = '../../build/lib/Release' # use '../../build/lib/Release' instead in windows
+handsclapping_lib_dir = '../../build/lib/Release' # use '../../build/lib' in Linux and '../../build/lib/Release' in Windows
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 

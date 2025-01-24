@@ -1,7 +1,5 @@
 #include "battle_field.h"
 
-#include <bits/stdint-uintn.h>
-
 #include <algorithm>
 
 #include "action.h"
