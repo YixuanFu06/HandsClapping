@@ -9,11 +9,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set pybind11 path
-set(Python_EXECUTABLE "D:/Program Files/Python/Python313/python.exe") # Replace it with your python executable path
-set(Python_LIBRARIES "D:/Program Files/Python/Python313/libs") # Replace it with your python library path
-set(Python_INCLUDE_DIRS "D:/Program Files/Python/Python313/include") # Replace it with your python include path
+set(Python_EXECUTABLE "/home/yixuanfu/anaconda3/envs/HandsClapping/bin/python") # Replace it with your python executable path
+set(Python_LIBRARIES "/home/yixuanfu/anaconda3/envs/HandsClapping/lib") # Replace it with your python library path
+set(Python_INCLUDE_DIRS "/home/yixuanfu/anaconda3/envs/HandsClapping/include") # Replace it with your python include path
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
-set(pybind11_DIR C:/Users/yixua/AppData/Roaming/Python/Python313/site-packages/pybind11/share/cmake/pybind11) # Replace it with your pybind11 path
+set(pybind11_DIR  /home/yixuanfu/anaconda3/envs/HandsClapping/lib/python3.11/site-packages/pybind11/share/cmake/pybind11) # Replace it with your pybind11 path
 find_package(pybind11 REQUIRED)
 
 # Set compiler options for UTF-8
@@ -28,15 +28,20 @@ set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set(GAME_DIR "${SOURCE_DIR}/game")
 set(APP_DIR "${SOURCE_DIR}/app")
 set(ONLINE_DIR "${SOURCE_DIR}/online")
+set(AI_IDIOT_DIR "${SOURCE_DIR}/AI/Idiot")
 
 # Collect files
 file(GLOB_RECURSE GAME_SOURCES "${GAME_DIR}/*.cpp")
+file(GLOB_RECURSE IDIOT_SOURCES "${AI_IDIOT_DIR}/include/*.cpp")
 
 # Main progams
 set(Main_Game "${APP_DIR}/handsclapping_game.cpp")
 set(Game_Debug_Mode "${APP_DIR}/handsclapping_game_debug.cpp")
 set(Referee_Mode "${APP_DIR}/handsclapping_referee.cpp")
 set(Binding_File "${SOURCE_DIR}/handsclapping_pylib.cpp")
+set(Idiot_Training "${AI_IDIOT_DIR}/app/training.cpp")
+set(Idiot_Demo "${AI_IDIOT_DIR}/app/demo.cpp")
+set(Idiot_1v1 "${AI_IDIOT_DIR}/app/game_1v1.cpp")
 
 # Generate python binding
 pybind11_add_module(handsclapping ${Binding_File} ${GAME_SOURCES})
@@ -54,3 +59,15 @@ target_include_directories(handsclapping_game_debug PRIVATE ${APP_DIR} ${GAME_DI
 # Referee mode executable file
 add_executable(handsclapping_referee ${Referee_Mode} ${GAME_SOURCES})
 target_include_directories(handsclapping_referee PRIVATE ${APP_DIR} ${GAME_DIR})
+
+# Idiot training executable file
+add_executable(idiot_training ${Idiot_Training} ${GAME_SOURCES} ${IDIOT_SOURCES})
+target_include_directories(idiot_training PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
+
+# Idiot demo executable file
+add_executable(idiot_demo ${Idiot_Demo} ${GAME_SOURCES} ${IDIOT_SOURCES})
+target_include_directories(idiot_demo PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
+
+# Idiot 1v1 game executable file
+add_executable(idiot_1v1_game ${Idiot_1v1} ${GAME_SOURCES} ${IDIOT_SOURCES})
+target_include_directories(idiot_1v1_game PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})

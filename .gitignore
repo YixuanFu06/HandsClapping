@@ -36,3 +36,6 @@ build/
 .vs/
 .vscode
 __pycache__/
+
+data/
+*.sh

@@ -32,7 +32,6 @@ std::vector<std::string> NickNameProcess(std::vector<std::string> nicknames) {
 }
 
 void InitActions() {
-  DefineAction(0, 0, NONE, {"NONE", "0"});
   DefineAction(-1, PRODUCE, {"PRODUCE", "qi", "."});
   DefineAction(1, 1, ATTACK, SINGLE, PISTOL, {"PISTOL", "dia", "gun"});
   DefineAction(1, 1, {1, 1}, ATTACK, SINGLE, PISTOL_UPPER,
@@ -124,6 +123,7 @@ void InitActions() {
   */
   DefineAction(3, DUPLICATOR,
                {"DUPLICATOR", "$", "papapa", "papapapapa", "kexing"});
+  DefineAction(0, 0, NONE, {"NONE", "0"});
   DefineAction(0, TIMEOUT, {"TIMEOUT", "-1"});
 }
 
