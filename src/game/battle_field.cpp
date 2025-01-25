@@ -283,7 +283,8 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
   }
 }
 
-void BattleField::BattleFieldUpdate(std::vector<std::string> player_actions, uint32_t mode) {
+void BattleField::BattleFieldUpdate(std::vector<std::string> player_actions,
+                                    uint32_t mode) {
   TurnUpdate();
   ActionUpdate(player_actions, mode);
   if (mode == 0) {
@@ -350,7 +351,8 @@ void BattleField::ActionUpdate(uint32_t print_mode) {
   RemoveDead(print_mode);
 }
 
-void BattleField::ActionUpdate(std::vector<std::string> player_actions, uint32_t print_mode) {
+void BattleField::ActionUpdate(std::vector<std::string> player_actions,
+                               uint32_t print_mode) {
   if (player_actions.size() > players_.size()) {
     std::cout << "Error: too many actions. Only the first " << players_.size()
               << " actions are used." << std::endl;
@@ -661,32 +663,32 @@ void Referee::DamageCommit() {
 
 void BattleField::RemoveDead(uint32_t mode) {
   if (mode == 0) {
-  for (uint32_t i = 0; i < players_.size(); i++) {
-    if (players_[i].IsDead()) {
-      std::cout << players_[i].GetName() << " is dead because of ";
-      switch (players_[i].GetDeathType()) {
-        case TIMEOUTED:
-          std::cout << "being timeout." << std::endl;
-          break;
-        case EXHAUSTED:
-          std::cout << "getting exhausted." << std::endl;
-          break;
-        case KILLED:
-          std::cout << "being killed." << std::endl;
-          break;
-        case SUICIDED:
-          std::cout << "commit suicide." << std::endl;
-          break;
-        case ATTACK_REBOUNDED:
-          std::cout << "the attack is rebounded." << std::endl;
-          break;
-        case BACKFIRED:
-          std::cout << "been backfired" << std::endl;
-          break;
+    for (uint32_t i = 0; i < players_.size(); i++) {
+      if (players_[i].IsDead()) {
+        std::cout << players_[i].GetName() << " is dead because of ";
+        switch (players_[i].GetDeathType()) {
+          case TIMEOUTED:
+            std::cout << "being timeout." << std::endl;
+            break;
+          case EXHAUSTED:
+            std::cout << "getting exhausted." << std::endl;
+            break;
+          case KILLED:
+            std::cout << "being killed." << std::endl;
+            break;
+          case SUICIDED:
+            std::cout << "commit suicide." << std::endl;
+            break;
+          case ATTACK_REBOUNDED:
+            std::cout << "the attack is rebounded." << std::endl;
+            break;
+          case BACKFIRED:
+            std::cout << "been backfired" << std::endl;
+            break;
+        }
       }
     }
   }
-}
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     if (players_[i].IsDead()) {

@@ -47,12 +47,14 @@ void InitActions() {
       {"CHOP_HORIZONTAL", "-", "hengpi", "hengdun", "hengsao", "heng"});
   DefineAction(2, 1, {1, 4, 7}, ATTACK, ALL, CHOP_VERTICAL,
                {"CHOP_VERTICAL", "|", "shupi", "shudun", "shu"});
-  DefineAction(2, 1, {0, 4, 8}, ATTACK,ALL, CHOP_INCLINE1,
+  DefineAction(2, 1, {0, 4, 8}, ATTACK, ALL, CHOP_INCLINE1,
                {"CHOP_INCLINE\\", "\\", "xiepi\\", "xiedun\\", "xie\\"});
   DefineAction(2, 1, {2, 4, 6}, ATTACK, ALL, CHOP_INCLINE2,
                {"CHOP_INCLINE/", "/", "xiepi/", "xiedun/", "xie/"});
-  DefineAction(2, 1, {0, 1, 2}, ATTACK, ALL, CHOP_UPPER, {"CHOP_UPPER", "shangsao"});
-  DefineAction(2, 1, {6, 7, 8}, ATTACK, ALL, CHOP_LOWER, {"CHOP_LOWER", "xiasao"});
+  DefineAction(2, 1, {0, 1, 2}, ATTACK, ALL, CHOP_UPPER,
+               {"CHOP_UPPER", "shangsao"});
+  DefineAction(2, 1, {6, 7, 8}, ATTACK, ALL, CHOP_LOWER,
+               {"CHOP_LOWER", "xiasao"});
   DefineAction(2, 1, {0, 3, 6}, ATTACK, ALL, CHOP_LEFT,
                {"CHOP_LEFT", "zuopi", "zuosao"});
   DefineAction(2, 1, {2, 5, 8}, ATTACK, ALL, CHOP_RIGHT,
@@ -67,7 +69,7 @@ void InitActions() {
   DefineAction(
       4, {0, 1, 0, 1, 2, 1, 0, 1, 0}, ATTACK, ALL, CHOP_CROSS,
       {"CHOP_CROSS", "+", "hengshu", "hengshusao", "hengshupi", "hengshudun"});
-  DefineAction(4, {1, 0, 1, 0, 2, 0, 1, 0, 1}, ATTACK, ALL,CHOP_X,
+  DefineAction(4, {1, 0, 1, 0, 2, 0, 1, 0, 1}, ATTACK, ALL, CHOP_X,
                {"CHOP_X", "x", "X", "xpi", "xdun", "xsao"});
   DefineAction(4, 1, {0, 1, 2, 3, 4, 5}, ATTACK, ALL, ICEAGE,
                {"ICEAGE", "bing", "bingtian", "tianbeng"});
@@ -80,8 +82,8 @@ void InitActions() {
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL, BLACKHOLE,
                {"BLACKHOLE", "heidong"});
   DefineAction(10, std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8},
-               std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL, DOOMSDAY,
-               {"DOOMSDAY", "mori"});
+               std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL,
+               DOOMSDAY, {"DOOMSDAY", "mori"});
   DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang"});
   DefineAction(1, -2, REMOTE_SHIELD, {"REMOTE_SHIELD", "~", "lang", "langzi"});
   DefineAction(1, -2, REBOUNDER, {"REBOUNDER", "tan", "xiaotan"});
