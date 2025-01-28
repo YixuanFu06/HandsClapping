@@ -10,6 +10,7 @@ Action::Action(float energy,
                std::vector<float> damage,
                std::vector<float> effect,
                ActionType type,
+               TargetType target_type,
                uint32_t id,
                std::vector<std::string> nicknames)
     : energy_(energy),
@@ -17,6 +18,7 @@ Action::Action(float energy,
       effect_(effect),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
       type_(type),
+      target_type_(target_type),
       id_(id),
       nicknames_(nicknames) {
   if (damage.size() != POSITION_NUM || effect.size() != POSITION_NUM) {
@@ -30,6 +32,7 @@ Action::Action(float energy,
 Action::Action(float energy,
                std::vector<float> damage,
                ActionType type,
+               TargetType target_type,
                uint32_t id,
                std::vector<std::string> nicknames)
     : energy_(energy),
@@ -37,6 +40,7 @@ Action::Action(float energy,
       effect_(damage),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
       type_(type),
+      target_type_(target_type),
       id_(id),
       nicknames_(nicknames) {
   if (damage.size() != POSITION_NUM) {
@@ -51,11 +55,13 @@ Action::Action(float energy,
                float damage,
                float effect,
                ActionType type,
+               TargetType target_type,
                uint32_t id,
                std::vector<std::string> nicknames)
     : energy_(energy),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
       type_(type),
+      target_type_(target_type),
       id_(id),
       nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
@@ -67,11 +73,13 @@ Action::Action(float energy,
 Action::Action(float energy,
                float damage,
                ActionType type,
+               TargetType target_type,
                uint32_t id,
                std::vector<std::string> nicknames)
     : energy_(energy),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
       type_(type),
+      target_type_(target_type),
       id_(id),
       nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
@@ -92,11 +100,13 @@ Action::Action(float energy,
                float effect,
                std::vector<uint32_t> effect_range,
                ActionType type,
+               TargetType target_type,
                uint32_t id,
                std::vector<std::string> nicknames)
     : energy_(energy),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
       type_(type),
+      target_type_(target_type),
       id_(id),
       nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
@@ -111,11 +121,13 @@ Action::Action(float energy,
                float damage,
                std::vector<uint32_t> range,
                ActionType type,
+               TargetType target_type,
                uint32_t id,
                std::vector<std::string> nicknames)
     : energy_(energy),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
       type_(type),
+      target_type_(target_type),
       id_(id),
       nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
@@ -138,7 +150,8 @@ Action::Action(float energy,
                std::vector<std::string> nicknames)
     : energy_(energy),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
-      type_(ActionType::DEFEND),
+      type_(DEFEND),
+      target_type_(SELF),
       id_(id),
       nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
@@ -151,7 +164,8 @@ Action::Action(PlayerPosition dodge_position,
                std::vector<std::string> nicknames)
     : energy_(0),
       dodge_position_(dodge_position),
-      type_(ActionType::DODGE),
+      type_(DODGE),
+      target_type_(SELF),
       id_(id),
       nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);
@@ -161,7 +175,8 @@ Action::Action(PlayerPosition dodge_position,
 Action::Action(float energy, uint32_t id, std::vector<std::string> nicknames)
     : energy_(energy),
       dodge_position_(static_cast<PlayerPosition>(CENTER)),
-      type_(ActionType::EQUIP),
+      type_(EQUIP),
+      target_type_(SELF),
       id_(id),
       nicknames_(nicknames) {
   damage_.resize(POSITION_NUM, 0.0f);

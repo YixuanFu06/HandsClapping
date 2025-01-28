@@ -47,6 +47,10 @@ void Player::SetAction() {
 void Player::PrintPlayer(uint32_t type) {
   std::cout << "Player " << name_ << ".  ";
   std::cout << "Action: " << action_->GetFormalName() << ".  ";
+  for (uint32_t i = 0; i < targets_.size(); i++) {
+    std::cout << "Target: " << targets_[i].first << " " << targets_[i].second
+              << " times.  ";
+  }
   switch (type) {
     case 1:
       std::cout << "Health: " << health_ << ".  ";
@@ -62,6 +66,10 @@ void Player::PrintPlayer(uint32_t type) {
 std::string Player::GetPlayerMessage(uint32_t type) {
   std::string message = "Player " + name_ + ".  ";
   message += "Action: " + action_->GetFormalName() + ".  ";
+  for (uint32_t i = 0; i < targets_.size(); i++) {
+    message += "Target: " + targets_[i].first + " " +
+               std::to_string(targets_[i].second) + " times.  ";
+  }
   switch (type) {
     case 1:
       message += "Health: " + std::to_string(health_) + ".  ";
@@ -73,6 +81,16 @@ std::string Player::GetPlayerMessage(uint32_t type) {
   }
   message += "\n";
   return message;
+}
+
+uint32_t Player::IsAimedAt(const Player *target) {
+  uint32_t times = 0;
+  for (uint32_t i = 0; i < targets_.size(); i++) {
+    if (targets_[i].first == target->GetName() || targets_[i].first == "#ALL") {
+      times += targets_[i].second;
+    }
+  }
+  return times;
 }
 
 }  // namespace Game
