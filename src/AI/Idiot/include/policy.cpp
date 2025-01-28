@@ -3,6 +3,8 @@
 #include <fstream>
 #include <random>
 
+#include "define_actions.h"
+
 namespace AI {
 
 namespace Idiot {
@@ -227,7 +229,7 @@ Policy::Policy(std::string name, uint32_t id)
                                         MAX_ENERGY + 1, MAX_ENERGY + 1,
                                         ACTION_NUM}),
       id_(id),
-      name_("name"),
+      name_(name),
       update_precision_(default_update_precision),
       declining_coefficient_(default_declining_coefficient),
       conservative_coefficient_(default_conservative_coefficient),
@@ -440,6 +442,30 @@ void Policy::RewardFeedback(Reward &r) {
     std::cerr << "Error: invalid reward tensor." << std::endl;
     exit(1);
   }
+}
+
+float Policy::Similarity(const Policy &p) {
+  float tvd = 0.0;
+  float total_entry = 0.0;
+  float declining_coefficient =
+      std::min(declining_coefficient_, p.declining_coefficient_);
+  for (uint32_t i = 1; i <= MAX_HEALTH; i++) {
+    for (uint32_t j = 1; j <= MAX_HEALTH; j++) {
+      for (uint32_t k = 0; k <= MAX_ENERGY; k++) {
+        for (uint32_t l = 0; l <= MAX_ENERGY; l++) {
+          float ratio = pow(declining_coefficient, i + j + k + l - 2);
+          for (uint32_t n = 0; n < ACTION_NUM; n++) {
+            if (Game::actions[n].GetEnergy() <= l) {
+              tvd += std::abs((*this)[i][j][k][l][n] - p[i][j][k][l][n]) / 2 *
+                     ratio;
+            }
+          }
+          total_entry += ratio;
+        }
+      }
+    }
+  }
+  return 1 - tvd / total_entry;
 }
 
 void Policy::Update(Reward &r) {

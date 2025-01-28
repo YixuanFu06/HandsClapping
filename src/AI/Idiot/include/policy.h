@@ -109,6 +109,8 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
   void Update(Reward &r);
   void Update(Reward &&r);
   void RewardFeedback(Reward &r);
+  float Similarity(
+      const Policy &p);  // get the tv-distance between two policies
   Game::Action *GetAction(uint32_t health,
                           uint32_t energy,
                           uint32_t enemy_health,

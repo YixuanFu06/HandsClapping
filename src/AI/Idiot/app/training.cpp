@@ -1,7 +1,7 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string DATA_PATH1 = "./data/AI/Idiot/policy1.txt";
+const std::string DATA_PATH1 = "./data/AI/Idiot/policy_Idiot-alpha.txt";
 const std::string DATA_PATH2 = "./data/AI/Idiot/policy2.txt";
 
 void PrintProgressBar(int current, int total) {
