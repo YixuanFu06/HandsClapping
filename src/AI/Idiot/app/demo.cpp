@@ -1,8 +1,8 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string DATA_PATH1 = "./data/AI/Idiot/policy1.txt";
-const std::string DATA_PATH2 = "./data/AI/Idiot/policy2.txt";
+const std::string DATA_PATH1 = "./data/AI/Idiot/init.txt";
+const std::string DATA_PATH2 = "./data/AI/Idiot/policy1.txt";
 
 int main() {
   std::filesystem::path root_path = AI::Idiot::FindRootPath();
@@ -15,7 +15,7 @@ int main() {
   AI::Idiot::Policy policy1 = AI::Idiot::Policy(data_path1.string());
   AI::Idiot::Policy policy2 = AI::Idiot::Policy(data_path2.string());
 
-  Game::BattleField battle_field({"player1", "player2"});
+  Game::BattleField battle_field({policy1.GetName(), policy2.GetName()});
   while (battle_field.GetMemberNum() > 1) {
     float health1 = battle_field.GetPlayerHealth(0);
     float energy1 = battle_field.GetPlayerEnergy(0);

@@ -212,8 +212,11 @@ void Reward::Store(const std::string &path) {
           }
           fout << std::endl;
         }
+        fout << std::endl;
       }
+      fout << std::endl;
     }
+    fout << std::endl;
   }
   fout.close();
 }
@@ -383,8 +386,11 @@ void Policy::Store(const std::string &path) {
           }
           fout << std::endl;
         }
+        fout << std::endl;
       }
+      fout << std::endl;
     }
+    fout << std::endl;
   }
   fout.close();
 }

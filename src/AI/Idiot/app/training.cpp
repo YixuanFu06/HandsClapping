@@ -1,7 +1,7 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string DATA_PATH1 = "./data/AI/Idiot/policy_Idiot-alpha.txt";
+const std::string DATA_PATH1 = "./data/AI/Idiot/init.txt";
 const std::string DATA_PATH2 = "./data/AI/Idiot/policy2.txt";
 
 void PrintProgressBar(int current, int total) {
@@ -56,7 +56,7 @@ int main() {
   uint32_t player1_win = 0, player2_win = 0;
 
   for (uint32_t i = 0; i < total_rounds; i++) {
-    Game::BattleField battle_field({"player1", "player2"});
+    Game::BattleField battle_field({policy1.GetName(), policy2.GetName()});
     AI::Idiot::Reward strategy_reward1 = AI::Idiot::Reward(policy1);
     AI::Idiot::Reward strategy_reward2 = AI::Idiot::Reward(policy2);
     AI::Idiot::Reward action_reward1 = AI::Idiot::Reward(policy1);
@@ -104,7 +104,7 @@ int main() {
     if (battle_field.GetMemberNum() == 0) {
       policy1.Update(action_reward1);
       policy2.Update(action_reward2);
-    } else if (battle_field.GetPlayerName(0) == "player1") {
+    } else if (battle_field.GetPlayerName(0) == policy1.GetName()) {
       policy1.Update(action_reward1 + strategy_reward1);
       policy2.Update(action_reward2 - strategy_reward2);
       player1_win++;
@@ -119,8 +119,8 @@ int main() {
 
   char confirm;
   std::cout << std::endl
-            << "player1 win: " << player1_win
-            << " times, player2 win: " << player2_win << " times.";
+            << policy1.GetName() << " win: " << player1_win
+            << " times, " << policy2.GetName() << " win: " << player2_win << " times.";
   std::cout << std::endl << "Do you want to store the policy? (y/n): ";
   std::cin >> confirm;
   while (confirm != 'y' && confirm != 'n') {
