@@ -37,5 +37,6 @@ build/
 .vscode
 __pycache__/
 
+# Draft datasets and scripts
 data/
-*.sh
+tmp/

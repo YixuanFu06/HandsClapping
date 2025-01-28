@@ -110,8 +110,16 @@ class BattleField {
     return players_[player_id].GetHealth();
   }
 
+  inline void SetPlayerHealth(uint32_t player_id, float health) {
+    players_[player_id].SetHealth(health);
+  }
+
   inline float GetPlayerEnergy(uint32_t player_id) {
     return players_[player_id].GetEnergy();
+  }
+
+  inline void SetPlayerEnergy(uint32_t player_id, float energy) {
+    players_[player_id].SetEnergy(energy);
   }
 
   void BattleFieldUpdate(
