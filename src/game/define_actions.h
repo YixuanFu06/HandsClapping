@@ -5,7 +5,6 @@
 namespace Game {
 
 enum ActionName {
-  NONE,
   PRODUCE,
   PISTOL,
   PISTOL_UPPER,
@@ -43,12 +42,15 @@ enum ActionName {
   DODGE_DOWNRIGHT,
   SUICIDE,
   ARTIFACT_SOUL,
+  /*
   ARTIFACT_TIME,
   ARTIFACT_SPACE,
   ARTIFACT_MIND,
   ARTIFACT_REALITY,
   ARTIFACT_STRENGTH,
+  */
   DUPLICATOR,
+  NONE,
   TIMEOUT
 };
 

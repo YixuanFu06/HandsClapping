@@ -36,3 +36,7 @@ build/
 .vs/
 .vscode
 __pycache__/
+
+# Draft datasets and scripts
+data/
+tmp/

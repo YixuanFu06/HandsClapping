@@ -283,16 +283,20 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
   }
 }
 
-void BattleField::BattleFieldUpdate(std::vector<std::string> player_actions) {
-  ActionUpdate(player_actions);
-  PrintBattleField(0);
+void BattleField::BattleFieldUpdate(std::vector<std::string> player_actions,
+                                    uint32_t mode) {
+  TurnUpdate();
+  ActionUpdate(player_actions, mode);
+  if (mode == 0) {
+    PrintBattleField(0);
+  }
   PositionUpdate();
-  EnergyUpdate();
-  HealthUpdate();
+  EnergyUpdate(mode);
+  HealthUpdate(mode);
   MemberNumUpdate();
 }
 
-void BattleField::ActionUpdate() {
+void BattleField::ActionUpdate(uint32_t print_mode) {
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].ClearTargets();
     std::cout << players_[i].GetName() << "'s action name: ";
@@ -344,10 +348,11 @@ void BattleField::ActionUpdate() {
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
   }
-  RemoveDead();
+  RemoveDead(print_mode);
 }
 
-void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
+void BattleField::ActionUpdate(std::vector<std::string> player_actions,
+                               uint32_t print_mode) {
   if (player_actions.size() > players_.size()) {
     std::cout << "Error: too many actions. Only the first " << players_.size()
               << " actions are used." << std::endl;
@@ -409,7 +414,7 @@ void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
   }
-  RemoveDead();
+  RemoveDead(print_mode);
 }
 
 void BattleField::PositionUpdate() {
@@ -418,7 +423,7 @@ void BattleField::PositionUpdate() {
   }
 }
 
-void BattleField::EnergyUpdate() {
+void BattleField::EnergyUpdate(uint32_t print_mode) {
   for (uint32_t i = 0; i < players_.size(); i++) {
     for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
       if (players_[i].GetTargets()[j].first == "#NONE") {
@@ -454,10 +459,10 @@ void BattleField::EnergyUpdate() {
       players_[i].GoDie(TIMEOUTED);
     }
   }
-  RemoveDead();
+  RemoveDead(print_mode);
 }
 
-void BattleField::HealthUpdate() {
+void BattleField::HealthUpdate(uint32_t print_mode) {
   // single person actions update
   for (uint32_t i = 0; i < players_.size(); i++) {
     switch (players_[i].GetAction()->GetId()) {
@@ -507,7 +512,7 @@ void BattleField::HealthUpdate() {
   referee_.DamageCommit();
   referee_.DamageLogClear();
 
-  RemoveDead();
+  RemoveDead(print_mode);
 }
 
 void Referee::JudgeBattle(std::vector<Player> &player_list, Player *player) {
@@ -576,19 +581,6 @@ void Referee::JudgeBattle(std::vector<Player> &player_list, Player *player) {
               std::make_pair(it.action_->GetEffect(player->GetPosition()),
                              it.action_->GetDamage(player->GetPosition()))));
         }
-        /*
-        // special cases: VISION > HAMMER
-        if (it.action_->GetId() == VISION &&
-            player->GetAction()->GetId() == HAMMER) {
-          total_effect +=
-              it.action_->GetEffect(player->GetPosition());
-        } else {
-          total_effect +=
-              std::max(it.action_->GetEffect(player->GetPosition()) -
-                          player->GetAction()->GetEffect(player->GetPosition()),
-                      0.0f);
-        }
-        */
       }
 
       for (auto &defender : defenders) {
@@ -669,29 +661,31 @@ void Referee::DamageCommit() {
   }
 }
 
-void BattleField::RemoveDead() {
-  for (uint32_t i = 0; i < players_.size(); i++) {
-    if (players_[i].IsDead()) {
-      std::cout << players_[i].GetName() << " is dead because of ";
-      switch (players_[i].GetDeathType()) {
-        case TIMEOUTED:
-          std::cout << "being timeout." << std::endl;
-          break;
-        case EXHAUSTED:
-          std::cout << "getting exhausted." << std::endl;
-          break;
-        case KILLED:
-          std::cout << "being killed." << std::endl;
-          break;
-        case SUICIDED:
-          std::cout << "commit suicide." << std::endl;
-          break;
-        case ATTACK_REBOUNDED:
-          std::cout << "the attack is rebounded." << std::endl;
-          break;
-        case BACKFIRED:
-          std::cout << "been backfired" << std::endl;
-          break;
+void BattleField::RemoveDead(uint32_t mode) {
+  if (mode == 0) {
+    for (uint32_t i = 0; i < players_.size(); i++) {
+      if (players_[i].IsDead()) {
+        std::cout << players_[i].GetName() << " is dead because of ";
+        switch (players_[i].GetDeathType()) {
+          case TIMEOUTED:
+            std::cout << "being timeout." << std::endl;
+            break;
+          case EXHAUSTED:
+            std::cout << "getting exhausted." << std::endl;
+            break;
+          case KILLED:
+            std::cout << "being killed." << std::endl;
+            break;
+          case SUICIDED:
+            std::cout << "commit suicide." << std::endl;
+            break;
+          case ATTACK_REBOUNDED:
+            std::cout << "the attack is rebounded." << std::endl;
+            break;
+          case BACKFIRED:
+            std::cout << "been backfired" << std::endl;
+            break;
+        }
       }
     }
   }
@@ -699,7 +693,9 @@ void BattleField::RemoveDead() {
   for (uint32_t i = 0; i < players_.size(); i++) {
     if (players_[i].IsDead()) {
       std::string name = RemovePlayer(i--);
-      std::cout << name << " is removed from the battle field." << std::endl;
+      if (mode == 0) {
+        std::cout << name << " is removed from the battle field." << std::endl;
+      }
     }
   }
 }

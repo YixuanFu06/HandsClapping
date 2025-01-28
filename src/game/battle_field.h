@@ -110,27 +110,38 @@ class BattleField {
     return players_[player_id].GetHealth();
   }
 
+  inline void SetPlayerHealth(uint32_t player_id, float health) {
+    players_[player_id].SetHealth(health);
+  }
+
   inline float GetPlayerEnergy(uint32_t player_id) {
     return players_[player_id].GetEnergy();
   }
 
-  void BattleFieldUpdate(std::vector<std::string> player_actions);
+  inline void SetPlayerEnergy(uint32_t player_id, float energy) {
+    players_[player_id].SetEnergy(energy);
+  }
 
-  void ActionUpdate();
+  void BattleFieldUpdate(
+      std::vector<std::string> player_actions,
+      uint32_t mode = 0);  // 0 for default and 1 for slient mode
 
-  void ActionUpdate(std::vector<std::string> player_actions);
+  void ActionUpdate(uint32_t mode = 0);  // 0 for default and 1 for slient mode
+
+  void ActionUpdate(std::vector<std::string> player_actions,
+                    uint32_t mode = 0);  // 0 for default and 1 for slient mode
 
   void PositionUpdate();
 
-  void EnergyUpdate();
+  void EnergyUpdate(uint32_t mode = 0);  // 0 for default and 1 for slient mode
 
-  void HealthUpdate();
+  void HealthUpdate(uint32_t mode = 0);  // 0 for default and 1 for slient mode
 
   inline void MemberNumUpdate() {
     member_num_ = players_.size();
   }
 
-  void RemoveDead();
+  void RemoveDead(uint32_t mode = 0);  // 0 for default and 1 for slient mode
 
   void DecodeInputString(std::string &player_action_name,
                          std::string &current_action_name,
