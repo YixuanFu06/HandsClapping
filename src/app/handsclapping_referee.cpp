@@ -15,7 +15,8 @@ int main() {
     battle_field.BattleFieldUpdate(3);
   }
 
-  std::cout << "Press any key to continue..." << std::endl;
-  system("pause");
+  std::cout << "Press Enter to continue..." << std::endl;
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  std::cin.get();
   return 0;
 }

@@ -10,9 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set pybind11 and python path
-set(Python3_EXECUTABLE "D:/Program Files/Python/Python313/python.exe") # Replace it with your python executable path
+set(Python3_EXECUTABLE "/home/yixuanfu/anaconda3/envs/HandsClapping/bin/python") # Replace it with your python executable path
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-set(pybind11_DIR  "C:/Users/yixua/AppData/Roaming/Python/Python313/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
+set(pybind11_DIR  "/home/yixuanfu/anaconda3/envs/HandsClapping/lib/python3.11/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
 find_package(pybind11 REQUIRED)
 
 # Set compiler options for UTF-8
@@ -100,7 +100,7 @@ foreach(script ${ONLINE_SOURCES})
         TARGET handsclapping POST_BUILD
         COMMAND ${Python3_EXECUTABLE} -m PyInstaller --onefile
                 --distpath ${PYINSTALLER_OUTPUT_DIR}
-                --workpath ${CMAKE_BINARY_DIR}
+                --workpath ${CMAKE_BINARY_DIR}/online_tmp
                 ${script}
         COMMENT "Running PyInstaller to package ${script} into an executable"
     )
@@ -113,8 +113,8 @@ set(CPACK_PACKAGE_CONTACT "yixuanfu89@gmail.com")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The electronic version of the game of Handsclapping.")
 set(CPACK_PACKAGE_VENDOR "Yixuan Fu, Zhourui Zhang")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-Windows-x86_64")
-set(CPACK_SOURCE_GENERATOR "NSIS;ZIP")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-Linux-x86_64")
+set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_SOURCE_IGNORE_FILES "/build/;/\\\\.git/;/\\\\.svn/;/\\\\.hg/;/\\\\.bzr/;/_CPack_Packages/;/CMakeFiles/;CMakeCache.txt;\\\\.cmake$;\\\\.swp$;\\\\.bak$;\\\\.orig$;\\\\.tmp$;\\\\.log$;\\\\.DS_Store$;\\\\.directory$")
 
 include(CPack)

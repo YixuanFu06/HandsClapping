@@ -23,7 +23,8 @@ int main() {
     std::cout << battle_field.GetPlayerName(0) << " wins!" << std::endl;
   }
 
-  std::cout << "Press any key to continue..." << std::endl;
-  system("pause");
+  std::cout << "Press Enter to continue..." << std::endl;
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  std::cin.get();
   return 0;
 }

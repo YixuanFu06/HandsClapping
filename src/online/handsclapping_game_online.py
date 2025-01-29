@@ -2,8 +2,8 @@ import sys
 import os
 
 handsclapping_lib_dirs = [
-    '../lib',  # for Windows Release
-    '../build/lib/Release' # for Windows development
+    '../lib',  # for Linux Release
+    '../build/lib' # for Windows development
 ]
 
 # Add each directory to the system path
