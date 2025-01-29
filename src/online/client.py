@@ -96,9 +96,11 @@ def start_client(server_ip, client_name):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python client.py <server IP> <client name>")
-        sys.exit(1)
-    
-    server_ip = sys.argv[1]
-    client_name = sys.argv[2]
-    start_client(server_ip, client_name)
+        server_ip = input("Enter the server IP address: ")
+        client_name = input("Enter your name: ")
+        start_client(server_ip, client_name)
+    else: 
+        server_ip = sys.argv[1]
+        client_name = sys.argv[2]
+        start_client(server_ip, client_name)
+    input("Press Enter to exit...")

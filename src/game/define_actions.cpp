@@ -4,7 +4,6 @@
 #include <cmath>
 
 #include "action.h"
-#include "player.h"
 
 namespace Game {
 

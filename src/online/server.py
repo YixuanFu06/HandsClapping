@@ -74,9 +74,6 @@ def waiting_for_confirmation(client_socket, addr, name):
                         else:
                             num += 1
                             break
-                    else:
-                        print("Error: find the wrong IP address.")
-                        exit
     if not ip_is_registered:
         registered_ip.append((ip, 1))
         print(f"{ip} is added to the registered IP list.")
@@ -217,15 +214,37 @@ def parse_arguments():
     return args
 
 if __name__ == "__main__":
-    args = parse_arguments()
-    max_players = args.player
-    max_ip_player = args.ip
-    waiting_time = args.wait
-    max_name_length = args.name
-    print(f"Setting max_players to {max_players}.")
-    print(f"Setting max_ip_player to {max_ip_player}.")
-    print(f"Setting waiting_time to {waiting_time} seconds.")
-
+    if len(sys.argv) > 1:
+        args = parse_arguments()
+        max_players = args.player
+        max_ip_player = args.ip
+        waiting_time = args.wait
+        max_name_length = args.name
+        print(f"Setting max_players to {max_players}.")
+        print(f"Setting max_ip_player to {max_ip_player}.")
+        print(f"Setting waiting_time to {waiting_time} seconds.")
+        print(f"Setting max_name_length to {max_name_length} characters.")
+    else:
+        YesOrNo = input("No arguments are provided. Are you sure you want to continue with the default settings? (y/n): ")
+        if YesOrNo == 'n':
+            max_players = int(input("Enter the maximum number of players: "))
+            max_ip_player = int(input("Enter the maximum number of players per IP address: "))
+            waiting_time = int(input("Enter the waiting time for each round in seconds (minus value means no waiting): "))
+            max_name_length = int(input("Enter the maximum length of the players' name: "))
+            print(f"Setting max_players to {max_players}.")
+            print(f"Setting max_ip_player to {max_ip_player}.")
+            print(f"Setting waiting_time to {waiting_time} seconds.")
+            print(f"Setting max_name_length to {max_name_length} characters.")
+        else:
+            args = parse_arguments()
+            max_players = args.player
+            max_ip_player = args.ip
+            waiting_time = args.wait
+            max_name_length = args.name
+            print(f"Setting max_players to {max_players}.")
+            print(f"Setting max_ip_player to {max_ip_player}.")
+            print(f"Setting waiting_time to {waiting_time} seconds.")
+            print(f"Setting max_name_length to {max_name_length} characters.")
     start_server_thread = threading.Thread(target=start_server)
     start_server_thread.start()
     while (not game_start):
@@ -252,3 +271,4 @@ if __name__ == "__main__":
     game_core(registered_clients, waiting_time)
     
     start_server_thread.join()
+    input("Press Enter to exit...")
