@@ -100,7 +100,7 @@ foreach(script ${ONLINE_SOURCES})
         TARGET handsclapping POST_BUILD
         COMMAND ${Python3_EXECUTABLE} -m PyInstaller --onefile
                 --distpath ${PYINSTALLER_OUTPUT_DIR}
-                --workpath ${CMAKE_BINARY_DIR}
+                --workpath ${CMAKE_BINARY_DIR}/online_tmp
                 ${script}
         COMMENT "Running PyInstaller to package ${script} into an executable"
     )
