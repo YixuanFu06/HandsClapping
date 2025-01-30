@@ -23,6 +23,7 @@ const float default_aggressive_coefficient =
     0.5;  // greater than or equals to 0
 
 std::filesystem::path FindRootPath();
+std::filesystem::path GetPolicyPath(const std::string &name);
 
 class Policy;
 
@@ -103,8 +104,8 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
   ~Policy() {
   }
 
-  void Store(const std::string &path);
-  void Store(const std::string &path, const std::string &name);
+  void Store();
+  void Store(const std::string &name);
   void Normalize();
   void Update(Reward &r);
   void Update(Reward &&r);

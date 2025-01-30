@@ -1,19 +1,16 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string DATA_PATH = "./data/AI/Idiot/policy1.txt";
+const std::string POLICY = "init";
 
 int main() {
-  std::filesystem::path root_path = AI::Idiot::FindRootPath();
-  std::filesystem::path data_path = root_path / DATA_PATH;
-  std::filesystem::create_directories(data_path.parent_path());
   Game::InitActions();
-  AI::Idiot::Policy policy = AI::Idiot::Policy(data_path.string());
+  AI::Idiot::Policy policy = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY).string());
 
   std::string play_again;
 
   do {
-    Game::BattleField battle_field({"player", "AI"});
+    Game::BattleField battle_field({"player", policy.GetName()});
 
     AI::Idiot::Reward strategy_reward = AI::Idiot::Reward(policy);
     AI::Idiot::Reward action_reward = AI::Idiot::Reward(policy);
@@ -104,11 +101,10 @@ int main() {
     std::cin >> confirm;
   }
   if (confirm == 'y') {
-    policy.Store(data_path.string());
-    std::cout << "Policy change is stored to " << data_path.string()
-              << std::endl;
+    policy.Store();
+    std::cout << "Policy change is stored to " << AI::Idiot::GetPolicyPath(POLICY).string() << std::endl;
   } else if (confirm == 'n') {
-    std::cout << "Policy change is discard." << std::endl;
+    std::cout << "Policy change is discarded." << std::endl;
   }
   return 0;
 }
