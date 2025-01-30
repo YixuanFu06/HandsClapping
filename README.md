@@ -19,12 +19,12 @@ The first non-supervised model for Handsclapping, *Idiot*, has been constructed 
 ***TODO: The next AI model named by HDP (which stands for hybrid dynamic programming model) has already been designed mathematically. It may achieve better performance in playing with human.***
 
 > **IMPORTANT**\
-> To get the rule of this game or learn how to play it in the electronic version, please refer to [README.md](src/README.md) in `src` directory. This file is only responsible for introduce this project technically and show how to construct it or how to install and use the released version.
+> To get the rule of this game or learn how to play it in the electronic version, please refer to [README.md](src/README.md) in `src` directory. This file is only responsible for introduce this project technically and show how to construct it or how to install and use the releases.
 
 ## Construct and Compile
 
 > **ATTENTION**\
-> This part introduces how to construct and compile this project in local Windows and Linux system and may require the previous knowledge about basic programming language and the corresponding toolchains. For users, it's OK to simply skip this part and download the released version of this project, following the instruction in the next part.
+> This part introduces how to construct and compile this project in local Windows and Linux system and may require the previous knowledge about basic programming language and the corresponding toolchains. For users, it's OK to simply skip this part and download the releases of this project, following the instruction in the next part.
 
 The following packages and libraries are required by this project:
 - The C++ compiler: run `apt install g++` in Linux or download [Microsoft Visual C++](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version) ([Visual Studio](https://visualstudio.microsoft.com/) is also recommended, although much larger.) in Windows.
@@ -40,7 +40,9 @@ The following packages and libraries are required by this project:
 
 - git: run `apt install git` in Linux or download [git](https://git-scm.com/downloads/) in Windows.
 
-- PyInstaller (if you want to generate released version locally, not necessary): run `pip install pyinstaller` in command line in both Linux and Windows system.
+- PyInstaller (if you want to generate releases locally, not necessary): run `pip install pyinstaller` in command line in both Linux and Windows system.
+
+- NSIS (if you want to generate setup file in Windows, not necessary): download [NSIS](https://nsis.sourceforge.io/Download) in Windows.
 
 The construction steps are as following:
 
@@ -65,7 +67,7 @@ in Linux, or
 $ cd ..
 $ cmake --build build --config Release
 ```
-in Windows. If you have installed PyInstaller and wants to generate released version of this project, you may switch to branch `release-Linux` or `release-Windows` and run
+in Windows. If you have installed PyInstaller and wants to generate releases of this project, you may switch to branch `release-Linux` or `release-Windows` and run
 ```
 $ cd build
 --------------------
@@ -77,13 +79,13 @@ in Linux or Windows respectively,
 
 For more information of running the program, please see [README.md](src/README.md) in `src` directory.
 
-## Install with Released Versions
+## Install with Releases
 
-To install with released versions, just find the released version which fits your operating system and computer structure provided by us in the repository. The project now only supports released versions for Windows system and Linux system on x86_64 structure. However, maybe released version for Linux can also work on arm64 but we're not really sure.
+To install with releases, just find the releases which fits your operating system and computer structure provided by us in the repository. The project now only supports releases for Windows system and Linux system on x86_64 structure. However, maybe releases for Linux can also work on arm64 but we're not really sure.
 
 After installing, you can run the program according to the introduction in [README.md](src/README.md) in `src` directory.
 
-Sadly, we can't support Macos currently for technical reasons. We'll be glad if you are willing to offer assistance to construct released versions for Macos.
+Sadly, we can't support Macos currently for technical reasons. We'll be glad if you are willing to offer assistance to construct releases for Macos.
 
 > **TOUCH US**\
 > Rasing issues in the repository is welcomed. Also, feel free to touch Yixuan Fu at the email provided in his profile.
