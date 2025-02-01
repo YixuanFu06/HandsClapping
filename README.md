@@ -18,12 +18,12 @@ Online mode is constructed through python script in [`src/online`](src/online) w
 The first non-supervised model for Handsclapping, *Idiot*, has been constructed in `dev-AI_Idiot` branch of the project and is still on training (training data is not published yet). It reaches part of our expectation and will be released fairly soon (maybe after the Chinese Spring Festival holiday :) ).\
 ***TODO: The next AI model named by HDP (which stands for hybrid dynamic programming model) has already been designed mathematically. It may achieve better performance in playing with human.***
 
-> **IMPORTANT**\
+> [!IMPORTANT]
 > To get the rule of this game or learn how to play it in the electronic version, please refer to [README.md](src/README.md) in `src` directory. This file is only responsible for introduce this project technically and show how to construct it or how to install and use the released version.
 
 ## Construct and Compile
 
-> **ATTENTION**\
+> [!TIP]
 > This part introduces how to construct and compile this project in local Windows and Linux system and may require the previous knowledge about basic programming language and the corresponding toolchains. For users, it's OK to simply skip this part and download the released version of this project, following the instruction in the next part.
 
 The following packages and libraries are required by this project:
