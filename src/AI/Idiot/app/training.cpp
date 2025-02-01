@@ -1,8 +1,8 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string POLICY1 = "init";
-const std::string POLICY2 = "Idiot-alpha";
+const std::string POLICY1 = "Idiot-gamma";
+const std::string POLICY2 = "Idiot-beta1";
 
 void PrintProgressBar(int current, int total) {
   int bar_width = 70;
@@ -24,21 +24,9 @@ void PrintProgressBar(int current, int total) {
 
 int main() {
   Game::InitActions();
-  AI::Idiot::Policy policy1 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY1).string());
-  AI::Idiot::Policy policy2 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY2).string());
-
-  {  // parameters setting
-    policy1.SetUpdatePrecision();
-    policy1.SetDecliningCoefficient();
-    policy1.SetConservativeCoefficient();
-    policy1.SetGreedyCoefficient();
-    policy1.SetAggressiveCoefficient();
-    policy2.SetUpdatePrecision();
-    policy2.SetDecliningCoefficient();
-    policy2.SetConservativeCoefficient();
-    policy2.SetGreedyCoefficient();
-    policy2.SetAggressiveCoefficient();
-  }
+  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath() << std::endl << std::endl;
+  AI::Idiot::Policy policy1 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY1));
+  AI::Idiot::Policy policy2 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY2));
 
   uint32_t total_rounds = 200;
   std::cout << "Enter the rounds of training: ";

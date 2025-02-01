@@ -96,6 +96,7 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
       : Tensor<float, STATE_DIM * 2 + 1>(p), name_(p.name_), id_(p.id_) {
   }
   Policy(const std::string &path);
+  Policy(const std::filesystem::path &path);
   Policy &operator=(const Policy &p);
   Policy operator+(const Reward &r);
   Policy operator*(const Reward &r);
@@ -112,6 +113,7 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
   void RewardFeedback(Reward &r);
   float Similarity(
       const Policy &p);  // get the tv-distance between two policies
+  void PrintDistribution(float enemy_health, float health, float enemy_energy, float energy);
   Game::Action *GetAction(uint32_t health,
                           uint32_t energy,
                           uint32_t enemy_health,
@@ -120,25 +122,33 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
   inline std::string GetName() const {
     return name_;
   }
+  inline void SetName(std::string name) {
+    name_ = name;
+  }
   inline uint32_t GetId() const {
     return id_;
   }
 
-  inline void SetUpdatePrecision() {
-  }
-  inline void SetDecliningCoefficient() {
-  }
-  inline void SetConservativeCoefficient() {
-  }
-  inline void SetGreedyCoefficient() {
-  }
-  inline void SetAggressiveCoefficient() {
-  }
   void SetUpdatePrecision(float update_precision);
+  inline float GetUpdatePrecision() {
+    return update_precision_;
+  }
   void SetDecliningCoefficient(float declining_coefficient);
+  inline float GetDecliningCoefficient() {
+    return declining_coefficient_;
+  }
   void SetConservativeCoefficient(float conservative_coefficient);
+  inline float GetConservativeCoefficient() {
+    return conservative_coefficient_;
+  }
   void SetGreedyCoefficient(float greedy_coefficient);
+  float GetGreedyCoefficient() {
+    return greedy_coefficient_;
+  }
   void SetAggressiveCoefficient(float aggressive_coefficient);
+  float GetAggressiveCoefficient() {
+    return aggressive_coefficient_;
+  }
 };
 
 }  // namespace Idiot

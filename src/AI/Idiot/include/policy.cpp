@@ -19,7 +19,6 @@ std::filesystem::path FindRootPath() {
   if (found != std::string::npos) {
     root_path = current_path_str.substr(
         0, found + std::string("HandsClapping").length());
-    std::cout << "HandsClapping directory found at: " << root_path << std::endl;
   } else {
     std::cerr << "Error: HandsClapping directory not found in " << current_path
               << ". Please run the program under the project directory."
@@ -299,6 +298,8 @@ Policy::Policy(const std::string &path)
   fin.close();
 }
 
+Policy::Policy(const std::filesystem::path &path) : Policy(path.string()) {}
+
 Policy &Policy::operator=(const Policy &p) {
   if (this != &p) {
     name_ = p.name_;
@@ -482,6 +483,38 @@ float Policy::Similarity(const Policy &p) {
     }
   }
   return 1 - tvd / total_entry;
+}
+
+void Policy::PrintDistribution(float enemy_health, float health, float enemy_energy, float energy) {
+  bool IsPrinted[ACTION_NUM];
+  for (uint32_t i = 0; i < ACTION_NUM; i++) {
+    IsPrinted[i] = false;
+  }
+  
+  bool PrintIsOver;
+  do {
+    PrintIsOver = true;
+    uint32_t current_max_action;
+    for (uint32_t i = 0; i < ACTION_NUM; i++) {
+      if ((*this)[enemy_health][health][enemy_energy][energy][i] != 0 && !IsPrinted[i]) {
+        current_max_action = i;
+        PrintIsOver = false;
+        break;
+      }
+    }
+    if (PrintIsOver) {
+      break;
+    }
+
+    for (uint32_t i = current_max_action + 1; i < ACTION_NUM; i++) {
+      if (!IsPrinted[i] && (*this)[enemy_health][health][enemy_energy][energy][i] > (*this)[enemy_health][health][enemy_energy][energy][current_max_action]) {
+        current_max_action = i;
+      }
+    }
+
+    IsPrinted[current_max_action] = true;
+    std::cout << Game::actions[current_max_action].GetFormalName() << ": " << (*this)[enemy_health][health][enemy_energy][energy][current_max_action] * 100 << "%\n";
+  } while(!PrintIsOver);
 }
 
 void Policy::Update(Reward &r) {

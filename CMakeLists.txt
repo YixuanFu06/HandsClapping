@@ -40,8 +40,7 @@ set(Binding_File "${SOURCE_DIR}/handsclapping_pylib.cpp")
 set(Idiot_Training "${AI_IDIOT_DIR}/app/training.cpp")
 set(Idiot_Demo "${AI_IDIOT_DIR}/app/demo.cpp")
 set(Idiot_1v1 "${AI_IDIOT_DIR}/app/game_1v1.cpp")
-set(Idiot_Init "${AI_IDIOT_DIR}/app/policy_init.cpp")
-set(Idiot_Analysis "${AI_IDIOT_DIR}/app/analysis_tool.cpp")
+set(Idiot_Analysis "${AI_IDIOT_DIR}/app/tools.cpp")
 
 # Generate python binding
 pybind11_add_module(handsclapping ${Binding_File} ${GAME_SOURCES})
@@ -78,12 +77,7 @@ add_executable(idiot_game_1v1 ${Idiot_1v1} ${GAME_SOURCES} ${IDIOT_SOURCES})
 target_include_directories(idiot_game_1v1 PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
 set_target_properties(idiot_game_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/AI/Idiot")
 
-# Idiot policy initialization executable file
-add_executable(idiot_init ${Idiot_Init} ${GAME_SOURCES} ${IDIOT_SOURCES})
-target_include_directories(idiot_init PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
-set_target_properties(idiot_init PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/AI/Idiot")
-
 # Idiot analysis tool executable file
-add_executable(idiot_analysis ${Idiot_Analysis} ${GAME_SOURCES} ${IDIOT_SOURCES})
-target_include_directories(idiot_analysis PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
-set_target_properties(idiot_analysis PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/AI/Idiot")
+add_executable(idiot_tools ${Idiot_Analysis} ${GAME_SOURCES} ${IDIOT_SOURCES})
+target_include_directories(idiot_tools PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
+set_target_properties(idiot_tools PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/AI/Idiot")

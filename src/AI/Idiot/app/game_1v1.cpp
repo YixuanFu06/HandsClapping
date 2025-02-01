@@ -1,11 +1,12 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string POLICY = "init";
+const std::string POLICY = "Idiot-gamma";
 
 int main() {
   Game::InitActions();
-  AI::Idiot::Policy policy = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY).string());
+  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath() << std::endl << std::endl;
+  AI::Idiot::Policy policy = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY));
 
   std::string play_again;
 
