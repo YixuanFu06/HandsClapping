@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <functional>
+#include <random>
 
 #include "../../../game/define_actions.h"
 #include "tensor.h"

@@ -2,7 +2,7 @@
 #include "../include/policy.h"
 
 const std::string POLICY1 = "Idiot-gamma";
-const std::string POLICY2 = "Idiot-beta1";
+const std::string POLICY2 = "Idiot-alpha";
 
 void PrintProgressBar(int current, int total) {
   int bar_width = 70;
@@ -101,9 +101,9 @@ int main() {
 
   char confirm;
   std::cout << std::endl
-            << policy1.GetName() << " win: " << player1_win
-            << " times, " << policy2.GetName() << " win: " << player2_win << " times.";
-  std::cout << std::endl << "Do you want to store the policy? (y/n): ";
+            << policy1.GetName() << " wins: " << player1_win
+            << " times. " << policy2.GetName() << " wins: " << player2_win << " times." << std::endl;
+  std::cout << "Do you want to store the policy? (y/n): ";
   std::cin >> confirm;
   while (confirm != 'y' && confirm != 'n') {
     std::cout << "Invalid input. Please input again." << std::endl;
