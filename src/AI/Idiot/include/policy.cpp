@@ -1,9 +1,6 @@
 #include "policy.h"
 
 #include <fstream>
-#include <random>
-
-#include "define_actions.h"
 
 namespace AI {
 
