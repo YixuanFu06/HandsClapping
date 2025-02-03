@@ -32,7 +32,7 @@ set(AI_IDIOT_DIR "${SOURCE_DIR}/AI/Idiot")
 file(GLOB_RECURSE GAME_SOURCES "${GAME_DIR}/*.cpp")
 file(GLOB_RECURSE IDIOT_SOURCES "${AI_IDIOT_DIR}/include/*.cpp")
 
-# Main progams
+# Main programs
 set(Main_Game "${APP_DIR}/handsclapping_game.cpp")
 set(Game_Debug_Mode "${APP_DIR}/handsclapping_game_debug.cpp")
 set(Referee_Mode "${APP_DIR}/handsclapping_referee.cpp")

@@ -20,7 +20,7 @@ void Referee::JudgeBattle(Player *player) {
         total_effect += it.action_->GetEffect(player->GetPosition());
       }
 
-      /************************************ Speical case: REBOUNDER
+      /************************************ Special case: REBOUNDER
        ******************************************/
       if (player->GetAction()->GetId() == REBOUNDER && total_effect <= 1) {
         for (ActionLog &it : action_log_) {
@@ -53,7 +53,7 @@ void Referee::JudgeBattle(Player *player) {
             &it, std::make_pair(
                      -(player->IsAimedAt(&it) *
                        player->GetAction()->GetEffect(player->GetPosition())),
-                     0)));
+                     0.0f)));
       }
 
       for (ActionLog &it : action_log_) {
