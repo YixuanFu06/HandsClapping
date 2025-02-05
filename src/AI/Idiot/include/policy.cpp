@@ -1,9 +1,6 @@
 #include "policy.h"
 
 #include <fstream>
-#include <random>
-
-#include "define_actions.h"
 
 namespace AI {
 
@@ -19,7 +16,6 @@ std::filesystem::path FindRootPath() {
   if (found != std::string::npos) {
     root_path = current_path_str.substr(
         0, found + std::string("HandsClapping").length());
-    std::cout << "HandsClapping directory found at: " << root_path << std::endl;
   } else {
     std::cerr << "Error: HandsClapping directory not found in " << current_path
               << ". Please run the program under the project directory."
@@ -28,6 +24,12 @@ std::filesystem::path FindRootPath() {
   }
 
   return root_path;
+}
+
+std::filesystem::path GetPolicyPath(const std::string &name) {
+  std::filesystem::path root_path = FindRootPath();
+  std::filesystem::path policy_path = root_path / "data/AI/Idiot" / ("policy_" + name + ".txt");
+  return policy_path;
 }
 
 Reward::Reward()
@@ -195,7 +197,9 @@ void Reward::ActionUpdate_Energy(float enemy_health,
 }
 
 void Reward::Store(const std::string &path) {
-  std::ofstream fout(path);
+  std::filesystem::path fs_path(path);
+  std::filesystem::create_directory(fs_path.parent_path());
+  std::ofstream fout(fs_path);
   if (!fout.is_open()) {
     std::cerr << "Error: Failed to open file " << path << std::endl;
     exit(1);
@@ -291,6 +295,8 @@ Policy::Policy(const std::string &path)
   fin.close();
 }
 
+Policy::Policy(const std::filesystem::path &path) : Policy(path.string()) {}
+
 Policy &Policy::operator=(const Policy &p) {
   if (this != &p) {
     name_ = p.name_;
@@ -367,8 +373,10 @@ Policy &Policy::operator*=(const Reward &r) {
   return *this;
 }
 
-void Policy::Store(const std::string &path) {
+void Policy::Store() {
+  std::filesystem::path path = GetPolicyPath(name_);
   std::ofstream fout(path);
+  std::filesystem::create_directory(path.parent_path());
   if (!fout.is_open()) {
     std::cerr << "Error: Failed to open file " << path << std::endl;
     exit(1);
@@ -395,9 +403,9 @@ void Policy::Store(const std::string &path) {
   fout.close();
 }
 
-void Policy::Store(const std::string &path, const std::string &name) {
+void Policy::Store(const std::string &name) {
   name_ = name;
-  Store(path);
+  Store();
 }
 
 void Policy::Normalize() {
@@ -474,6 +482,38 @@ float Policy::Similarity(const Policy &p) {
   return 1 - tvd / total_entry;
 }
 
+void Policy::PrintDistribution(float enemy_health, float health, float enemy_energy, float energy) {
+  bool IsPrinted[ACTION_NUM];
+  for (uint32_t i = 0; i < ACTION_NUM; i++) {
+    IsPrinted[i] = false;
+  }
+  
+  bool PrintIsOver;
+  do {
+    PrintIsOver = true;
+    uint32_t current_max_action;
+    for (uint32_t i = 0; i < ACTION_NUM; i++) {
+      if ((*this)[enemy_health][health][enemy_energy][energy][i] != 0 && !IsPrinted[i]) {
+        current_max_action = i;
+        PrintIsOver = false;
+        break;
+      }
+    }
+    if (PrintIsOver) {
+      break;
+    }
+
+    for (uint32_t i = current_max_action + 1; i < ACTION_NUM; i++) {
+      if (!IsPrinted[i] && (*this)[enemy_health][health][enemy_energy][energy][i] > (*this)[enemy_health][health][enemy_energy][energy][current_max_action]) {
+        current_max_action = i;
+      }
+    }
+
+    IsPrinted[current_max_action] = true;
+    std::cout << Game::actions[current_max_action].GetFormalName() << ": " << (*this)[enemy_health][health][enemy_energy][energy][current_max_action] * 100 << "%\n";
+  } while(!PrintIsOver);
+}
+
 void Policy::Update(Reward &r) {
   if (this->id_ != r.id_) {
     std::cerr << "Error: Policy and Reward do not match" << std::endl;
@@ -499,9 +539,11 @@ Game::Action *Policy::GetAction(uint32_t enemy_health,
                                 uint32_t enemy_energy,
                                 uint32_t energy) {
   std::vector<float> probabilities;
-  for (Game::Action action : Game::actions) {
-    probabilities.push_back(
-        (*this)[enemy_health][health][enemy_energy][energy][action.GetId()]);
+  for (Game::Action &action : Game::actions) {
+    if (action.GetId() != Game::NONE && action.GetId() != Game::TIMEOUT) {
+      probabilities.push_back(
+          (*this)[enemy_health][health][enemy_energy][energy][action.GetId()]);
+    }
   }
 
   std::random_device rd;

@@ -163,8 +163,8 @@ void BattleField::RemovePlayer(std::string name) {
   }
 }
 
-void BattleField::PrintBattleField(uint32_t type) {
-  switch (type) {
+void BattleField::PrintBattleField(uint32_t mode) {
+  switch (mode) {
     case 1:
       std::cout << "The " << turn_ << "th turn. " << member_num_
                 << " players: \n";
@@ -199,9 +199,9 @@ void BattleField::PrintBattleField(uint32_t type) {
   }
 }
 
-std::string BattleField::GetBattleFieldMessage(uint32_t type) {
+std::string BattleField::GetBattleFieldMessage(uint32_t mode) {
   std::string output;
-  switch (type) {
+  switch (mode) {
     case 1:
       output += "The " + std::to_string(turn_) + "th turn. " +
                 std::to_string(member_num_) + " players: \n";
@@ -236,8 +236,8 @@ std::string BattleField::GetBattleFieldMessage(uint32_t type) {
   return output;
 }
 
-void BattleField::BattleFieldUpdate(uint32_t type) {
-  switch (type) {
+void BattleField::BattleFieldUpdate(uint32_t mode) {
+  switch (mode) {
     case 1: {
       TurnUpdate();
       PrintBattleField(1);
@@ -275,7 +275,7 @@ void BattleField::BattleFieldUpdate(uint32_t type) {
       TurnUpdate();
       PrintBattleField(2);
       ActionUpdate();
-      PrintBattleField(type);
+      PrintBattleField(mode);
       PositionUpdate();
       EnergyUpdate();
       HealthUpdate();
@@ -425,28 +425,28 @@ void BattleField::PositionUpdate() {
 
 void BattleField::EnergyUpdate(uint32_t print_mode) {
   for (uint32_t i = 0; i < players_.size(); i++) {
-    for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
-      if (players_[i].GetTargets()[j].first == "#NONE") {
+    for (uint32_t j = 0; j < players_[i].GetTargetNum(); j++) {
+      if (players_[i].GetTarget(j).first == "#NONE") {
         continue;
-      } else if (players_[i].GetTargets()[j].first == "#ALL") {
+      } else if (players_[i].GetTarget(j).first == "#ALL") {
         switch (players_[i].GetAction()->GetTargetType()) {
           case SINGLE:
             players_[i].SetEnergy(players_[i].GetEnergy() -
                                   players_[i].GetAction()->GetEnergy() *
                                       (GetMemberNum() - 1) *
-                                      players_[i].GetTargets()[j].second);
+                                      players_[i].GetTarget(j).second);
             break;
           case ALL:
           case SELF:
             players_[i].SetEnergy(players_[i].GetEnergy() -
                                   players_[i].GetAction()->GetEnergy() *
-                                      players_[i].GetTargets()[j].second);
+                                      players_[i].GetTarget(j).second);
             break;
         }
       } else {
         players_[i].SetEnergy(players_[i].GetEnergy() -
                               players_[i].GetAction()->GetEnergy() *
-                                  players_[i].GetTargets()[j].second);
+                                  players_[i].GetTarget(j).second);
       }
     }
 
@@ -463,30 +463,32 @@ void BattleField::EnergyUpdate(uint32_t print_mode) {
 }
 
 void BattleField::HealthUpdate(uint32_t print_mode) {
-  // single person actions update
+  /**************** special cases: single-person actions: DUPLICATOR,
+   * ARTIFACT_SOUL ********************/
   for (uint32_t i = 0; i < players_.size(); i++) {
     switch (players_[i].GetAction()->GetId()) {
       case DUPLICATOR:
-        for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
+        for (uint32_t j = 0; j < players_[i].GetTargetNum(); j++) {
           players_[i].SetEnergy(players_[i].GetEnergy() +
-                                5 * players_[i].GetTargets()[j].second);
+                                5 * players_[i].GetTarget(j).second);
         }
         break;
       case ARTIFACT_SOUL:
-        for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
+        for (uint32_t j = 0; j < players_[i].GetTargetNum(); j++) {
           players_[i].SetHealth(players_[i].GetHealth() +
                                 1 * players_[i].GetTargets()[j].second);
         }
         break;
     }
   }
+  /******************************************************************************************************/
 
   for (uint32_t i = 0; i < players_.size(); i++) {
-    for (uint32_t j = 0; j < players_[i].GetTargets().size(); j++) {
-      if (players_[i].GetTargets()[j].first == "#NONE") {
+    for (uint32_t j = 0; j < players_[i].GetTargetNum(); j++) {
+      if (players_[i].GetTarget(j).first == "#NONE") {
         continue;
-      } else if (players_[i].GetTargets()[j].first == "#ALL") {
-        for (uint32_t k = 0; k < players_[i].GetTargets()[j].second; k++) {
+      } else if (players_[i].GetTarget(j).first == "#ALL") {
+        for (uint32_t k = 0; k < players_[i].GetTarget(j).second; k++) {
           for (Player &it : players_) {
             if (it.GetName() != players_[i].GetName()) {
               referee_.ActionLogAdd(&players_[i], players_[i].GetAction(),
@@ -495,16 +497,16 @@ void BattleField::HealthUpdate(uint32_t print_mode) {
           }
         }
       } else {
-        for (uint32_t k = 0; k < players_[i].GetTargets()[j].second; k++) {
+        for (uint32_t k = 0; k < players_[i].GetTarget(j).second; k++) {
           referee_.ActionLogAdd(&players_[i], players_[i].GetAction(),
-                                players_[i].GetTargets()[j].first);
+                                players_[i].GetTarget(j).first);
         }
       }
     }
   }
 
   for (uint32_t i = 0; i < players_.size(); i++) {
-    referee_.JudgeBattle(players_, &players_[i]);
+    referee_.JudgeBattle(&players_[i]);
   }
 
   referee_.ActionLogClear();
@@ -513,152 +515,6 @@ void BattleField::HealthUpdate(uint32_t print_mode) {
   referee_.DamageLogClear();
 
   RemoveDead(print_mode);
-}
-
-void Referee::JudgeBattle(std::vector<Player> &player_list, Player *player) {
-  switch (player->GetAction()->GetType()) {
-    case DEFEND: {
-      float total_damage = 0;
-      float total_effect = 0;
-      for (ActionLog &it : action_log_) {
-        if (it.owner_ == player || it.action_->GetType() != ATTACK ||
-            it.target_ != player->GetName()) {
-          continue;
-        }
-        total_damage += it.action_->GetDamage(player->GetPosition());
-        total_effect += it.action_->GetEffect(player->GetPosition());
-      }
-      // special cases: REBOUNDER
-      if (player->GetAction()->GetId() == REBOUNDER && total_effect <= 1) {
-        for (ActionLog &it : action_log_) {
-          if (it.action_->GetType() == ATTACK &&
-              it.target_ == player->GetName() &&
-              it.action_->GetEffect(player->GetPosition()) > 0) {
-            DamageLogAdd(it.owner_,
-                         it.action_->GetDamage(it.owner_->GetPosition()),
-                         it.action_->GetEffect(it.owner_->GetPosition()));
-          }
-        }
-        break;
-      }
-      DamageLogAdd(
-          player, total_damage,
-          total_effect + player->GetAction()->GetEffect(player->GetPosition()));
-    } break;
-    case ATTACK: {
-      float total_damage = 0;
-      float total_effect = 0;
-      std::vector<std::pair<const Player *, std::pair<float, float>>> defenders;
-      for (const Player &it : player_list) {
-        if (it.GetName() == player->GetName()) {
-          continue;
-        }
-        defenders.push_back(std::make_pair(
-            &it, std::make_pair(
-                     -(player->IsAimedAt(&it) *
-                       player->GetAction()->GetEffect(player->GetPosition())),
-                     0)));
-      }
-
-      for (ActionLog &it : action_log_) {
-        if (it.action_->GetType() != ATTACK ||
-            it.target_ != player->GetName()) {
-          continue;
-        }
-        bool IsDefended = false;
-        for (auto &defender : defenders) {
-          if (defender.first->GetName() == it.owner_->GetName()) {
-            defender.second.first +=
-                it.action_->GetEffect(player->GetPosition());
-            defender.second.second +=
-                it.action_->GetDamage(player->GetPosition());
-            IsDefended = true;
-          }
-        }
-        if (!IsDefended) {
-          defenders.push_back(std::make_pair(
-              it.owner_,
-              std::make_pair(it.action_->GetEffect(player->GetPosition()),
-                             it.action_->GetDamage(player->GetPosition()))));
-        }
-      }
-
-      for (auto &defender : defenders) {
-        // special cases: VISION > HAMMER
-        if (defender.second.first == 0 &&
-            player->GetAction()->GetId() == HAMMER) {
-          for (Player &it : player_list) {
-            if (it.GetName() == defender.first->GetName() &&
-                it.GetAction()->GetId() == VISION) {
-              DamageLogAdd(player, player->IsAimedAt(&it),
-                           player->IsAimedAt(&it));
-            }
-          }
-        }
-
-        total_effect += std::min(std::max(defender.second.first, 0.0f),
-                                 defender.second.second);
-        total_damage += defender.second.second;
-      }
-      DamageLogAdd(player, total_damage, total_effect);
-    } break;
-    case EQUIP:
-    case DODGE: {
-      // special cases: SUICIDE
-      if (player->GetAction()->GetId() == SUICIDE) {
-        bool IsAttacked = false;
-        for (ActionLog &it : action_log_) {
-          if (it.action_->GetType() == ATTACK &&
-              it.target_ == player->GetName() &&
-              it.action_->GetEffect(player->GetPosition()) > 0 &&
-              it.action_->GetId() != BLACKHOLE &&
-              it.action_->GetId() != DOOMSDAY) {
-            DamageLogAdd(it.owner_,
-                         it.action_->GetDamage(it.owner_->GetPosition()),
-                         it.action_->GetEffect(it.owner_->GetPosition()));
-            IsAttacked = true;
-          } else if (it.action_->GetId() == BLACKHOLE ||
-                     it.action_->GetId() == DOOMSDAY) {
-            DamageLogAdd(player, it.action_->GetDamage(player->GetPosition()),
-                         it.action_->GetDamage(player->GetPosition()));
-          } else if (it.action_->GetId() == REBOUNDER) {
-            DamageLogAdd(it.owner_, 1, 1);
-            IsAttacked = true;
-          }
-        }
-        if (!IsAttacked) {
-          DamageLogAdd(player, 1, 1);
-        }
-        break;
-      }
-
-      float total_damage = 0;
-      float total_effect = 0;
-      for (ActionLog &it : action_log_) {
-        if (it.owner_ == player || it.action_->GetType() != ATTACK ||
-            it.target_ != player->GetName()) {
-          continue;
-        }
-        total_damage += it.action_->GetDamage(player->GetPosition());
-        total_effect += it.action_->GetEffect(player->GetPosition());
-      }
-      DamageLogAdd(player, total_damage, total_effect);
-    } break;
-  }
-}
-
-void Referee::DamageCommit() {
-  for (DamageLog &it : damage_log_) {
-    float damage = std::max(std::min(it.damage_, it.effect_), 0.0f);
-    it.object_->SetHealth(it.object_->GetHealth() - damage);
-    if (it.object_->GetHealth() <= 0) {
-      if (it.object_->GetAction()->GetId() == SUICIDE) {
-        it.object_->GoDie(SUICIDED);
-      } else {
-        it.object_->GoDie(KILLED);
-      }
-    }
-  }
 }
 
 void BattleField::RemoveDead(uint32_t mode) {

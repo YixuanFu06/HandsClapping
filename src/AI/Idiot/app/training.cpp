@@ -1,8 +1,8 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string DATA_PATH1 = "./data/AI/Idiot/init.txt";
-const std::string DATA_PATH2 = "./data/AI/Idiot/policy2.txt";
+const std::string POLICY1 = "Idiot-gamma";
+const std::string POLICY2 = "Idiot-alpha";
 
 void PrintProgressBar(int current, int total) {
   int bar_width = 70;
@@ -23,28 +23,10 @@ void PrintProgressBar(int current, int total) {
 }
 
 int main() {
-  std::filesystem::path root_path = AI::Idiot::FindRootPath();
-  std::filesystem::path data_path1 = root_path / DATA_PATH1;
-  std::filesystem::path data_path2 = root_path / DATA_PATH2;
-  std::filesystem::create_directories(data_path1.parent_path());
-  std::filesystem::create_directories(data_path2.parent_path());
-
   Game::InitActions();
-  AI::Idiot::Policy policy1 = AI::Idiot::Policy(data_path1.string());
-  AI::Idiot::Policy policy2 = AI::Idiot::Policy(data_path2.string());
-
-  {  // parameters setting
-    policy1.SetUpdatePrecision();
-    policy1.SetDecliningCoefficient();
-    policy1.SetConservativeCoefficient();
-    policy1.SetGreedyCoefficient();
-    policy1.SetAggressiveCoefficient();
-    policy2.SetUpdatePrecision();
-    policy2.SetDecliningCoefficient();
-    policy2.SetConservativeCoefficient();
-    policy2.SetGreedyCoefficient();
-    policy2.SetAggressiveCoefficient();
-  }
+  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath() << std::endl << std::endl;
+  AI::Idiot::Policy policy1 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY1));
+  AI::Idiot::Policy policy2 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY2));
 
   uint32_t total_rounds = 200;
   std::cout << "Enter the rounds of training: ";
@@ -119,21 +101,20 @@ int main() {
 
   char confirm;
   std::cout << std::endl
-            << policy1.GetName() << " win: " << player1_win
-            << " times, " << policy2.GetName() << " win: " << player2_win << " times.";
-  std::cout << std::endl << "Do you want to store the policy? (y/n): ";
+            << policy1.GetName() << " wins: " << player1_win
+            << " times. " << policy2.GetName() << " wins: " << player2_win << " times." << std::endl;
+  std::cout << "Do you want to store the policy? (y/n): ";
   std::cin >> confirm;
   while (confirm != 'y' && confirm != 'n') {
     std::cout << "Invalid input. Please input again." << std::endl;
     std::cin >> confirm;
   }
   if (confirm == 'y') {
-    policy1.Store(data_path1.string());
-    policy2.Store(data_path2.string());
-    std::cout << "Policy change is stored to " << data_path1.string() << " and "
-              << data_path2.string() << std::endl;
+    policy1.Store();
+    policy2.Store();
+    std::cout << "Policy change is stored to " << AI::Idiot::GetPolicyPath(POLICY1).string() << " and " << AI::Idiot::GetPolicyPath(POLICY2).string() << std::endl;
   } else if (confirm == 'n') {
-    std::cout << "Policy change is discard." << std::endl;
+    std::cout << "Policy change is discarded." << std::endl;
   }
 
   return 0;
