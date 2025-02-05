@@ -2,7 +2,8 @@
 #include "../include/policy.h"
 
 const uint32_t MAX_TRAINERS = 10;
-const std::vector<std::string> TRAINER_POLICIES = {"Idiot-alpha", "Idiot-beta1", "Idiot-gamma"};
+const std::vector<std::string> TRAINER_POLICIES = {"Idiot-alpha", "Idiot-beta",
+                                                   "Idiot-gamma", "Idiot-init"};
 const std::string TRAINEE_POLICY = "Idiot-gamma";
 
 void PrintProgressBar(int current, int total) {
@@ -24,17 +25,20 @@ void PrintProgressBar(int current, int total) {
 }
 
 int main() {
-    Game::InitActions();
-    std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath() << std::endl << std::endl;
-    std::vector<AI::Idiot::Policy> trainers;
-    for (const std::string &trainer_name : TRAINER_POLICIES) {
-        if (trainers.size() == MAX_TRAINERS) {
-            std::cout << "Too much trainers! The number of trainers is at most " << MAX_TRAINERS << ". More will be ignored." << std::endl;
-            break;
-        }
-        trainers.push_back(AI::Idiot::GetPolicyPath(trainer_name));
+  Game::InitActions();
+  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
+            << std::endl
+            << std::endl;
+  std::vector<AI::Idiot::Policy> trainers;
+  for (const std::string &trainer_name : TRAINER_POLICIES) {
+    if (trainers.size() == MAX_TRAINERS) {
+      std::cout << "Too much trainers! The number of trainers is at most "
+                << MAX_TRAINERS << ". More will be ignored." << std::endl;
+      break;
     }
-    AI::Idiot::Policy trainee = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(TRAINEE_POLICY));
+    trainers.push_back(AI::Idiot::GetPolicyPath(trainer_name));
+  }
+  AI::Idiot::Policy trainee(AI::Idiot::GetPolicyPath(TRAINEE_POLICY));
 
   uint32_t total_rounds = 200;
   std::cout << "Enter the rounds of training: ";
@@ -49,7 +53,7 @@ int main() {
   uint32_t trainee_win = 0, trainers_win = 0;
   uint32_t single_trainer_attend[MAX_TRAINERS] = {0};
   uint32_t single_trainer_win[MAX_TRAINERS] = {0};
-    
+
   for (uint32_t i = 0; i < total_rounds; i++) {
     // choose a policy from trainers uniformly randomly
     std::random_device rd;
@@ -61,13 +65,13 @@ int main() {
 
     bool IsSameName = false;
     if (tmp_trainer.GetName() == trainee.GetName()) {
-        tmp_trainer.SetName(tmp_trainer.GetName() + "-trainer");
-        IsSameName = true;
+      tmp_trainer.SetName(tmp_trainer.GetName() + "-trainer");
+      IsSameName = true;
     }
-    
+
     Game::BattleField battle_field({trainee.GetName(), tmp_trainer.GetName()});
-    AI::Idiot::Reward strategy_reward1 = AI::Idiot::Reward(trainee);
-    AI::Idiot::Reward action_reward1 = AI::Idiot::Reward(trainee);
+    AI::Idiot::Reward strategy_reward1(trainee);
+    AI::Idiot::Reward action_reward1(trainee);
     while (battle_field.GetMemberNum() > 1) {
       float health1 = battle_field.GetPlayerHealth(0);
       float energy1 = battle_field.GetPlayerEnergy(0);
@@ -109,7 +113,7 @@ int main() {
     }
 
     if (IsSameName) {
-        tmp_trainer.SetName(trainee.GetName());
+      tmp_trainer.SetName(trainee.GetName());
     }
 
     PrintProgressBar(i + 1, total_rounds);
@@ -118,10 +122,12 @@ int main() {
   char confirm;
   std::cout << std::endl
             << trainee.GetName() << " wins: " << trainee_win
-            << " times. Trainers win: " << trainers_win << " times." << std::endl;
+            << " times. Trainers win: " << trainers_win << " times."
+            << std::endl;
   std::cout << "In which ";
   for (uint32_t i = 0; i < trainers.size(); i++) {
-    std::cout << trainers[i].GetName() << " wins " << single_trainer_win[i] << " out of " << single_trainer_attend[i] << " times. ";
+    std::cout << trainers[i].GetName() << " wins " << single_trainer_win[i]
+              << " out of " << single_trainer_attend[i] << " times. ";
   }
   std::cout << std::endl;
   std::cout << std::endl << "Do you want to store the policy? (y/n): ";
@@ -132,10 +138,11 @@ int main() {
   }
   if (confirm == 'y') {
     trainee.Store();
-    std::cout << "Policy change is stored to " << AI::Idiot::GetPolicyPath(TRAINEE_POLICY).string() << std::endl;
+    std::cout << "Policy change is stored to "
+              << AI::Idiot::GetPolicyPath(TRAINEE_POLICY).string() << std::endl;
   } else if (confirm == 'n') {
     std::cout << "Policy change is discarded." << std::endl;
   }
 
-    return 0;
+  return 0;
 }
