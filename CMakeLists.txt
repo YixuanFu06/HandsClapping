@@ -119,7 +119,7 @@ set(CPACK_SOURCE_IGNORE_FILES "/build/;/\\\\.git/;/\\\\.svn/;/\\\\.hg/;/\\\\.bzr
 
 include(CPack)
 
-install(TARGETS handsclapping_game handsclapping_game_debug handsclapping_referee
+install(TARGETS handsclapping_game handsclapping_referee
         DESTINATION bin/game)
 install(TARGETS handsclapping DESTINATION lib)
 install(FILES ${ONLINE_SOURCES} DESTINATION python)
