@@ -108,6 +108,14 @@ class Player {
     return targets_;
   }
 
+  inline std::pair<std::string, uint32_t> GetTarget(uint32_t target_id) {
+    return targets_[target_id];
+  }
+
+  inline uint32_t GetTargetNum() {
+    return targets_.size();
+  }
+
   inline void ClearTargets() {
     targets_.clear();
   }
