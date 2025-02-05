@@ -1,11 +1,17 @@
 import sys
 import os
 
-handsclapping_lib_dir = '../../build/lib' # use '../../build/lib' in Linux and '../../build/lib/Release' in Windows
+handsclapping_lib_dirs = [
+    '../../lib',  # for releases
+    '../../build/lib', # for developing
+    '../../build/lib/Release', # for Release developing
+    '../../build/lib/Debug' # for Debug developing
+]
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-
-sys.path.append(os.path.join(script_dir, handsclapping_lib_dir))
+# Add each directory to the system path
+for lib_dir in handsclapping_lib_dirs:
+    if os.path.exists(lib_dir):
+        sys.path.append(lib_dir)
 
 import time
 import socket
