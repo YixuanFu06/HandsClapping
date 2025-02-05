@@ -2,8 +2,10 @@ import sys
 import os
 
 handsclapping_lib_dirs = [
-    '../lib',  # for Windows Release
-    '../build/lib/Release' # for Windows development
+    '../../lib',  # for releases
+    '../../build/lib', # for developing
+    '../../build/lib/Release', # for Release developing
+    '../../build/lib/Debug' # for Debug developing
 ]
 
 # Add each directory to the system path

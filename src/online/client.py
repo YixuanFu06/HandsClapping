@@ -98,9 +98,9 @@ if __name__ == "__main__":
     if len(sys.argv) != 3:
         server_ip = input("Enter the server IP address: ")
         client_name = input("Enter your name: ")
-        start_client(server_ip, client_name)
     else: 
         server_ip = sys.argv[1]
         client_name = sys.argv[2]
-        start_client(server_ip, client_name)
+    
+    start_client(server_ip, client_name)
     input("Press Enter to exit...")
