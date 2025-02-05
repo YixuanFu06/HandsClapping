@@ -1,8 +1,5 @@
 #include "player.h"
 
-#include "action.h"
-#include "define_actions.h"
-
 namespace Game {
 
 Player::Player(float health,
