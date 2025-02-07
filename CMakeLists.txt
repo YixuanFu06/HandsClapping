@@ -9,9 +9,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set pybind11 and python path
-set(Python3_EXECUTABLE "/home/yixuanfu/anaconda3/envs/HandsClapping/bin/python") # Replace it with your python executable path
+set(Python3_EXECUTABLE "D:/Program Files/Python/Python313/python.exe") # Replace it with your python executable path
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-set(pybind11_DIR  "/home/yixuanfu/anaconda3/envs/HandsClapping/lib/python3.11/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
+set(pybind11_DIR  "C:/Users/yixua/AppData/Roaming/Python/Python313/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
 find_package(pybind11 REQUIRED)
 
 # Set compiler options for UTF-8
@@ -42,6 +42,7 @@ set(Idiot_Demo "${AI_IDIOT_DIR}/app/demo.cpp")
 set(Idiot_1v1 "${AI_IDIOT_DIR}/app/game_1v1.cpp")
 set(Idiot_Analysis "${AI_IDIOT_DIR}/app/tools.cpp")
 set(Idiot_Hybrid_Training "${AI_IDIOT_DIR}/app/hybrid_training.cpp")
+set(Idiot_Group_Training "${AI_IDIOT_DIR}/app/group_training.cpp")
 
 # Generate python binding
 pybind11_add_module(handsclapping ${Binding_File} ${GAME_SOURCES})
@@ -87,3 +88,8 @@ set_target_properties(idiot_tools PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_S
 add_executable(idiot_hybrid_training ${Idiot_Hybrid_Training} ${GAME_SOURCES} ${IDIOT_SOURCES})
 target_include_directories(idiot_hybrid_training PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
 set_target_properties(idiot_hybrid_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/Idiot")
+
+# Idiot asymmetric training executable file
+add_executable(idiot_group_training ${Idiot_Group_Training} ${GAME_SOURCES} ${IDIOT_SOURCES})
+target_include_directories(idiot_group_training PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
+set_target_properties(idiot_group_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/Idiot")
