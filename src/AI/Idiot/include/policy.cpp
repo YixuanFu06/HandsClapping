@@ -252,7 +252,7 @@ Policy::Policy(const Policy &p)
       aggressive_coefficient_(p.aggressive_coefficient_) {
 }
 
-Policy::Policy(std::string name, uint32_t id)
+Policy::Policy(const std::string &name, uint32_t id)
     : Tensor<float, STATE_DIM * 2 + 1>({MAX_HEALTH + 1, MAX_HEALTH + 1,
                                         MAX_ENERGY + 1, MAX_ENERGY + 1,
                                         ACTION_NUM}),
@@ -397,8 +397,8 @@ Policy &Policy::operator*=(const Reward &r) {
 
 void Policy::Store() {
   std::filesystem::path path = GetPolicyPath(name_);
+  std::filesystem::create_directories(path.parent_path());
   std::ofstream fout(path);
-  std::filesystem::create_directory(path.parent_path());
   if (!fout.is_open()) {
     std::cerr << "Error: Failed to open file " << path << std::endl;
     exit(1);
@@ -567,10 +567,10 @@ void Policy::Update(Reward &&r) {
   id_++;
 }
 
-Game::Action *Policy::GetAction(uint32_t enemy_health,
-                                uint32_t health,
-                                uint32_t enemy_energy,
-                                uint32_t energy) {
+Game::Action *Policy::GetAction(float enemy_health,
+                                float health,
+                                float enemy_energy,
+                                float energy) {
   std::vector<float> probabilities;
   for (Game::Action &action : Game::actions) {
     if (action.GetId() != Game::NONE && action.GetId() != Game::TIMEOUT) {

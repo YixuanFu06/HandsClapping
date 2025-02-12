@@ -1,11 +1,10 @@
 #pragma once
 
 #include <filesystem>
-#include <functional>
 #include <random>
 
 #include "../../../game/define_actions.h"
-#include "tensor.h"
+#include "../../tensor.h"
 
 namespace AI {
 
@@ -91,8 +90,8 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
 
  public:
   Policy();
-  Policy(const std::string name, uint32_t id);
   Policy(const Policy &p);
+  Policy(const std::string &name, uint32_t id);
   Policy(const std::string &path);
   Policy(const std::filesystem::path &path);
   Policy &operator=(const Policy &p);
@@ -115,10 +114,10 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
                          float health,
                          float enemy_energy,
                          float energy);
-  Game::Action *GetAction(uint32_t health,
-                          uint32_t energy,
-                          uint32_t enemy_health,
-                          uint32_t enemy_energy);
+  Game::Action *GetAction(float health,
+                          float energy,
+                          float enemy_health,
+                          float enemy_energy);
 
   inline std::string GetName() const {
     return name_;

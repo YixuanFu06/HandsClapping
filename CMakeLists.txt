@@ -27,22 +27,30 @@ set(GAME_DIR "${SOURCE_DIR}/game")
 set(APP_DIR "${SOURCE_DIR}/app")
 set(ONLINE_DIR "${SOURCE_DIR}/online")
 set(AI_IDIOT_DIR "${SOURCE_DIR}/AI/Idiot")
+set(AI_HDP_DIR "${SOURCE_DIR}/AI/HDP")
 
 # Collect files
 file(GLOB_RECURSE GAME_SOURCES "${GAME_DIR}/*.cpp")
 file(GLOB_RECURSE IDIOT_SOURCES "${AI_IDIOT_DIR}/include/*.cpp")
+file(GLOB_RECURSE HDP_SOURCES "${AI_HDP_DIR}/include/*.cpp")
 
 # Main programs
 set(Main_Game "${APP_DIR}/handsclapping_game.cpp")
 set(Game_Debug_Mode "${APP_DIR}/handsclapping_game_debug.cpp")
 set(Referee_Mode "${APP_DIR}/handsclapping_referee.cpp")
+
 set(Binding_File "${SOURCE_DIR}/handsclapping_pylib.cpp")
+
 set(Idiot_Training "${AI_IDIOT_DIR}/app/training.cpp")
 set(Idiot_Demo "${AI_IDIOT_DIR}/app/demo.cpp")
 set(Idiot_1v1 "${AI_IDIOT_DIR}/app/game_1v1.cpp")
 set(Idiot_Analysis "${AI_IDIOT_DIR}/app/tools.cpp")
 set(Idiot_Hybrid_Training "${AI_IDIOT_DIR}/app/hybrid_training.cpp")
 set(Idiot_Group_Training "${AI_IDIOT_DIR}/app/group_training.cpp")
+
+set(HDP_Training "${AI_HDP_DIR}/app/training.cpp")
+set(HDP_1v1 "${AI_HDP_DIR}/app/game_1v1.cpp")
+set(HDP_IDIOT_Demo "${AI_HDP_DIR}/app/demo_HDP_Idiot.cpp")
 
 # Generate python binding
 pybind11_add_module(handsclapping ${Binding_File} ${GAME_SOURCES})
@@ -93,3 +101,18 @@ set_target_properties(idiot_hybrid_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY 
 add_executable(idiot_group_training ${Idiot_Group_Training} ${GAME_SOURCES} ${IDIOT_SOURCES})
 target_include_directories(idiot_group_training PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
 set_target_properties(idiot_group_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/Idiot")
+
+# HDP training executable file
+add_executable(hdp_training ${HDP_Training} ${GAME_SOURCES} ${HDP_SOURCES})
+target_include_directories(hdp_training PRIVATE ${AI_HDP_DIR} ${GAME_DIR})
+set_target_properties(hdp_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/HDP")
+
+# HDP 1v1 game executable file
+add_executable(hdp_game_1v1 ${HDP_1v1} ${GAME_SOURCES} ${HDP_SOURCES})
+target_include_directories(hdp_game_1v1 PRIVATE ${AI_HDP_DIR} ${GAME_DIR})
+set_target_properties(hdp_game_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/HDP")
+
+# HDP Idiot demo executable file
+add_executable(hdp_idiot_demo ${HDP_IDIOT_Demo} ${GAME_SOURCES} ${HDP_SOURCES} ${IDIOT_SOURCES})
+target_include_directories(hdp_idiot_demo PRIVATE ${AI_HDP_DIR} ${GAME_DIR} ${AI_IDIOT_DIR})
+set_target_properties(hdp_idiot_demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/HDP")
