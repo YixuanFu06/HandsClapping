@@ -7,7 +7,7 @@
 #include <random>
 #include <thread>
 
-#include "../../game/define_actions.h"
+#include "../../../game/define_actions.h"
 #include "state.h"
 #include "model.h"
 #include "winning_rate.h"

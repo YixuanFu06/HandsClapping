@@ -26,8 +26,9 @@ set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set(GAME_DIR "${SOURCE_DIR}/game")
 set(APP_DIR "${SOURCE_DIR}/app")
 set(ONLINE_DIR "${SOURCE_DIR}/online")
-set(AI_IDIOT_DIR "${SOURCE_DIR}/AI/Idiot")
-set(AI_HDP_DIR "${SOURCE_DIR}/AI/HDP")
+set(AI_DIR "${SOURCE_DIR}/AI")
+set(AI_IDIOT_DIR "${AI_DIR}/Idiot")
+set(AI_HDP_DIR "${AI_DIR}/HDP")
 
 # Collect files
 file(GLOB_RECURSE GAME_SOURCES "${GAME_DIR}/*.cpp")
@@ -50,7 +51,9 @@ set(Idiot_Group_Training "${AI_IDIOT_DIR}/app/group_training.cpp")
 
 set(HDP_Training "${AI_HDP_DIR}/app/training.cpp")
 set(HDP_1v1 "${AI_HDP_DIR}/app/game_1v1.cpp")
-set(HDP_IDIOT_Demo "${AI_HDP_DIR}/app/demo_HDP_Idiot.cpp")
+
+set(AI_Demo "${AI_DIR}/app/demo.cpp")
+set(AI_game_1v1 "${AI_DIR}/app/game_1v1.cpp")
 
 # Generate python binding
 pybind11_add_module(handsclapping ${Binding_File} ${GAME_SOURCES})
@@ -112,7 +115,12 @@ add_executable(hdp_game_1v1 ${HDP_1v1} ${GAME_SOURCES} ${HDP_SOURCES})
 target_include_directories(hdp_game_1v1 PRIVATE ${AI_HDP_DIR} ${GAME_DIR})
 set_target_properties(hdp_game_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/HDP")
 
-# HDP Idiot demo executable file
-add_executable(hdp_idiot_demo ${HDP_IDIOT_Demo} ${GAME_SOURCES} ${HDP_SOURCES} ${IDIOT_SOURCES})
-target_include_directories(hdp_idiot_demo PRIVATE ${AI_HDP_DIR} ${GAME_DIR} ${AI_IDIOT_DIR})
-set_target_properties(hdp_idiot_demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/HDP")
+# AI demo executable file
+add_executable(ai_demo ${AI_Demo} ${GAME_SOURCES} ${IDIOT_SOURCES} ${HDP_SOURCES})
+target_include_directories(ai_demo PRIVATE ${AI_DIR} ${GAME_DIR})
+set_target_properties(ai_demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/api")
+
+# AI 1v1 game executable file
+add_executable(ai_game_1v1 ${AI_game_1v1} ${GAME_SOURCES} ${IDIOT_SOURCES} ${HDP_SOURCES})
+target_include_directories(ai_game_1v1 PRIVATE ${AI_DIR} ${GAME_DIR})
+set_target_properties(ai_game_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/api")

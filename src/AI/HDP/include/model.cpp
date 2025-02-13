@@ -99,7 +99,7 @@ void Model::Update() {
     exit(1);
   }
   action_winning_rate_.Update();
-  std::cout << "action_winning_rate update finishes." << std::endl;
+  std::cout << "action_winning_rate update finished." << std::endl;
 
   if (policy_.GetId() != id_) {
     std::cerr << "Error: Model and NewPolicy do not match." << std::endl;
@@ -107,18 +107,18 @@ void Model::Update() {
   }
   policy_.Update();
   policy_.IsNormalized();
-  std::cout << "Policy update finishes." << std::endl;
+  std::cout << "Policy update finished." << std::endl;
 
   action_winning_rate_.Update();
   action_winning_rate_.SetId(action_winning_rate_.GetId() - 1);
-  std::cout << "action_winning_rate update finishes." << std::endl;
+  std::cout << "action_winning_rate update finished." << std::endl;
 
   if (state_winning_rate_.GetId() != id_) {
     std::cerr << "Error: Model and StateWinningRate do not match." << std::endl;
     exit(1);
   }
   state_winning_rate_.Update();
-  std::cout << "state_winning_rate update finishes." << std::endl;
+  std::cout << "state_winning_rate update finished." << std::endl;
 
   id_++;
 }
