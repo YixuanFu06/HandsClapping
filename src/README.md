@@ -28,7 +28,50 @@ Input such as `dia->Alice,dia->Bob` and `2dia->#1,3dia->Charley` is also support
 
 The nicknames for each action is given by the table below. You may also look them up in [`src/game/define_actions.cpp`](game/define_actions.cpp).
 
-***TODO: table*** coming out soon
+| Formal Name | Chinese Name | Nickname |
+|-------------|--------------|----------|
+| PISTOL      | 手枪         | dia、gun |
+| PISTOL_UPPER|   上打       | ^dia、dia^、shangda |
+| PISTOL_LOWER|  下打     | vdia、diav、Vdia、diaV、xiada |
+| PISTOL_LEFT |左打       | <dia、dia<、zuoda |
+| PISTOL_RIGHT| 右打     | >dia、dia>、youda |
+| CHOP_HORIZONTAL |   横扫| -、hengpi、hengdun、hengsao、heng |
+| CHOP_VERTICAL | 竖劈 | \|、shupi、shudun、shu |
+| CHOP_INCLINE |    斜劈（左上到右下）     | \\、xiepi\、xiedun\、xie\ |
+| CHOP_INCLINE2 |   斜劈（右上到左下）    | /、xiepi/、xiedun/、xie/ |
+| CHOP_UPPER  |  上扫     | shangsao |
+| CHOP_LOWER  |   下扫    | xiasao |
+| CHOP_LEFT   |     左劈      | zuopi、zuosao |
+| CHOP_RIGHT  |    右劈       | youpi、yousao |
+| VISION      |     幻视      | T、t、huanshi |
+| HAMMER      |     锤子      | leichui、chuizi、langtou、chui |
+| HAWKEYE     |       鹰眼    | o、O、yan、yingyan、ying |
+| CHOP_CROSS  |     横竖扫      | +、hengshu、hengshusao、hengshupi、hengshudun |
+| CHOP_X      |      双斜扫     | x、X、xpi、xdun、xsao |
+| ICEAGE      |    冰天       | bing、bingtian、tianbeng |
+| EARTHQUAKE  |     地裂      | dilie、liedi |
+| EDITH       |    伊迪斯       | yidisi、e、E |
+| BLACKHOLE   |   黑洞        | heidong |
+| DOOMSDAY    |      末日     | mori |
+| SHIELD      |    小防       | fang、_\|、xiaofang |
+| REMOTE_SHIELD|    浪子战甲    | ~、lang、langzi |
+| REBOUNDER   |      小弹     | tan、xiaotan |
+| DODGE_UPLEFT |    左上躲     | ^<、<^、zuoshang、shangzuo、zuoshangduo、shangzuoduo、zuoshangshan、shangzuoshan、upleft、leftup |
+| DODGE_UPMID |    上躲       | ^、shang、shangduo、shangshan、up |
+| DODGE_UPRIGHT|     右上躲   | ^>、>^、youshang、shangyou、youshangduo、shangyouduo、youshangshan、shangyoushan、upright、rightup |
+| DODGE_GROUNDLEFT |   左躲 | <、zuo、zuoduo、zuoshan、left |
+| DODGE_GROUNDRIGHT| 右躲 | >、you、youduo、youshan、right |
+| DODGE_DOWNLEFT |   左下躲   | v<、<v、V<、<V、zuoxia、xiazuo、zuoxiaduo、xiazuoduo、zuoxiashan、xiazuoshan、downleft、leftdown |
+| DODGE_DOWNMID |    下躲   | v、V、xia、xiaduo、xiashan、down |
+| DODGE_DOWNRIGHT|   右下躲  | v>、>v、V>、>V、youxia、xiayou、youxiaduo、xiayouduo、youxiashan、xiayoushan、downright、rightdown |
+| SUICIDE     |    自杀       | Q、q、*、zisha、bong |
+| ARTIFACT_SOUL|     灵魂原石    | soul、linghun、@ |
+| DUPLICATOR  |   啪啪啪啪啪  | $、papapa、papapapapa、kexing |
+| ARTIFACT_TIME| 时间原石（未推出）    | time、shijian、jiu、lanihuilai |
+| ARTIFACT_SPACE|   空间原石（未推出）     | space、kongjian |
+| ARTIFACT_MIND|    心灵原石（未推出）      | mind、spirit、jingshen |
+| ARTIFACT_REALITY|  现实原石（未推出）       | reality、xianshi |
+| ARTIFACT_STRENGTH|   力量原石（未推出）     | strength、liliang |
 
 ## Offline Mode
 
