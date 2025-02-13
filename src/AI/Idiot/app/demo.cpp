@@ -2,13 +2,15 @@
 #include "../include/policy.h"
 
 const std::string POLICY1 = "Idiot-gamma";
-const std::string POLICY2 = "Idiot-beta1";
+const std::string POLICY2 = "Idiot-alpha";
 
 int main() {
   Game::InitActions();
-  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath() << std::endl << std::endl;
-  AI::Idiot::Policy policy1 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY1));
-  AI::Idiot::Policy policy2 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY2));
+  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
+            << std::endl
+            << std::endl;
+  AI::Idiot::Policy policy1(AI::Idiot::GetPolicyPath(POLICY1));
+  AI::Idiot::Policy policy2(AI::Idiot::GetPolicyPath(POLICY2));
 
   Game::BattleField battle_field({policy1.GetName(), policy2.GetName()});
   while (battle_field.GetMemberNum() > 1) {

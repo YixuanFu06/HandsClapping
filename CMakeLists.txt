@@ -9,9 +9,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set pybind11 and python path
-set(Python3_EXECUTABLE "/home/yixuanfu/anaconda3/envs/HandsClapping/bin/python") # Replace it with your python executable path
+set(Python3_EXECUTABLE "D:/Program Files/Python/Python313/python.exe") # Replace it with your python executable path
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-set(pybind11_DIR  "/home/yixuanfu/anaconda3/envs/HandsClapping/lib/python3.11/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
+set(pybind11_DIR  "C:/Users/yixua/AppData/Roaming/Python/Python313/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
 find_package(pybind11 REQUIRED)
 
 # Set compiler options for UTF-8
@@ -26,22 +26,34 @@ set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set(GAME_DIR "${SOURCE_DIR}/game")
 set(APP_DIR "${SOURCE_DIR}/app")
 set(ONLINE_DIR "${SOURCE_DIR}/online")
-set(AI_IDIOT_DIR "${SOURCE_DIR}/AI/Idiot")
+set(AI_DIR "${SOURCE_DIR}/AI")
+set(AI_IDIOT_DIR "${AI_DIR}/Idiot")
+set(AI_HDP_DIR "${AI_DIR}/HDP")
 
 # Collect files
 file(GLOB_RECURSE GAME_SOURCES "${GAME_DIR}/*.cpp")
 file(GLOB_RECURSE IDIOT_SOURCES "${AI_IDIOT_DIR}/include/*.cpp")
+file(GLOB_RECURSE HDP_SOURCES "${AI_HDP_DIR}/include/*.cpp")
 
 # Main programs
 set(Main_Game "${APP_DIR}/handsclapping_game.cpp")
 set(Game_Debug_Mode "${APP_DIR}/handsclapping_game_debug.cpp")
 set(Referee_Mode "${APP_DIR}/handsclapping_referee.cpp")
+
 set(Binding_File "${SOURCE_DIR}/handsclapping_pylib.cpp")
+
 set(Idiot_Training "${AI_IDIOT_DIR}/app/training.cpp")
 set(Idiot_Demo "${AI_IDIOT_DIR}/app/demo.cpp")
 set(Idiot_1v1 "${AI_IDIOT_DIR}/app/game_1v1.cpp")
 set(Idiot_Analysis "${AI_IDIOT_DIR}/app/tools.cpp")
 set(Idiot_Hybrid_Training "${AI_IDIOT_DIR}/app/hybrid_training.cpp")
+set(Idiot_Group_Training "${AI_IDIOT_DIR}/app/group_training.cpp")
+
+set(HDP_Training "${AI_HDP_DIR}/app/training.cpp")
+set(HDP_1v1 "${AI_HDP_DIR}/app/game_1v1.cpp")
+
+set(AI_Demo "${AI_DIR}/app/demo.cpp")
+set(AI_game_1v1 "${AI_DIR}/app/game_1v1.cpp")
 
 # Generate python binding
 pybind11_add_module(handsclapping ${Binding_File} ${GAME_SOURCES})
@@ -87,3 +99,28 @@ set_target_properties(idiot_tools PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_S
 add_executable(idiot_hybrid_training ${Idiot_Hybrid_Training} ${GAME_SOURCES} ${IDIOT_SOURCES})
 target_include_directories(idiot_hybrid_training PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
 set_target_properties(idiot_hybrid_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/Idiot")
+
+# Idiot asymmetric training executable file
+add_executable(idiot_group_training ${Idiot_Group_Training} ${GAME_SOURCES} ${IDIOT_SOURCES})
+target_include_directories(idiot_group_training PRIVATE ${AI_IDIOT_DIR} ${GAME_DIR})
+set_target_properties(idiot_group_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/Idiot")
+
+# HDP training executable file
+add_executable(hdp_training ${HDP_Training} ${GAME_SOURCES} ${HDP_SOURCES})
+target_include_directories(hdp_training PRIVATE ${AI_HDP_DIR} ${GAME_DIR})
+set_target_properties(hdp_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/HDP")
+
+# HDP 1v1 game executable file
+add_executable(hdp_game_1v1 ${HDP_1v1} ${GAME_SOURCES} ${HDP_SOURCES})
+target_include_directories(hdp_game_1v1 PRIVATE ${AI_HDP_DIR} ${GAME_DIR})
+set_target_properties(hdp_game_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/HDP")
+
+# AI demo executable file
+add_executable(ai_demo ${AI_Demo} ${GAME_SOURCES} ${IDIOT_SOURCES} ${HDP_SOURCES})
+target_include_directories(ai_demo PRIVATE ${AI_DIR} ${GAME_DIR})
+set_target_properties(ai_demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/api")
+
+# AI 1v1 game executable file
+add_executable(ai_game_1v1 ${AI_game_1v1} ${GAME_SOURCES} ${IDIOT_SOURCES} ${HDP_SOURCES})
+target_include_directories(ai_game_1v1 PRIVATE ${AI_DIR} ${GAME_DIR})
+set_target_properties(ai_game_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/bin/AI/api")
