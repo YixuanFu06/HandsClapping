@@ -1,4 +1,4 @@
-#include "game_api.h"
+#include "state.h"
 
 namespace AI {
 
@@ -42,13 +42,6 @@ State ConjugateState(const State &state) {
   std::swap(new_state.health, new_state.enemy_health);
   std::swap(new_state.energy, new_state.enemy_energy);
   return new_state;
-}
-
-int StateReward(const State &state) {
-  if (state.enemy_health <= 0 && state.health > 0) {
-    return 1;
-  }
-  return 0;
 }
 
 float Attention(float p) {

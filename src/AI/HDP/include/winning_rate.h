@@ -3,7 +3,7 @@
 #include <filesystem>
 
 #include "../../tensor.h"
-#include "game_api.h"
+#include "state.h"
 
 namespace AI {
 

@@ -1,7 +1,7 @@
 #include "../include/model.h"
 #include "define_actions.h"
 
-const std::string MODEL = "test1";
+const std::string MODEL = "HDP-alpha";
 
 int main() {
   Game::InitActions();

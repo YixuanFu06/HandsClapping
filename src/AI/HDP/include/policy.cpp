@@ -8,7 +8,7 @@
 #include <thread>
 
 #include "../../game/define_actions.h"
-#include "game_api.h"
+#include "state.h"
 #include "model.h"
 #include "winning_rate.h"
 
@@ -285,36 +285,12 @@ void Policy::Update() {
                                                        Game::actions[n_prime]);
                 float winning_rate =
                     DeclineFunction(
-                        master_model_->GetStateWinningRate(new_state)) +
-                    StateReward(new_state);
+                        master_model_->GetStateWinningRate(new_state));
                 float winning_rate_prime =
                     DeclineFunction(
-                        master_model_->GetStateWinningRate(new_state_prime)) +
-                    StateReward(new_state_prime);
-                // if (i == 1 && j == 1 && k == 1 && l == 0 && n ==
-                // Game::SHIELD) {
-                //   std::cout << "State (" << i << ", " << j << ", " << k << ",
-                //   "
-                //             << l << ") Action " <<
-                //             Game::actions[n].GetFormalName()
-                //             << " -> " << Game::actions[m].GetFormalName()
-                //             << " -> " <<
-                //             Game::actions[n_prime].GetFormalName()
-                //             << " : " << winning_rate << " vs " <<
-                //             winning_rate_prime
-                //             << std::endl;
-                // }
+                        master_model_->GetStateWinningRate(new_state_prime));
                 if (winning_rate > winning_rate_prime) {
                   IsStableCovered = false;
-                  // if (i == 1 && j == 1 && k == 1 && l == 0 && n ==
-                  // Game::SHIELD) {
-                  //   std::cout << "Action " <<
-                  //   Game::actions[m].GetFormalName() << "'s cover stability
-                  //   at state "; std::cout << "(" << j << ", " << i << ", " <<
-                  //   l << ", " << k << ") is "; std::cout <<
-                  //   GetOriginalCoverStability(ConjugateState(state), m) <<
-                  //   std::endl;
-                  // }
                   if (GetOriginalCoverStability(ConjugateState(state), m) ==
                       0) {
                     IsCovered = false;
@@ -327,22 +303,9 @@ void Policy::Update() {
               }
 
               if (IsStableCovered && !IsEqual) {
-                // std::cout << Game::actions[n].GetFormalName() << " is stable
-                // covered by "; std::cout <<
-                // Game::actions[n_prime].GetFormalName() << " at "; std::cout
-                // << "(" << i << ", " << j << ", " << k << ", " << l << ")" <<
-                // std::endl; std::cin.get();
                 new_cover_stability_[i][j][k][l][n] = 1;
               }
               if (IsCovered && !IsEqual) {
-                // if (i == 1 && j == 1 && k == 1 && l == 0 && n ==
-                // Game::SHIELD) {
-                //   std::cout << Game::actions[n].GetFormalName() << " is
-                //   covered by "; std::cout <<
-                //   Game::actions[n_prime].GetFormalName() << " at "; std::cout
-                //   << "(" << i << ", " << j << ", " << k << ", " << l << ")"
-                //   << std::endl; std::cin.get();
-                // }
                 (*this)[i][j][k][l][n] = 0;
                 break;
               }
@@ -361,8 +324,6 @@ void Policy::Update() {
     uint32_t end =
         (t == num_threads - 1) ? total_tasks - 1 : (t + 1) * range - 1;
     threads.emplace_back(thread_task, start, end);
-    // start this thread directly
-    // thread_task(start, end);
   }
 
   while (completed_threads < num_threads) {

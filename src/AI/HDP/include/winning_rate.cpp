@@ -93,8 +93,14 @@ float StateWinningRate::GetStateWinningRate(float enemy_health,
     std::cerr << "Error: state_winning_rate out of range" << std::endl;
     exit(1);
   }
-  if (enemy_health <= 0 || health <= 0) {
+  if (enemy_health > 0 && health <= 0) {
     return 0;
+  }
+  if (enemy_health <= 0 && health > 0) {
+    return 1;
+  }
+  if (enemy_health <= 0 && health <= 0) {
+    return 0.5;
   }
   if (enemy_health > MAX_HEALTH) {
     enemy_health = MAX_HEALTH;
@@ -300,8 +306,7 @@ void ActionWinningRate::Update() {
                   master_model_->GetActionProbability(ConjugateState(state),
                                                       m) *
                   (master_model_->DeclineFunction(
-                       master_model_->GetStateWinningRate(new_state)) +
-                   StateReward(new_state));
+                       master_model_->GetStateWinningRate(new_state)));
             }
           }
         }

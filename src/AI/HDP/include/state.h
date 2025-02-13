@@ -21,8 +21,6 @@ State StateTransform(const State &state,
 
 State ConjugateState(const State &state);
 
-int StateReward(const State &state);
-
 float Attention(float p);
 
 }  // namespace HDP
