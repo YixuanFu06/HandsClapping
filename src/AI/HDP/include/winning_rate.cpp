@@ -306,7 +306,7 @@ void ActionWinningRate::Update() {
                   master_model_->GetActionProbability(ConjugateState(state),
                                                       m) *
                   (master_model_->DeclineFunction(
-                       master_model_->GetStateWinningRate(new_state)));
+                      master_model_->GetStateWinningRate(new_state)));
             }
           }
         }

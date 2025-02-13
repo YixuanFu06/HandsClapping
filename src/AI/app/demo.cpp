@@ -1,5 +1,5 @@
-#include "../Idiot/include/policy.h"
 #include "../HDP/include/model.h"
+#include "../Idiot/include/policy.h"
 #include "HDP/include/model.h"
 #include "Idiot/include/policy.h"
 #include "define_actions.h"
@@ -24,7 +24,7 @@ int main() {
     std::cout << "Invalid model type!" << std::endl;
     return 0;
   }
-  
+
   if (model1_type == "HDP" && model2_type == "HDP") {
     std::cout << "Enter the name of the first model: ";
     std::string model1_name;
@@ -36,7 +36,8 @@ int main() {
     std::cin >> model2_name;
     AI::HDP::Model model2(model2_name);
 
-    std::cout << "Enter the rounds of battle (1 round will give out the specific battle information): ";
+    std::cout << "Enter the rounds of battle (1 round will give out the "
+                 "specific battle information): ";
     uint32_t total_rounds;
     std::cin >> total_rounds;
 
@@ -45,8 +46,7 @@ int main() {
       if (model1_name == model2_name) {
         model2_name += "-copy";
       }
-      Game::BattleField battle_field(
-          {model1_name, model2_name});
+      Game::BattleField battle_field({model1_name, model2_name});
       while (battle_field.GetMemberNum() > 1) {
         float health1 = battle_field.GetPlayerHealth(0);
         float energy1 = battle_field.GetPlayerEnergy(0);
@@ -71,20 +71,20 @@ int main() {
       } else if (battle_field.GetPlayerName(0) == model1.GetName()) {
         model1_win++;
         if (total_rounds == 1) {
-          std::cout << "Game over! " << model1_name << " wins!"
-                    << std::endl;
+          std::cout << "Game over! " << model1_name << " wins!" << std::endl;
         }
       } else {
         model2_win++;
         if (total_rounds == 1) {
-          std::cout << "Game over! " << model2_name << " wins!"
-                    << std::endl;
+          std::cout << "Game over! " << model2_name << " wins!" << std::endl;
         }
       }
     }
 
-    std::cout << model1_name << " wins " << model1_win << " rounds." << std::endl;
-    std::cout << model2_name << " wins " << model2_win << " rounds." << std::endl;
+    std::cout << model1_name << " wins " << model1_win << " rounds."
+              << std::endl;
+    std::cout << model2_name << " wins " << model2_win << " rounds."
+              << std::endl;
 
   } else if (model1_type == "HDP" && model2_type == "Idiot") {
     std::cout << "Enter the name of the first model: ";
@@ -97,14 +97,14 @@ int main() {
     std::cin >> model2_name;
     AI::Idiot::Policy model2(AI::Idiot::GetPolicyPath(model2_name));
 
-    std::cout << "Enter the rounds of battle (1 round will give out the specific battle information): ";
+    std::cout << "Enter the rounds of battle (1 round will give out the "
+                 "specific battle information): ";
     uint32_t total_rounds;
     std::cin >> total_rounds;
 
     uint32_t model1_win = 0, model2_win = 0;
     for (uint32_t i = 0; i < total_rounds; i++) {
-      Game::BattleField battle_field(
-          {model1.GetName(), model2.GetName()});
+      Game::BattleField battle_field({model1.GetName(), model2.GetName()});
       while (battle_field.GetMemberNum() > 1) {
         float health1 = battle_field.GetPlayerHealth(0);
         float energy1 = battle_field.GetPlayerEnergy(0);
@@ -141,8 +141,10 @@ int main() {
       }
     }
 
-    std::cout << model1_name << " wins " << model1_win << " rounds." << std::endl;
-    std::cout << model2_name << " wins " << model2_win << " rounds." << std::endl;
+    std::cout << model1_name << " wins " << model1_win << " rounds."
+              << std::endl;
+    std::cout << model2_name << " wins " << model2_win << " rounds."
+              << std::endl;
 
   } else if (model1_type == "Idiot" && model2_type == "HDP") {
     std::cout << "Enter the name of the first model: ";
@@ -155,14 +157,14 @@ int main() {
     std::cin >> model2_name;
     AI::HDP::Model model2(model2_name);
 
-    std::cout << "Enter the rounds of battle (1 round will give out the specific battle information): ";
+    std::cout << "Enter the rounds of battle (1 round will give out the "
+                 "specific battle information): ";
     uint32_t total_rounds;
     std::cin >> total_rounds;
 
     uint32_t model1_win = 0, model2_win = 0;
     for (uint32_t i = 0; i < total_rounds; i++) {
-      Game::BattleField battle_field(
-          {model1.GetName(), model2.GetName()});
+      Game::BattleField battle_field({model1.GetName(), model2.GetName()});
       while (battle_field.GetMemberNum() > 1) {
         float health1 = battle_field.GetPlayerHealth(0);
         float energy1 = battle_field.GetPlayerEnergy(0);
@@ -199,8 +201,10 @@ int main() {
       }
     }
 
-    std::cout << model1_name << " wins " << model1_win << " rounds." << std::endl;
-    std::cout << model2_name << " wins " << model2_win << " rounds." << std::endl;
+    std::cout << model1_name << " wins " << model1_win << " rounds."
+              << std::endl;
+    std::cout << model2_name << " wins " << model2_win << " rounds."
+              << std::endl;
 
   } else if (model1_type == "Idiot" && model2_type == "Idiot") {
     std::cout << "Enter the name of the first model: ";
@@ -213,7 +217,8 @@ int main() {
     std::cin >> model2_name;
     AI::Idiot::Policy model2(AI::Idiot::GetPolicyPath(model2_name));
 
-    std::cout << "Enter the rounds of battle (1 round will give out the specific battle information): ";
+    std::cout << "Enter the rounds of battle (1 round will give out the "
+                 "specific battle information): ";
     uint32_t total_rounds;
     std::cin >> total_rounds;
 
@@ -222,8 +227,7 @@ int main() {
       if (model1_name == model2_name) {
         model2_name += "-copy";
       }
-      Game::BattleField battle_field(
-          {model1_name, model2_name});
+      Game::BattleField battle_field({model1_name, model2_name});
       while (battle_field.GetMemberNum() > 1) {
         float health1 = battle_field.GetPlayerHealth(0);
         float energy1 = battle_field.GetPlayerEnergy(0);
@@ -260,8 +264,10 @@ int main() {
       }
     }
 
-    std::cout << model1_name << " wins " << model1_win << " rounds." << std::endl;
-    std::cout << model2_name << " wins " << model2_win << " rounds." << std::endl;
+    std::cout << model1_name << " wins " << model1_win << " rounds."
+              << std::endl;
+    std::cout << model2_name << " wins " << model2_win << " rounds."
+              << std::endl;
   }
 
   return 0;

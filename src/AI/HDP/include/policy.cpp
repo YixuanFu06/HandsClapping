@@ -8,8 +8,8 @@
 #include <thread>
 
 #include "../../../game/define_actions.h"
-#include "state.h"
 #include "model.h"
+#include "state.h"
 #include "winning_rate.h"
 
 namespace AI {
@@ -283,12 +283,10 @@ void Policy::Update() {
                     StateTransform(state, Game::actions[m], Game::actions[n]);
                 State new_state_prime = StateTransform(state, Game::actions[m],
                                                        Game::actions[n_prime]);
-                float winning_rate =
-                    DeclineFunction(
-                        master_model_->GetStateWinningRate(new_state));
-                float winning_rate_prime =
-                    DeclineFunction(
-                        master_model_->GetStateWinningRate(new_state_prime));
+                float winning_rate = DeclineFunction(
+                    master_model_->GetStateWinningRate(new_state));
+                float winning_rate_prime = DeclineFunction(
+                    master_model_->GetStateWinningRate(new_state_prime));
                 if (winning_rate > winning_rate_prime) {
                   IsStableCovered = false;
                   if (GetOriginalCoverStability(ConjugateState(state), m) ==

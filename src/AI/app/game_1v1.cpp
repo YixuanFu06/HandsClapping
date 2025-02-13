@@ -8,7 +8,8 @@ int main() {
             << std::endl
             << std::endl;
 
-  std::cout << "Enter the type of the model you want to play with (HDP or Idiot): ";
+  std::cout
+      << "Enter the type of the model you want to play with (HDP or Idiot): ";
   std::string model_type;
   std::cin >> model_type;
   if (model_type != "HDP" && model_type != "Idiot") {
@@ -61,7 +62,8 @@ int main() {
     std::cout << "Enter the name of the model: ";
     std::string model_name;
     std::cin >> model_name;
-    AI::Idiot::Policy model = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(model_name));
+    AI::Idiot::Policy model =
+        AI::Idiot::Policy(AI::Idiot::GetPolicyPath(model_name));
 
     std::string play_again;
 
