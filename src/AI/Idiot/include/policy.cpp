@@ -28,7 +28,8 @@ std::filesystem::path FindRootPath() {
 
 std::filesystem::path GetPolicyPath(const std::string &name) {
   std::filesystem::path root_path = FindRootPath();
-  std::filesystem::path policy_path = root_path / "data/AI/Idiot" / ("policy_" + name + ".txt");
+  std::filesystem::path policy_path =
+      root_path / "data/AI/Idiot" / ("policy_" + name + ".txt");
   return policy_path;
 }
 
@@ -41,6 +42,15 @@ Reward::Reward()
       conservative_coefficient_(default_conservative_coefficient),
       greedy_coefficient_(default_greedy_coefficient),
       aggressive_coefficient_(default_aggressive_coefficient) {
+}
+
+Reward::Reward(const Reward &r)
+    : Tensor<float, STATE_DIM * 2 + 1>(r),
+      id_(r.id_),
+      declining_coefficient_(r.declining_coefficient_),
+      conservative_coefficient_(r.conservative_coefficient_),
+      greedy_coefficient_(r.greedy_coefficient_),
+      aggressive_coefficient_(r.aggressive_coefficient_) {
 }
 
 Reward::Reward(const Policy &p)
@@ -172,7 +182,7 @@ void Reward::ActionUpdate_Health(float enemy_health,
                                  float enemy_energy,
                                  float energy,
                                  Game::Action *action,
-                                 float chang_of_health) {
+                                 float change_of_health) {
   if (action->GetType() != Game::ATTACK) {
     std::cout
         << "Error: the argument of ActionUpdate_Health is not an ATTACK type."
@@ -181,7 +191,7 @@ void Reward::ActionUpdate_Health(float enemy_health,
   }
   (*this)[static_cast<uint32_t>(enemy_health)][static_cast<uint32_t>(health)]
          [static_cast<uint32_t>(enemy_energy)][static_cast<uint32_t>(energy)]
-         [action->GetId()] += chang_of_health + aggressive_coefficient_;
+         [action->GetId()] += change_of_health + aggressive_coefficient_;
 }
 
 void Reward::ActionUpdate_Energy(float enemy_health,
@@ -189,11 +199,11 @@ void Reward::ActionUpdate_Energy(float enemy_health,
                                  float enemy_energy,
                                  float energy,
                                  Game::Action *action,
-                                 float chang_of_energy) {
+                                 float change_of_energy) {
   (*this)[static_cast<uint32_t>(enemy_health)][static_cast<uint32_t>(health)]
          [static_cast<uint32_t>(enemy_energy)][static_cast<uint32_t>(energy)]
          [action->GetId()] +=
-      (chang_of_energy - 0.5 - action->GetEnergy()) * greedy_coefficient_;
+      (change_of_energy - 0.5 - action->GetEnergy()) * greedy_coefficient_;
 }
 
 void Reward::Store(const std::string &path) {
@@ -231,7 +241,18 @@ Policy::Policy()
                                         ACTION_NUM}) {
 }
 
-Policy::Policy(std::string name, uint32_t id)
+Policy::Policy(const Policy &p)
+    : Tensor<float, STATE_DIM * 2 + 1>(p),
+      name_(p.name_),
+      id_(p.id_),
+      update_precision_(p.update_precision_),
+      declining_coefficient_(p.declining_coefficient_),
+      conservative_coefficient_(p.conservative_coefficient_),
+      greedy_coefficient_(p.greedy_coefficient_),
+      aggressive_coefficient_(p.aggressive_coefficient_) {
+}
+
+Policy::Policy(const std::string &name, uint32_t id)
     : Tensor<float, STATE_DIM * 2 + 1>({MAX_HEALTH + 1, MAX_HEALTH + 1,
                                         MAX_ENERGY + 1, MAX_ENERGY + 1,
                                         ACTION_NUM}),
@@ -295,7 +316,8 @@ Policy::Policy(const std::string &path)
   fin.close();
 }
 
-Policy::Policy(const std::filesystem::path &path) : Policy(path.string()) {}
+Policy::Policy(const std::filesystem::path &path) : Policy(path.string()) {
+}
 
 Policy &Policy::operator=(const Policy &p) {
   if (this != &p) {
@@ -375,8 +397,8 @@ Policy &Policy::operator*=(const Reward &r) {
 
 void Policy::Store() {
   std::filesystem::path path = GetPolicyPath(name_);
+  std::filesystem::create_directories(path.parent_path());
   std::ofstream fout(path);
-  std::filesystem::create_directory(path.parent_path());
   if (!fout.is_open()) {
     std::cerr << "Error: Failed to open file " << path << std::endl;
     exit(1);
@@ -482,18 +504,22 @@ float Policy::Similarity(const Policy &p) {
   return 1 - tvd / total_entry;
 }
 
-void Policy::PrintDistribution(float enemy_health, float health, float enemy_energy, float energy) {
+void Policy::PrintDistribution(float enemy_health,
+                               float health,
+                               float enemy_energy,
+                               float energy) {
   bool IsPrinted[ACTION_NUM];
   for (uint32_t i = 0; i < ACTION_NUM; i++) {
     IsPrinted[i] = false;
   }
-  
+
   bool PrintIsOver;
   do {
     PrintIsOver = true;
     uint32_t current_max_action;
     for (uint32_t i = 0; i < ACTION_NUM; i++) {
-      if ((*this)[enemy_health][health][enemy_energy][energy][i] != 0 && !IsPrinted[i]) {
+      if ((*this)[enemy_health][health][enemy_energy][energy][i] != 0 &&
+          !IsPrinted[i]) {
         current_max_action = i;
         PrintIsOver = false;
         break;
@@ -504,14 +530,21 @@ void Policy::PrintDistribution(float enemy_health, float health, float enemy_ene
     }
 
     for (uint32_t i = current_max_action + 1; i < ACTION_NUM; i++) {
-      if (!IsPrinted[i] && (*this)[enemy_health][health][enemy_energy][energy][i] > (*this)[enemy_health][health][enemy_energy][energy][current_max_action]) {
+      if (!IsPrinted[i] &&
+          (*this)[enemy_health][health][enemy_energy][energy][i] >
+              (*this)[enemy_health][health][enemy_energy][energy]
+                     [current_max_action]) {
         current_max_action = i;
       }
     }
 
     IsPrinted[current_max_action] = true;
-    std::cout << Game::actions[current_max_action].GetFormalName() << ": " << (*this)[enemy_health][health][enemy_energy][energy][current_max_action] * 100 << "%\n";
-  } while(!PrintIsOver);
+    std::cout << Game::actions[current_max_action].GetFormalName() << ": "
+              << (*this)[enemy_health][health][enemy_energy][energy]
+                        [current_max_action] *
+                     100
+              << "%\n";
+  } while (!PrintIsOver);
 }
 
 void Policy::Update(Reward &r) {
@@ -534,10 +567,10 @@ void Policy::Update(Reward &&r) {
   id_++;
 }
 
-Game::Action *Policy::GetAction(uint32_t enemy_health,
-                                uint32_t health,
-                                uint32_t enemy_energy,
-                                uint32_t energy) {
+Game::Action *Policy::GetAction(float enemy_health,
+                                float health,
+                                float enemy_energy,
+                                float energy) {
   std::vector<float> probabilities;
   for (Game::Action &action : Game::actions) {
     if (action.GetId() != Game::NONE && action.GetId() != Game::TIMEOUT) {

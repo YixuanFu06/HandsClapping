@@ -1,14 +1,19 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string POLICY1 = "Idiot-gamma";
-const std::string POLICY2 = "Idiot-beta1";
-
 int main() {
   Game::InitActions();
-  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath() << std::endl << std::endl;
-  AI::Idiot::Policy policy1 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY1));
-  AI::Idiot::Policy policy2 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY2));
+  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
+            << std::endl
+            << std::endl;
+  std::cout << "Enter the name of the first model: ";
+  std::string model1_name;
+  std::cin >> model1_name;
+  AI::Idiot::Policy policy1(AI::Idiot::GetPolicyPath(model1_name));
+  std::cout << "Enter the name of the second model: ";
+  std::string model2_name;
+  std::cin >> model2_name;
+  AI::Idiot::Policy policy2(AI::Idiot::GetPolicyPath(model2_name));
 
   Game::BattleField battle_field({policy1.GetName(), policy2.GetName()});
   while (battle_field.GetMemberNum() > 1) {
@@ -30,5 +35,7 @@ int main() {
               << std::endl;
   }
 
+  std::cout << "Press any key to continue..." << std::endl;
+  std::cin.get();
   return 0;
 }
