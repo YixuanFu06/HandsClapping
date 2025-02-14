@@ -27,6 +27,7 @@ The first non-supervised model for Handsclapping, *Idiot*, has been constructed 
 > This part introduces how to construct and compile this project in local Windows and Linux system and may require the previous knowledge about basic programming language and the corresponding toolchains. For users, it's OK to simply skip this part and download the releases of this project, following the instruction in the next part.
 
 The following packages and libraries are required by this project:
+
 - The C++ compiler: run `apt install g++` in Linux or download [Microsoft Visual C++](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version) ([Visual Studio](https://visualstudio.microsoft.com/) is also recommended, although much larger.) in Windows.
 
 - CMake: run `apt install cmake` in Linux or download [CMake](https://cmake.org/download/) in Windows.
@@ -51,28 +52,36 @@ The construction steps are as following:
 2. Two path in [`CMakeLists.txt`](./CMakeLists.txt) needs to be changed into your file path (see it in comments). You may get your Python3's path by `which python3` in Linux or `where python3` in Windows. The path for pybind11 can be find through `pip show pybind11` in both Linux and Windows.
 
 3. In command line, change into the project directory and type the following commands:
-```
+
+``` bash
 $ cd HandsClapping
 --------------------
 $ mkdir build
 $ cd build
 $ cmake ..
 ```
+
 Then, run
-```
+
+``` bash
 $ make
 ```
+
 in Linux, or
-```
+
+``` bash
 $ cd ..
 $ cmake --build build --config Release
 ```
+
 in Windows. If you have installed PyInstaller and wants to generate releases of this project, you may switch to branch `release-Linux` or `release-Windows` and run
-```
+
+``` bash
 $ cd build
 --------------------
 $ cpack
 ```
+
 in Linux or Windows respectively,
 
 4. After compiling, you may find executable files in directory `build/bin` and can run programs in `build/bin/game` to play Handsclapping game offline. To enable the online mode, you should first launch a server program ([server.py](src/online/server.py)) and connect client programs ([client.py](src/online/client.py)) to it.
@@ -81,11 +90,11 @@ For more information of running the program, please see [README.md](src/README.m
 
 ## Install with Releases
 
-To install with releases, just find the releases which fits your operating system and computer structure provided by us in the repository. The project now only supports releases for Windows system and Linux system on x86_64 structure. However, maybe releases for Linux can also work on arm64 but we're not really sure.
+To install with releases, just find the release which fit your operating system and computer structure provided by us in the repository. The project now only supports releases for Windows system and Linux system on x86_64 structure. However, maybe releases for Linux can also work on arm64 but we're not really sure.
 
 After installing, you can run the program according to the introduction in [README.md](src/README.md) in `src` directory.
 
-Sadly, we can't support Macos currently for technical reasons. We'll be glad if you are willing to offer assistance to construct releases for Macos.
+Unfortunately, we can't support Macos currently for technical reasons. We'll be glad if you are willing to offer assistance to construct releases for Macos.
 
 > **TOUCH US**\
 > Rasing issues in the repository is welcomed. Also, feel free to touch Yixuan Fu at the email provided in his profile.

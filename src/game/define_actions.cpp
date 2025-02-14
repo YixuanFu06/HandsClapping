@@ -74,14 +74,14 @@ void InitActions() {
                {"ICEAGE", "bing", "bingtian", "tianbeng"});
   DefineAction(4, 1, {3, 4, 5, 6, 7, 8}, ATTACK, ALL, EARTHQUAKE,
                {"EARTHQUAKE", "dilie", "liedi"});
-  DefineAction(5, std::pow(10, 5), {0, 1, 2, 3, 4, 5, 6, 7, 8}, std::pow(10, 5),
+  DefineAction(5, 50, {0, 1, 2, 3, 4, 5, 6, 7, 8}, 50,
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, SINGLE, EDITH,
                {"EDITH", "yidisi", "e", "E"});
-  DefineAction(7, std::pow(10, 7), {0, 1, 2, 3, 4, 5, 6, 7, 8}, std::pow(10, 7),
+  DefineAction(7, 70, {0, 1, 2, 3, 4, 5, 6, 7, 8}, 70,
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL, BLACKHOLE,
                {"BLACKHOLE", "heidong"});
-  DefineAction(10, std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8},
-               std::pow(10, 10), {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL,
+  DefineAction(10, 100, {0, 1, 2, 3, 4, 5, 6, 7, 8},
+               100, {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL,
                DOOMSDAY, {"DOOMSDAY", "mori"});
   DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang"});
   DefineAction(1, -2, REMOTE_SHIELD, {"REMOTE_SHIELD", "~", "lang", "langzi"});

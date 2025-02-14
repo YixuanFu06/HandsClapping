@@ -1,9 +1,6 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string POLICY1 = "Idiot-gamma";
-const std::string POLICY2 = "Idiot-alpha";
-
 void PrintProgressBar(int current, int total) {
   int bar_width = 70;
   float progress = static_cast<float>(current) / total;
@@ -24,9 +21,21 @@ void PrintProgressBar(int current, int total) {
 
 int main() {
   Game::InitActions();
-  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath() << std::endl << std::endl;
-  AI::Idiot::Policy policy1 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY1));
-  AI::Idiot::Policy policy2 = AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY2));
+  std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
+            << std::endl
+            << std::endl;
+
+  std::cout << "Enter the name of the first policy: ";
+  std::string policy1_name;
+  std::cin >> policy1_name;
+  AI::Idiot::Policy policy1 =
+      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(policy1_name));
+
+  std::cout << "Enter the name of the second policy: ";
+  std::string policy2_name;
+  std::cin >> policy2_name;
+  AI::Idiot::Policy policy2 =
+      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(policy2_name));
 
   uint32_t total_rounds = 200;
   std::cout << "Enter the rounds of training: ";
@@ -39,10 +48,10 @@ int main() {
 
   for (uint32_t i = 0; i < total_rounds; i++) {
     Game::BattleField battle_field({policy1.GetName(), policy2.GetName()});
-    AI::Idiot::Reward strategy_reward1 = AI::Idiot::Reward(policy1);
-    AI::Idiot::Reward strategy_reward2 = AI::Idiot::Reward(policy2);
-    AI::Idiot::Reward action_reward1 = AI::Idiot::Reward(policy1);
-    AI::Idiot::Reward action_reward2 = AI::Idiot::Reward(policy2);
+    AI::Idiot::Reward strategy_reward1(policy1);
+    AI::Idiot::Reward strategy_reward2(policy2);
+    AI::Idiot::Reward action_reward1(policy1);
+    AI::Idiot::Reward action_reward2(policy2);
     while (battle_field.GetMemberNum() > 1) {
       float health1 = battle_field.GetPlayerHealth(0);
       float energy1 = battle_field.GetPlayerEnergy(0);
@@ -101,8 +110,9 @@ int main() {
 
   char confirm;
   std::cout << std::endl
-            << policy1.GetName() << " wins: " << player1_win
-            << " times. " << policy2.GetName() << " wins: " << player2_win << " times." << std::endl;
+            << policy1.GetName() << " wins: " << player1_win << " times. "
+            << policy2.GetName() << " wins: " << player2_win << " times."
+            << std::endl;
   std::cout << "Do you want to store the policy? (y/n): ";
   std::cin >> confirm;
   while (confirm != 'y' && confirm != 'n') {
@@ -112,10 +122,15 @@ int main() {
   if (confirm == 'y') {
     policy1.Store();
     policy2.Store();
-    std::cout << "Policy change is stored to " << AI::Idiot::GetPolicyPath(POLICY1).string() << " and " << AI::Idiot::GetPolicyPath(POLICY2).string() << std::endl;
+    std::cout << "Policy change is stored to "
+              << AI::Idiot::GetPolicyPath(policy1_name).string() << " and "
+              << AI::Idiot::GetPolicyPath(policy2_name).string() << std::endl;
   } else if (confirm == 'n') {
     std::cout << "Policy change is discarded." << std::endl;
   }
+
+  std::cout << "Press any key to continue..." << std::endl;
+  system("pause");
 
   return 0;
 }

@@ -1,11 +1,10 @@
 #pragma once
 
 #include <filesystem>
-#include <functional>
 #include <random>
 
 #include "../../../game/define_actions.h"
-#include "tensor.h"
+#include "../../tensor.h"
 
 namespace AI {
 
@@ -18,8 +17,8 @@ const uint32_t MAX_HEALTH = 5;
 const float default_update_precision = 100.0;     // greater than 0
 const float default_declining_coefficient = 0.7;  // in [0,1]
 const float default_conservative_coefficient =
-    2.0;                                       // greater than or equals to 0
-const float default_greedy_coefficient = 0.5;  // greater than or equals to 0
+    2.0;                                        // greater than or equals to 0
+const float default_greedy_coefficient = 0.75;  // greater than or equals to 0
 const float default_aggressive_coefficient =
     0.5;  // greater than or equals to 0
 
@@ -41,8 +40,7 @@ class Reward : public Tensor<float, STATE_DIM * 2 + 1> {
  public:
   Reward();
   Reward(const Policy &p);
-  Reward(const Reward &r) : Tensor<float, STATE_DIM * 2 + 1>(r), id_(r.id_) {
-  }
+  Reward(const Reward &r);
   Reward &operator=(const Reward &r);
   Reward operator+(const Reward &r);
   Reward operator-(const Reward &r);
@@ -92,10 +90,8 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
 
  public:
   Policy();
-  Policy(const std::string name, uint32_t id);
-  Policy(const Policy &p)
-      : Tensor<float, STATE_DIM * 2 + 1>(p), name_(p.name_), id_(p.id_) {
-  }
+  Policy(const Policy &p);
+  Policy(const std::string &name, uint32_t id);
   Policy(const std::string &path);
   Policy(const std::filesystem::path &path);
   Policy &operator=(const Policy &p);
@@ -114,11 +110,14 @@ class Policy : public Tensor<float, STATE_DIM * 2 + 1> {
   void RewardFeedback(Reward &r);
   float Similarity(
       const Policy &p);  // get the tv-distance between two policies
-  void PrintDistribution(float enemy_health, float health, float enemy_energy, float energy);
-  Game::Action *GetAction(uint32_t health,
-                          uint32_t energy,
-                          uint32_t enemy_health,
-                          uint32_t enemy_energy);
+  void PrintDistribution(float enemy_health,
+                         float health,
+                         float enemy_energy,
+                         float energy);
+  Game::Action *GetAction(float health,
+                          float energy,
+                          float enemy_health,
+                          float enemy_energy);
 
   inline std::string GetName() const {
     return name_;
