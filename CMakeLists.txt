@@ -174,7 +174,7 @@ install(DIRECTORY ${DATA_DIR} DESTINATION HandsClapping)
 install(FILES "${CMAKE_SOURCE_DIR}/LICENSE" DESTINATION share/licenses)
 install(FILES "${CMAKE_SOURCE_DIR}/README.md" DESTINATION share/doc)
 install(FILES "${CMAKE_SOURCE_DIR}/src/README.md" DESTINATION share/doc RENAME "TUTORIAL.md")
-install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION HandsClapping)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION share)
 # TODO:
 # install(TARGETS idiot_training idiot_demo idiot_game_1v1 idiot_init idiot_analysis
 #         DESTINATION bin/AI/Idiot)

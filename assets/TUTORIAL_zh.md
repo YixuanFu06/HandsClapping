@@ -24,7 +24,7 @@
 
 于是，对玩家 Bob 执行 **PISTOL** 招数3 次的命令可以是 `3dia->#2`。
 
-输入如 `dia->Alice,dia->Bob` 和 `2dia->#1,3dia->Charley` 也是支持的。注意不要在 `,` 周围留有空格。
+类似 `dia->Alice,dia->Bob` 和 `2dia->#1,3dia->Charley` 的输入也是支持的。注意不要在 `,` 周围留有空格。
 
 每个招数的昵称如下表所示。您也可以在 [`src/game/define_actions.cpp`](/src/game/define_actions.cpp) 中查找它们。
 
@@ -79,7 +79,7 @@
 > [!IMPORTANT]
 > 本应用不会在桌面创建快捷方式。所有可执行文件均需在安装目录下查找，例如 `C:/Program Files/HandsClappingGame 1.0.0`。
 
-如果通过代码本地构建项目，离线游戏提供三种模式：**游戏模式**、**调试模式** 和 **裁判模式**。游戏模式实现了拍手游戏的基本功能（支持多人战斗），调试模式提供了更多关于战场和玩家的详细信息（这些信息在游戏模式中对玩家是不可见的），例如每个玩家的气数和健康值。裁判模式则不提供战斗环境，而是判断两个对抗招数的结果，且不受气数限制。
+离线游戏提供三种模式：**游戏模式**、**调试模式** 和 **裁判模式**。游戏模式实现了拍手游戏的基本功能（支持多人战斗），调试模式提供了更多关于战场和玩家的详细信息（这些信息在游戏模式中对玩家是不可见的），例如每个玩家的气数和生命值。裁判模式则不提供战斗环境，而是判断两个对抗招数的结果，且不受气数限制。
 
 要运行这些模式，请在安装路径的 `HandsClapping/bin/game` 中启动对应的可执行文件。
 
@@ -114,7 +114,7 @@
 
 然后，您需要设置服务器的参数，包括最大玩家数量、同一 IP 地址的最大玩家数量、玩家决定招数的等待时间以及用户名的最大长度。默认值如图所示。您可以直接输入 `y` 使用默认值，或者输入 `n` 设置自定义值。
 
-\![server](/assets/server.png "server")
+![server](/assets/server.png "server")
 
 如果输入 `n`，程序将依次要求您输入自定义参数。所有参数均为 `int` 类型。
 
@@ -156,7 +156,7 @@
 
 客户端程序需要两个参数：服务器的 IP 地址和您的用户名，如下图所示。
 
-\![client](/assets/client.png "client")
+![client](/assets/client.png "client")
 
 您也可以通过命令行方便地设置参数。
 
@@ -176,7 +176,7 @@
 
 最后，输入您的招数并享受游戏！
 
-\![online_game](/assets/online_game.png "online_game")
+![online_game](/assets/online_game.png "online_game")
 
 ## 人工智能模式
 
@@ -186,10 +186,10 @@
 
 要与 AI 对战，请在安装目录下运行 `HandsClapping/bin/AI/api/ai_1v1.exe` 文件。
 
-\![ai_1v1](/assets/ai_1v1.png "ai_1v1")
+![ai_1v1](/assets/ai_1v1.png "ai_1v1")
 
 您也可以通过运行 `HandsClapping/bin/AI/api/ai_demo.exe` 文件观看两个 AI 之间的演示战斗，以熟悉它们。
 
-\![ai_demo](/assets/ai_demo.png "ai_demo")
+![ai_demo](/assets/ai_demo.png "ai_demo")
 
 更强大的 AI 正在训练中。感谢您对我们工作的耐心和支持。
