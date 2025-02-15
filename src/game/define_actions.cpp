@@ -81,9 +81,9 @@ void InitActions() {
   DefineAction(7, 70, {0, 1, 2, 3, 4, 5, 6, 7, 8}, 70,
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL, BLACKHOLE,
                {"BLACKHOLE", "heidong"});
-  DefineAction(10, 100, {0, 1, 2, 3, 4, 5, 6, 7, 8},
-               100, {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL,
-               DOOMSDAY, {"DOOMSDAY", "mori"});
+  DefineAction(10, 100, {0, 1, 2, 3, 4, 5, 6, 7, 8}, 100,
+               {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL, DOOMSDAY,
+               {"DOOMSDAY", "mori"});
   DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang"});
   DefineAction(1, -2, REMOTE_SHIELD, {"REMOTE_SHIELD", "~", "lang", "langzi"});
   DefineAction(1, -2, REBOUNDER, {"REBOUNDER", "tan", "xiaotan"});
