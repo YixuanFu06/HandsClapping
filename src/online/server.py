@@ -74,9 +74,6 @@ def waiting_for_confirmation(client_socket, addr, name):
                         else:
                             num += 1
                             break
-                    else:
-                        print("Error: find the wrong IP address.")
-                        exit
     if not ip_is_registered:
         registered_ip.append((ip, 1))
         print(f"{ip} is added to the registered IP list.")
@@ -312,13 +309,13 @@ if __name__ == "__main__":
     if len(registered_clients) == 0:
         print("No player is online. Game is terminated.")
         start_server_thread.join()
-        exit
+        sys.exit()
     elif len(registered_clients) == 1:
         registered_clients[0].player[0].send("Only one player is online. Game is terminated.\n".encode('utf-8'))
         registered_clients[0].player[0].send("END\n".encode('utf-8'))
         print("Only one player is online. Game is terminated.")
         start_server_thread.join()
-        exit
+        sys.exit()
     for player in registered_clients:
         player[0].send(player[1].encode('utf-8') + ": Getting ready for the game...\n".encode('utf-8'))
         print(f"Contact {player[1]} to start the game...")
