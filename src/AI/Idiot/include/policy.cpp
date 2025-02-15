@@ -10,17 +10,14 @@ std::filesystem::path FindRootPath() {
   std::filesystem::path current_path = std::filesystem::current_path();
   std::filesystem::path root_path;
 
-  while (current_path.has_parent_path()) {
-    if (std::filesystem::exists(current_path / "HandsClapping") &&
-        std::filesystem::is_directory(current_path / "HandsClapping")) {
-      root_path = current_path / "HandsClapping";
-      break;
-    }
-    current_path = current_path.parent_path();
-  }
+  std::string current_path_str = current_path.string();
+  std::size_t found = current_path_str.find("HandsClapping");
 
-  if (root_path.empty()) {
-    std::cerr << "Error: HandsClapping directory not found in " << std::filesystem::current_path()
+  if (found != std::string::npos) {
+    root_path = current_path_str.substr(
+        0, found + std::string("HandsClapping").length());
+  } else {
+    std::cerr << "Error: HandsClapping directory not found in " << current_path
               << ". Please run the program under the project directory."
               << std::endl;
     exit(1);
