@@ -247,7 +247,7 @@ if __name__ == "__main__":
         print(f"Setting waiting_time to {waiting_time} seconds.")
         print(f"Setting max_name_length to {max_name_length} characters.")
     else:
-        print(f"Default settings: max_players = {default_max_players}, max_ip_player = {default_max_ip_player}, waiting_time = {default_waiting_time}, max_name_length = {default_max_ip_player}.")
+        print(f"Default settings: max_players = {default_max_players}, max_ip_player = {default_max_ip_player}, waiting_time = {default_waiting_time}, max_name_length = {default_max_name_length}.")
         YesOrNo = input("No arguments are provided. Are you sure you want to continue with the default settings? (y/n): ")
         if YesOrNo == 'n':
             while True:
