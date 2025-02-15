@@ -22,5 +22,8 @@ int main() {
   } else {
     std::cout << battle_field.GetPlayerName(0) << " wins!" << std::endl;
   }
+
+  std::cout << "Press any key to continue..." << std::endl;
+  std::cin.get();
   return 0;
 }

@@ -1,17 +1,22 @@
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
-const std::string POLICY = "Idiot-init";
-
 int main() {
   Game::InitActions();
   std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
             << std::endl
             << std::endl;
+  
+  std::cout << "Enter the name of the AI model you want to play against: ";
+  std::string model_name;
+  std::cin >> model_name;
   AI::Idiot::Policy policy =
-      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY));
+      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(model_name));
 
   std::string play_again;
+
+  uint32_t player_win = 0;
+  uint32_t AI_win = 0;
 
   do {
     Game::BattleField battle_field({"player", policy.GetName()});
@@ -88,10 +93,15 @@ int main() {
       std::cout << "Game over! No winner!" << std::endl;
     } else if (battle_field.GetPlayerName(0) == "player") {
       std::cout << "Game over! You win!" << std::endl;
+      player_win++;
     } else {
       std::cout << "Game over and you lose! You cannot even beat an idiot AI!"
                 << std::endl;
+      AI_win++;
     }
+
+    std::cout << "You win " << player_win << " times and AI wins " << AI_win
+              << " times." << std::endl;
 
     std::cout << "Play again? (y/n): ";
     std::cin >> play_again;
@@ -107,9 +117,12 @@ int main() {
   if (confirm == 'y') {
     policy.Store();
     std::cout << "Policy change is stored to "
-              << AI::Idiot::GetPolicyPath(POLICY).string() << std::endl;
+              << AI::Idiot::GetPolicyPath(model_name).string() << std::endl;
   } else if (confirm == 'n') {
     std::cout << "Policy change is discarded." << std::endl;
   }
+
+  std::cout << "Press any key to continue..." << std::endl;
+  std::cin.get();
   return 0;
 }

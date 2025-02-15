@@ -1,16 +1,21 @@
 #include "../../../game/battle_field.h"
 #include "../include/model.h"
 
-const std::string MODEL = "HDP-alpha";
-
 int main() {
   Game::InitActions();
   std::cout << "HandsClapping directory found at: " << AI::HDP::FindRootPath()
             << std::endl
             << std::endl;
-  AI::HDP::Model model = AI::HDP::Model(MODEL);
+  
+  std::cout << "Enter the name of the AI model you want to play against: ";
+  std::string model_name;
+  std::cin >> model_name;
+  AI::HDP::Model model(model_name);
 
   std::string play_again;
+
+  uint32_t player_win = 0;
+  uint32_t AI_win = 0;
 
   do {
     Game::BattleField battle_field({"player", model.GetName()});
@@ -36,10 +41,15 @@ int main() {
       std::cout << "Game over! No winner!" << std::endl;
     } else if (battle_field.GetPlayerName(0) == "player") {
       std::cout << "Game over! You win!" << std::endl;
+      player_win++;
     } else {
       std::cout << "Game over and you lose! You cannot even beat an idiot AI!"
                 << std::endl;
+      AI_win++;
     }
+
+    std::cout << "You win " << player_win << " times and AI wins " << AI_win
+              << " times." << std::endl;
 
     std::cout << "Play again? (y/n): ";
     std::cin >> play_again;

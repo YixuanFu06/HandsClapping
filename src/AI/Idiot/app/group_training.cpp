@@ -2,8 +2,6 @@
 #include "../include/policy.h"
 
 const uint32_t MAX_POLICIES = 10;
-const std::vector<std::string> POLICIES = {"Idiot-alpha", "Idiot-beta",
-                                           "Idiot-gamma", "Idiot-init"};
 
 void PrintProgressBar(int current, int total) {
   int bar_width = 70;
@@ -28,13 +26,22 @@ int main() {
   std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
             << std::endl
             << std::endl;
+
+  std::cout << "Enter the number of policies (at most " << MAX_POLICIES
+            << "): ";
+  uint32_t trainer_num;
+  std::cin >> trainer_num;
+  if (trainer_num > MAX_POLICIES) {
+    std::cout << "Too much policies! The number of policies is at most "
+              << MAX_POLICIES << ". More will be ignored." << std::endl;
+    trainer_num = MAX_POLICIES;
+  }
+
+  std::cout << "Enter the names of the policies: ";
   std::vector<AI::Idiot::Policy> policies;
-  for (const std::string &policy_name : POLICIES) {
-    if (policies.size() == MAX_POLICIES) {
-      std::cout << "Too much trainers! The number of trainers is at most "
-                << MAX_POLICIES << ". More will be ignored." << std::endl;
-      break;
-    }
+  for (uint32_t i = 0; i < trainer_num; i++) {
+    std::string policy_name;
+    std::cin >> policy_name;
     policies.push_back(AI::Idiot::GetPolicyPath(policy_name));
   }
 
@@ -168,6 +175,9 @@ int main() {
   } else if (confirm == 'n') {
     std::cout << "Policy change is discarded." << std::endl;
   }
+
+  std::cout << "Press any key to continue..." << std::endl;
+  std::cin.get();
 
   return 0;
 }

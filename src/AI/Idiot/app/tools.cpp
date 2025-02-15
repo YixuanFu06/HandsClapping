@@ -34,6 +34,9 @@ int main() {
   } else {
     std::cout << "Invalid command. Try again." << std::endl;
   }
+
+  std::cout << "Press any key to continue..." << std::endl;
+  std::cin.get();
 }
 
 void Initialization() {

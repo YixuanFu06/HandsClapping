@@ -136,3 +136,42 @@ add_executable(ai_1v1 ${AI_1v1} ${GAME_SOURCES} ${IDIOT_SOURCES} ${HDP_SOURCES})
 target_include_directories(ai_1v1 PRIVATE ${AI_DIR} ${GAME_DIR})
 target_link_libraries(ai_1v1 pthread)
 set_target_properties(ai_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${AI_API_OUTPUT_DIR}")
+
+# PyInstaller for online sources
+foreach(script ${ONLINE_SOURCES})
+    get_filename_component(script_name ${script} NAME_WE)
+    add_custom_command(
+        TARGET handsclapping POST_BUILD
+        COMMAND ${Python3_EXECUTABLE} -m PyInstaller --onefile
+                --distpath ${PYINSTALLER_OUTPUT_DIR}
+                --workpath ${CMAKE_BINARY_DIR}/online_tmp
+                ${script}
+        COMMENT "Running PyInstaller to package ${script} into an executable"
+    )
+endforeach()
+
+# Install targets
+set(CPACK_PACKAGE_NAME "HandsClappingGame")
+set(CPACK_PACKAGE_VERSION "1.1.0")
+set(CPACK_PACKAGE_CONTACT "yixuanfu89@gmail.com")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The electronic version of the game of Handsclapping.")
+set(CPACK_PACKAGE_VENDOR "Yixuan Fu, Zhourui Zhang")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-Linux-x86_64")
+set(CPACK_SOURCE_GENERATOR "TGZ")
+set(CPACK_SOURCE_IGNORE_FILES "/build/;/\\\\.git/;/\\\\.svn/;/\\\\.hg/;/\\\\.bzr/;/_CPack_Packages/;/CMakeFiles/;CMakeCache.txt;\\\\.cmake$;\\\\.swp$;\\\\.bak$;\\\\.orig$;\\\\.tmp$;\\\\.log$;\\\\.DS_Store$;\\\\.directory$")
+
+include(CPack)
+
+install(TARGETS handsclapping DESTINATION HandsClapping/lib)
+install(FILES ${ONLINE_SOURCES} DESTINATION HandsClapping/python)
+install(DIRECTORY ${GAME_OUTPUT_DIR} DESTINATION HandsClapping/bin)
+install(DIRECTORY ${PYINSTALLER_OUTPUT_DIR} DESTINATION HandsClapping/bin)
+install(DIRECTORY ${AI_IDIOT_OUTPUT_DIR} DESTINATION HandsClapping/bin/AI)
+install(DIRECTORY ${AI_HDP_OUTPUT_DIR} DESTINATION HandsClapping/bin/AI)
+install(DIRECTORY ${AI_API_OUTPUT_DIR} DESTINATION HandsClapping/bin/AI)
+install(DIRECTORY ${DATA_DIR} DESTINATION HandsClapping)
+install(FILES "${CMAKE_SOURCE_DIR}/LICENSE" DESTINATION share/licenses)
+install(FILES "${CMAKE_SOURCE_DIR}/README.md" DESTINATION share/doc)
+install(FILES "${CMAKE_SOURCE_DIR}/src/README.md" DESTINATION share/doc RENAME "TUTORIAL.md")
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION share)

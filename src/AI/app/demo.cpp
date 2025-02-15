@@ -270,5 +270,8 @@ int main() {
               << std::endl;
   }
 
+  std::cout << "Press any key to continue..." << std::endl;
+  std::cin.get();
+
   return 0;
 }
