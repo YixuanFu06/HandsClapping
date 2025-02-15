@@ -131,7 +131,7 @@ int main() {
   }
 
   std::cout << "Press any key to continue..." << std::endl;
-  std::cin.get();
+  system("pause");
 
   return 0;
 }
