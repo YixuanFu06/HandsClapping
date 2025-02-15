@@ -22,9 +22,5 @@ int main() {
   } else {
     std::cout << battle_field.GetPlayerName(0) << " wins!" << std::endl;
   }
-
-  std::cout << "Press Enter to continue..." << std::endl;
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  std::cin.get();
   return 0;
 }

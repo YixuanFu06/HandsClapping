@@ -1,6 +1,8 @@
-#include <iostream>
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
+
+const std::string POLICY1 = "Idiot-gamma";
+const std::string POLICY2 = "Idiot-alpha";
 
 void PrintProgressBar(int current, int total) {
   int bar_width = 70;
@@ -25,18 +27,10 @@ int main() {
   std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
             << std::endl
             << std::endl;
-
-  std::cout << "Enter the name of the first policy: ";
-  std::string policy1_name;
-  std::cin >> policy1_name;
   AI::Idiot::Policy policy1 =
-      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(policy1_name));
-
-  std::cout << "Enter the name of the second policy: ";
-  std::string policy2_name;
-  std::cin >> policy2_name;
+      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY1));
   AI::Idiot::Policy policy2 =
-      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(policy2_name));
+      AI::Idiot::Policy(AI::Idiot::GetPolicyPath(POLICY2));
 
   uint32_t total_rounds = 200;
   std::cout << "Enter the rounds of training: ";
@@ -124,14 +118,11 @@ int main() {
     policy1.Store();
     policy2.Store();
     std::cout << "Policy change is stored to "
-              << AI::Idiot::GetPolicyPath(policy1_name).string() << " and "
-              << AI::Idiot::GetPolicyPath(policy2_name).string() << std::endl;
+              << AI::Idiot::GetPolicyPath(POLICY1).string() << " and "
+              << AI::Idiot::GetPolicyPath(POLICY2).string() << std::endl;
   } else if (confirm == 'n') {
     std::cout << "Policy change is discarded." << std::endl;
   }
-
-  std::cout << "Press any key to continue..." << std::endl;
-  std::cin.get();
 
   return 0;
 }

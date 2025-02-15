@@ -114,20 +114,20 @@ void Referee::JudgeBattle(Player *player) {
               it.action_->GetId() != BLACKHOLE &&
               it.action_->GetId() != DOOMSDAY) {
             DamageLogAdd(it.owner_,
-                         it.action_->GetDamage(it.owner_->GetPosition()),
-                         it.action_->GetEffect(it.owner_->GetPosition()));
+                         it.action_->GetDamage(it.owner_->GetPosition()) * player->GetTarget(0).second,
+                         it.action_->GetEffect(it.owner_->GetPosition()) * player->GetTarget(0).second);
             IsAttacked = true;
           } else if (it.action_->GetId() == BLACKHOLE ||
                      it.action_->GetId() == DOOMSDAY) {
             DamageLogAdd(player, it.action_->GetDamage(player->GetPosition()),
                          it.action_->GetDamage(player->GetPosition()));
           } else if (it.action_->GetId() == REBOUNDER) {
-            DamageLogAdd(it.owner_, 1, 1);
+            DamageLogAdd(it.owner_, player->GetTarget(0).second, player->GetTarget(0).second);
             IsAttacked = true;
           }
         }
         if (!IsAttacked) {
-          DamageLogAdd(player, 1, 1);
+          DamageLogAdd(player, player->GetTarget(0).second, player->GetTarget(0).second);
         }
         break;
       }

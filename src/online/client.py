@@ -103,4 +103,3 @@ if __name__ == "__main__":
         client_name = sys.argv[2]
     
     start_client(server_ip, client_name)
-    input("Press Enter to exit...")

@@ -307,9 +307,9 @@ void BattleField::ActionUpdate(uint32_t print_mode) {
     bool IsFound = false;
     while (player_action_name.size() > 0) {
       std::string current_action_name;
-      std::string target_id;
+      std::string target_name;
       uint32_t repeated_times;
-      DecodeInputString(player_action_name, current_action_name, target_id,
+      DecodeInputString(player_action_name, current_action_name, target_name,
                         repeated_times);
 
       ActionName current_action;
@@ -335,7 +335,7 @@ void BattleField::ActionUpdate(uint32_t print_mode) {
       } else {
         action = current_action;
         players_[i].SetActionName(action);
-        players_[i].AddTarget(target_id, repeated_times);
+        players_[i].AddTarget(target_name, repeated_times);
         IsFound = true;
       }
     }
@@ -426,9 +426,7 @@ void BattleField::PositionUpdate() {
 void BattleField::EnergyUpdate(uint32_t print_mode) {
   for (uint32_t i = 0; i < players_.size(); i++) {
     for (uint32_t j = 0; j < players_[i].GetTargetNum(); j++) {
-      if (players_[i].GetTarget(j).first == "#NONE") {
-        continue;
-      } else if (players_[i].GetTarget(j).first == "#ALL") {
+      if (players_[i].GetTarget(j).first == "#ALL") {
         switch (players_[i].GetAction()->GetTargetType()) {
           case SINGLE:
             players_[i].SetEnergy(players_[i].GetEnergy() -

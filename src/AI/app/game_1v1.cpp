@@ -1,4 +1,3 @@
-#include <cstdint>
 #include "../../game/battle_field.h"
 #include "../HDP/include/model.h"
 #include "../Idiot/include/policy.h"
@@ -10,7 +9,7 @@ int main() {
             << std::endl;
 
   std::cout
-      << "Enter the type of the model you want to play against (HDP or Idiot): ";
+      << "Enter the type of the model you want to play with (HDP or Idiot): ";
   std::string model_type;
   std::cin >> model_type;
   if (model_type != "HDP" && model_type != "Idiot") {
@@ -26,9 +25,6 @@ int main() {
 
     std::string play_again;
 
-    uint32_t player_win = 0;
-    uint32_t AI_win = 0;
-
     do {
       Game::BattleField battle_field({"player", model.GetName()});
 
@@ -53,15 +49,10 @@ int main() {
         std::cout << "Game over! No winner!" << std::endl;
       } else if (battle_field.GetPlayerName(0) == "player") {
         std::cout << "Game over! You win!" << std::endl;
-        player_win++;
       } else {
         std::cout << "Game over and you lose! You cannot even beat an idiot AI!"
                   << std::endl;
-        AI_win++;
       }
-    
-      std::cout << "You win " << player_win << " times and AI wins " << AI_win
-                << " times." << std::endl;
 
       std::cout << "Play again? (y/n): ";
       std::cin >> play_again;
@@ -76,9 +67,6 @@ int main() {
 
     std::string play_again;
 
-    uint32_t player_win = 0;
-    uint32_t AI_win = 0;
-
     do {
       Game::BattleField battle_field({"player", model.GetName()});
 
@@ -103,15 +91,10 @@ int main() {
         std::cout << "Game over! No winner!" << std::endl;
       } else if (battle_field.GetPlayerName(0) == "player") {
         std::cout << "Game over! You win!" << std::endl;
-        player_win++;
       } else {
         std::cout << "Game over and you lose! You cannot even beat an idiot AI!"
                   << std::endl;
-        AI_win++;
       }
-
-      std::cout << "You win " << player_win << " times and AI wins " << AI_win
-                << " times." << std::endl;
 
       std::cout << "Play again? (y/n): ";
       std::cin >> play_again;

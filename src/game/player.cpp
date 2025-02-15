@@ -32,13 +32,36 @@ void Player::SetAction() {
   for (uint32_t i = 0; i < actions.size(); i++) {
     if (static_cast<ActionName>(actions[i].GetId()) == action_name_) {
       action_ = &actions[i];
-      return;
+      switch (action_->GetType()) {
+        case ATTACK:
+          return;
+        case EQUIP: {
+          if (action_->GetType() == EQUIP) {
+            uint32_t repeated_times = 0;
+            for (std::pair<std::string, uint32_t> &target : targets_) {
+              repeated_times += target.second;
+            }
+            ClearTargets();
+            AddTarget("#NONE", repeated_times);
+          }
+          return;
+        }
+        case DEFEND:
+        case DODGE: {
+          ClearTargets();
+          AddTarget("#NONE", 1);
+          return;
+        }
+      }
     }
   }
+
   std::cout << "Error: action " << action_name_ << " not found, set as NONE."
             << std::endl;
   action_name_ = NONE;
-  action_ = nullptr;
+  action_ = &actions[NONE];
+  ClearTargets();
+  AddTarget("#NONE", 1);
 }
 
 void Player::PrintPlayer(uint32_t type) {

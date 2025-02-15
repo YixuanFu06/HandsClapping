@@ -2,6 +2,9 @@
 #include "../include/policy.h"
 
 const uint32_t MAX_TRAINERS = 10;
+const std::vector<std::string> TRAINER_POLICIES = {"Idiot-alpha", "Idiot-beta",
+                                                   "Idiot-gamma", "Idiot-init"};
+const std::string TRAINEE_POLICY = "Idiot-gamma";
 
 void PrintProgressBar(int current, int total) {
   int bar_width = 70;
@@ -26,27 +29,16 @@ int main() {
   std::cout << "HandsClapping directory found at: " << AI::Idiot::FindRootPath()
             << std::endl
             << std::endl;
-
-  std::cout << "Enter the number of trainers (at most " << MAX_TRAINERS
-            << "): ";
-  uint32_t trainer_num;
-  std::cin >> trainer_num;
-  if (trainer_num > MAX_TRAINERS) {
-    std::cout << "Too much trainers! The number of trainers is at most "
-              << MAX_TRAINERS << ". More will be ignored." << std::endl;
-    trainer_num = MAX_TRAINERS;
-  }
   std::vector<AI::Idiot::Policy> trainers;
-  for (uint32_t i = 0; i < trainer_num; i++) {
-    std::string trainer_name;
-    std::cin >> trainer_name;
+  for (const std::string &trainer_name : TRAINER_POLICIES) {
+    if (trainers.size() == MAX_TRAINERS) {
+      std::cout << "Too much trainers! The number of trainers is at most "
+                << MAX_TRAINERS << ". More will be ignored." << std::endl;
+      break;
+    }
     trainers.push_back(AI::Idiot::GetPolicyPath(trainer_name));
   }
-
-  std::cout << "Enter the name of the trainee: ";
-  std::string trainee_name;
-  std::cin >> trainee_name;
-  AI::Idiot::Policy trainee(AI::Idiot::GetPolicyPath(trainee_name));
+  AI::Idiot::Policy trainee(AI::Idiot::GetPolicyPath(TRAINEE_POLICY));
 
   uint32_t total_rounds = 200;
   std::cout << "Enter the rounds of training: ";
@@ -147,13 +139,10 @@ int main() {
   if (confirm == 'y') {
     trainee.Store();
     std::cout << "Policy change is stored to "
-              << AI::Idiot::GetPolicyPath(trainee_name).string() << std::endl;
+              << AI::Idiot::GetPolicyPath(TRAINEE_POLICY).string() << std::endl;
   } else if (confirm == 'n') {
     std::cout << "Policy change is discarded." << std::endl;
   }
-
-  std::cout << "Press any key to continue..." << std::endl;
-  std::cin.get();
 
   return 0;
 }
