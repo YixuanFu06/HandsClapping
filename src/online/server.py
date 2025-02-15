@@ -178,8 +178,6 @@ def start_server():
     server_socket.listen(5)
     print("Waiting to be connected...")
 
-    server_socket.settimeout(30.0)
-    
     try:
         player_detection_thread = threading.Thread(target=player_detection)
         player_detection_thread.start()
