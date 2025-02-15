@@ -10,10 +10,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set pybind11 and python path
-set(Python3_EXECUTABLE "/home/yixuanfu/anaconda3/envs/HandsClapping/bin/python") # Replace it with your python executable path
+set(Python3_EXECUTABLE "D:/Program Files/Python/Python313/python.exe") # Replace it with your python executable path
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-set(pybind11_DIR  "/home/yixuanfu/anaconda3/envs/HandsClapping/lib/python3.11/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
+set(pybind11_DIR  "C:/Users/yixua/AppData/Roaming/Python/Python313/site-packages/pybind11/share/cmake/pybind11") # Replace it with your pybind11 path
 find_package(pybind11 REQUIRED)
+
 
 # Set compiler options for UTF-8
 if(MSVC)
@@ -116,23 +117,19 @@ set_target_properties(idiot_group_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "
 # HDP training executable file
 add_executable(hdp_training ${HDP_Training} ${GAME_SOURCES} ${HDP_SOURCES})
 target_include_directories(hdp_training PRIVATE ${AI_HDP_DIR} ${GAME_DIR})
-target_link_libraries(hdp_training pthread)
 set_target_properties(hdp_training PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${AI_HDP_OUTPUT_DIR}")
 
 # HDP 1v1 game executable file
 add_executable(hdp_game_1v1 ${HDP_1v1} ${GAME_SOURCES} ${HDP_SOURCES})
 target_include_directories(hdp_game_1v1 PRIVATE ${AI_HDP_DIR} ${GAME_DIR})
-target_link_libraries(hdp_game_1v1 pthread)
 set_target_properties(hdp_game_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${AI_HDP_OUTPUT_DIR}")
 
 # AI demo executable file
 add_executable(ai_demo ${AI_Demo} ${GAME_SOURCES} ${IDIOT_SOURCES} ${HDP_SOURCES})
 target_include_directories(ai_demo PRIVATE ${AI_DIR} ${GAME_DIR})
-target_link_libraries(ai_demo pthread)
 set_target_properties(ai_demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${AI_API_OUTPUT_DIR}")
 
 # AI 1v1 game executable file
 add_executable(ai_1v1 ${AI_1v1} ${GAME_SOURCES} ${IDIOT_SOURCES} ${HDP_SOURCES})
 target_include_directories(ai_1v1 PRIVATE ${AI_DIR} ${GAME_DIR})
-target_link_libraries(ai_1v1 pthread)
 set_target_properties(ai_1v1 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${AI_API_OUTPUT_DIR}")

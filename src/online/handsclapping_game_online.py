@@ -104,8 +104,6 @@ def game_core(registered_clients, waiting_time):
             IsDie = True
             for i in range(battle_field.GetMemberNum()):
                 if battle_field.GetPlayerName(i) == name:
-                    player[0].send(f"Your health: {battle_field.GetPlayerHealth(i)}\n".encode('utf-8'))
-                    player[0].send(f"Your energy: {battle_field.GetPlayerEnergy(i)}\n".encode('utf-8'))
                     IsDie = False
                     break
             if IsDie:
