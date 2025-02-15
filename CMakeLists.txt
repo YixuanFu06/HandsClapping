@@ -148,7 +148,7 @@ endforeach()
 
 # Install targets
 set(CPACK_PACKAGE_NAME "HandsClappingGame")
-set(CPACK_PACKAGE_VERSION "1.1.0")
+set(CPACK_PACKAGE_VERSION "1.1.1")
 set(CPACK_PACKAGE_CONTACT "yixuanfu89@gmail.com")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The electronic version of the game of Handsclapping.")
 set(CPACK_PACKAGE_VENDOR "Yixuan Fu, Zhourui Zhang")
