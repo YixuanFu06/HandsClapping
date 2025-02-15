@@ -153,7 +153,7 @@ set(CPACK_PACKAGE_CONTACT "yixuanfu89@gmail.com")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The electronic version of the game of Handsclapping.")
 set(CPACK_PACKAGE_VENDOR "Yixuan Fu, Zhourui Zhang")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-Linux-x86_64")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-Windows-x86_64")
 set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_SOURCE_IGNORE_FILES "/build/;/\\\\.git/;/\\\\.svn/;/\\\\.hg/;/\\\\.bzr/;/_CPack_Packages/;/CMakeFiles/;CMakeCache.txt;\\\\.cmake$;\\\\.swp$;\\\\.bak$;\\\\.orig$;\\\\.tmp$;\\\\.log$;\\\\.DS_Store$;\\\\.directory$")
 
