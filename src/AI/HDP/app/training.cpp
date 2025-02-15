@@ -28,6 +28,6 @@ int main() {
   }
 
   std::cout << "Press any key to continue..." << std::endl;
-  system("pause");
+  std::cin.get();
   return 0;
 }

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "../../../game/battle_field.h"
 #include "../include/policy.h"
 
@@ -130,7 +131,7 @@ int main() {
   }
 
   std::cout << "Press any key to continue..." << std::endl;
-  system("pause");
+  std::cin.get();
 
   return 0;
 }

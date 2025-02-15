@@ -7,11 +7,11 @@
 这仍然是一个初期的项目，有许多事情需要完成，其中最重要的部分如下：
 
 - **实现离线拍手游戏的基本元素**，包括气、生命值、走位、攻击以及其他可能的功能。编写游戏的裁判程序也非常重要。  
-这部分内容在 [`src/game`](../src/game) 和 [`src/app`](../src/app) 中处理，其中 [`src/app`](../src/app) 包含所有主函数，而游戏核心部分的头文件则存储在 [`src/game`](../src/game) 中。  
+这部分内容在 [`src/game`](/src/game) 和 [`src/app`](/src/app) 中处理，其中 [`src/app`](/src/app) 包含所有主函数，而游戏核心部分的头文件则存储在 [`src/game`](/src/game) 中。  
 ***待办事项：截至2025年1月29日，游戏中已经支持了一些基本招数。但我们仍然需要更多的招数和游戏模式，例如组队模式。***
 
 - **制作在线版本**，可能需要熟悉网络架构和渲染技术。  
-  在线模式通过 [`../src/online`](../src/online) 中的 Python 脚本与 C++ 模块结合构建，C++ 程序由 [`handsclapping_pylib.cpp`](../src/handsclapping_pylib.cpp) 封装。  
+  在线模式通过 [`src/online`](/src/online) 中的 Python 脚本与 C++ 模块结合构建，C++ 程序由 [`handsclapping_pylib.cpp`](/src/handsclapping_pylib.cpp) 封装。  
   ***待办事项：当前版本仅支持同一局域网内的在线游戏。移动设备客户端正在开发中。***
 
 - **构建实用AI模型**，使其能够模拟人类玩家行为甚至击败人类。  

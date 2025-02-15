@@ -6,6 +6,7 @@
 #include <iostream>
 #include <random>
 #include <thread>
+#include <atomic>
 
 #include "../../../game/define_actions.h"
 #include "model.h"

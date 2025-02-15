@@ -79,7 +79,7 @@ The nicknames for each action is given by the table below. You may also look the
 > [!IMPORTANT]
 > This application doesn't provide a shortcut on the desktop. All the executable files should be looking in the installation directory, for example, `C:/Program Files/HandsClappingGame 1.0.0`.
 
-Three modes for offline game are provided if you construct the project locally by the code provided in the repository, including **game mode**, **debug mode**, and **referee mode**, in which game mode implements the basic function of Handsclapping game (multi-player battle is supported), while the debug mode provides more detailed information about the battle field and players which is nontransparent for players in game mode, such as each player's energy and health. The referee mode, instead of providing a battle environment, judges the outcome of two against actions, with no restriction on energy.
+Three modes for offline game are provided, including **game mode**, **debug mode**, and **referee mode**, in which game mode implements the basic function of Handsclapping game (multi-player battle is supported), while the debug mode provides more detailed information about the battle field and players which is nontransparent for players in game mode, such as each player's energy and health. The referee mode, instead of providing a battle environment, judges the outcome of two against actions, with no restriction on energy.
 
 To run these modes, please launch the corresponding executable files in `HandsClapping/bin/game` in your installation path.
 

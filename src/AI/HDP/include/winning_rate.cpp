@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <thread>
+#include <atomic>
 
 #include "model.h"
 

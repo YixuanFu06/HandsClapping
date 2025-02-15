@@ -74,6 +74,9 @@ def waiting_for_confirmation(client_socket, addr, name):
                         else:
                             num += 1
                             break
+                    else:
+                        print("Error: find the wrong IP address.")
+                        exit
     if not ip_is_registered:
         registered_ip.append((ip, 1))
         print(f"{ip} is added to the registered IP list.")
@@ -247,22 +250,46 @@ if __name__ == "__main__":
         print(f"Default settings: max_players = {default_max_players}, max_ip_player = {default_max_ip_player}, waiting_time = {default_waiting_time}, max_name_length = {default_max_ip_player}.")
         YesOrNo = input("No arguments are provided. Are you sure you want to continue with the default settings? (y/n): ")
         if YesOrNo == 'n':
-            max_players = int(input("Enter the maximum number of players: "))
-            if max_players <= 0:
-                print("Invalid number of players. (Expected > 0 integer) Set to 10.")
-                max_players = default_max_players
-            max_ip_player = int(input("Enter the maximum number of players per IP address: "))
-            if max_ip_player <= 0:
-                print("Invalid number of players per IP. (Expected > 0 integer) Set to 1.")
-                max_ip_player = default_max_ip_player
-            waiting_time = int(input("Enter the waiting time for each round in seconds (0 means no limitation): "))
-            if waiting_time < 0:
-                print("Invalid waiting time. (Expected >= 0 int) Set to 0.")
-                waiting_time = default_waiting_time
-            max_name_length = int(input("Enter the maximum length of the players' name: "))
-            if max_name_length <= 0:
-                print("Invalid length of the player name. (Expected > 0 integer) Set to 16.")
-                max_name_length = default_max_name_length
+            while True:
+                try:
+                    max_players = int(input("Enter the maximum number of players: "))
+                    if max_players <= 0:
+                        print("Invalid number of players. (Expected > 0 integer) Set to 10.")
+                        max_players = default_max_players
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+            
+            while True:
+                try:
+                    max_ip_player = int(input("Enter the maximum number of players per IP address: "))
+                    if max_ip_player <= 0:
+                        print("Invalid number of players per IP. (Expected > 0 integer) Set to 1.")
+                        max_ip_player = default_max_ip_player
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+            
+            while True:
+                try:
+                    waiting_time = int(input("Enter the waiting time for each round in seconds (0 means no limitation): "))
+                    if waiting_time < 0:
+                        print("Invalid waiting time. (Expected >= 0 int) Set to 0.")
+                        waiting_time = default_waiting_time
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+            
+            while True:
+                try:
+                    max_name_length = int(input("Enter the maximum length of the players' name: "))
+                    if max_name_length <= 0:
+                        print("Invalid length of the player name. (Expected > 0 integer) Set to 16.")
+                        max_name_length = default_max_name_length
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+
             print(f"Setting max_players to {max_players}.")
             print(f"Setting max_ip_player to {max_ip_player}.")
             print(f"Setting waiting_time to {waiting_time} seconds.")
@@ -304,4 +331,3 @@ if __name__ == "__main__":
     game_core(registered_clients, waiting_time)
     
     start_server_thread.join()
-    input("Press Enter to exit...")

@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "action.h"
+#include "player.h"
 
 namespace Game {
 
@@ -31,7 +32,7 @@ std::vector<std::string> NickNameProcess(std::vector<std::string> nicknames) {
 }
 
 void InitActions() {
-  DefineAction(-1, PRODUCE, {"PRODUCE", "qi", "."});
+  DefineAction(-1, 0, PRODUCE, {"PRODUCE", ".", "qi"});
   DefineAction(1, 1, ATTACK, SINGLE, PISTOL, {"PISTOL", "dia", "gun"});
   DefineAction(1, 1, {1, 1}, ATTACK, SINGLE, PISTOL_UPPER,
                {"PISTOL_UPPER", "^dia", "dia^", "shangda"});
@@ -80,9 +81,9 @@ void InitActions() {
   DefineAction(7, 70, {0, 1, 2, 3, 4, 5, 6, 7, 8}, 70,
                {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL, BLACKHOLE,
                {"BLACKHOLE", "heidong"});
-  DefineAction(10, 100, {0, 1, 2, 3, 4, 5, 6, 7, 8},
-               100, {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL,
-               DOOMSDAY, {"DOOMSDAY", "mori"});
+  DefineAction(10, 100, {0, 1, 2, 3, 4, 5, 6, 7, 8}, 100,
+               {0, 1, 2, 3, 4, 5, 6, 7, 8}, ATTACK, ALL, DOOMSDAY,
+               {"DOOMSDAY", "mori"});
   DefineAction(0, -1, SHIELD, {"SHIELD", "fang", "_|", "xiaofang"});
   DefineAction(1, -2, REMOTE_SHIELD, {"REMOTE_SHIELD", "~", "lang", "langzi"});
   DefineAction(1, -2, REBOUNDER, {"REBOUNDER", "tan", "xiaotan"});
@@ -125,7 +126,7 @@ void InitActions() {
   DefineAction(3, DUPLICATOR,
                {"DUPLICATOR", "$", "papapa", "papapapapa", "kexing"});
   DefineAction(0, 0, NONE, {"NONE", "0"});
-  DefineAction(0, TIMEOUT, {"TIMEOUT", "-1"});
+  DefineAction(0, 0, TIMEOUT, {"TIMEOUT", "-1"});
 }
 
 void DefineAction(float energy,
