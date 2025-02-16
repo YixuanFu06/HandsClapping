@@ -4,7 +4,9 @@
 
 如果您已经非常熟悉拍手游戏的规则，可以直接跳转到 **输入与招数语法** 部分。
 
-即将推出。
+*即将推出*
+
+---
 
 ## 输入与招数语法
 
@@ -74,18 +76,22 @@
 | ARTIFACT_REALITY | 现实原石（未发布） | reality, xianshi |
 | ARTIFACT_STRENGTH | 力量原石（未发布） | strength, liliang |
 
+---
+
 ## 离线模式
 
-> [!IMPORTANT]
+> [!NOTE]
 > 本应用不会在桌面创建快捷方式。所有可执行文件均需在安装目录下查找，例如 `C:/Program Files/HandsClappingGame 1.0.0`。
 
 离线游戏提供三种模式：**游戏模式**、**调试模式** 和 **裁判模式**。游戏模式实现了拍手游戏的基本功能（支持多人战斗），调试模式提供了更多关于战场和玩家的详细信息（这些信息在游戏模式中对玩家是不可见的），例如每个玩家的气数和生命值。裁判模式则不提供战斗环境，而是判断两个对抗招数的结果，且不受气数限制。
 
 要运行这些模式，请在安装路径的 `HandsClapping/bin/game` 中启动对应的可执行文件。
 
+---
+
 ## 在线模式
 
-> **要求**\
+> [!IMPORTANT]
 > 设备必须有可用的 38921 端口，否则需要本地重新编译并修改端口。
 > 当前在线模式仅支持局域网内的互联网连接。
 
@@ -178,9 +184,11 @@
 
 ![online_game](/assets/online_game.png "online_game")
 
-## 人工智能模式
+---
 
-拍手游戏项目目前支持玩家与 AI 的 1v1 对战。我们提供了两种 AI 结构：*Idiot* 和 *HDP*。基于 *Idiot* 结构的四个模型（**Idiot-alpha**、**Idiot-beta**、**Idiot-gamma** 和 **Idiot-delta**）以及基于 *HDP* 结构的一个模型（**HDP-alpha**）已发布，目前 *HDP* 结构的表现优于 *Idiot* 结构。
+## AI模式
+
+拍手游戏项目目前支持玩家与 AI 的 1v1 对战。我们提供了两种类型的AI：*Idiot* 和 *HDP*。基于 *Idiot* 结构的四个模型（**Idiot-alpha**、**Idiot-beta**、**Idiot-gamma** 和 **Idiot-delta**）以及基于 *HDP* 结构的一个模型（**HDP-alpha**）已发布，目前 *HDP* 结构的表现优于 *Idiot* 结构。
 
 由于时间有限，我们尚未提供训练您自己的 AI 的接口。此功能将很快推出。
 
