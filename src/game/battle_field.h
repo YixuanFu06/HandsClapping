@@ -22,10 +22,7 @@ class BattleField {
                  PlayerPosition position,
                  ActionName action_name,
                  Action *action);
-  void AddPlayer(std::string name,
-                 float health,
-                 float energy,
-                 PlayerPosition position);
+  void AddPlayer(std::string name, float health, float energy);
 
   inline Player GetPlayer(uint32_t player_id) {
     return players_[player_id];
@@ -38,6 +35,14 @@ class BattleField {
 
   std::string RemovePlayer(uint32_t player_id);
   void RemovePlayer(std::string name);
+
+  inline std::string GetActionFormalName(uint32_t action_name) {
+    return Game::actions[action_name].GetFormalName();
+  }
+
+  inline float GetActionEnergy(uint32_t action_name) {
+    return Game::actions[action_name].GetEnergy();
+  }
 
   inline uint32_t GetTurn() {
     return turn_;
@@ -85,16 +90,17 @@ class BattleField {
       std::vector<std::string> player_actions,
       uint32_t mode = 0);  // 0 for default and 1 for slient mode
 
-  void ActionUpdate(uint32_t mode = 0);  // 0 for default and 1 for slient mode
+  void ActionUpdate();
 
-  void ActionUpdate(std::vector<std::string> player_actions,
-                    uint32_t mode = 0);  // 0 for default and 1 for slient mode
+  void ActionUpdate(std::vector<std::string> player_actions);
+
+  void ActionUpdate(std::vector<uint32_t> player_actions);
 
   void PositionUpdate();
 
-  void EnergyUpdate(uint32_t mode = 0);  // 0 for default and 1 for slient mode
+  void EnergyUpdate();
 
-  void HealthUpdate(uint32_t mode = 0);  // 0 for default and 1 for slient mode
+  void HealthUpdate();
 
   inline void MemberNumUpdate() {
     member_num_ = players_.size();

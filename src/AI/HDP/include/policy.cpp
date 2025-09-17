@@ -1,12 +1,12 @@
 #include "policy.h"
 
+#include <atomic>
 #include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <random>
 #include <thread>
-#include <atomic>
 
 #include "../../../game/define_actions.h"
 #include "model.h"

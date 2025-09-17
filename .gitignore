@@ -40,3 +40,4 @@ __pycache__/
 # Draft datasets and scripts
 data/
 tmp/
+model/

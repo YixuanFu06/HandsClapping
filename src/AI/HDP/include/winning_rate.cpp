@@ -1,8 +1,8 @@
 #include "winning_rate.h"
 
+#include <atomic>
 #include <fstream>
 #include <thread>
-#include <atomic>
 
 #include "model.h"
 
