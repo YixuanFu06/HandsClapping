@@ -20,12 +20,10 @@ State StateTransform(const State &state,
   const float HEALTH = 1000;
   const float ENERGY = 1000;
   Game::BattleField battle_field;
-  battle_field.AddPlayer("self", HEALTH, ENERGY,
-                         static_cast<Game::PlayerPosition>(Game::CENTER));
-  battle_field.AddPlayer("enemy", HEALTH, ENERGY,
-                         static_cast<Game::PlayerPosition>(Game::CENTER));
+  battle_field.AddPlayer("self", HEALTH, ENERGY);
+  battle_field.AddPlayer("enemy", HEALTH, ENERGY);
   battle_field.ActionUpdate(
-      {action.GetFormalName(), enemy_action.GetFormalName()}, 1);
+      {action.GetFormalName(), enemy_action.GetFormalName()});
   battle_field.PositionUpdate();
   battle_field.EnergyUpdate();
   battle_field.HealthUpdate();

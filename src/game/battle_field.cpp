@@ -77,7 +77,7 @@ void BattleField::DecodeInputString(std::string &player_action_name,
 
 BattleField::BattleField(std::vector<std::string> player_names) : turn_(0) {
   for (uint32_t i = 0; i < player_names.size(); i++) {
-    AddPlayer(player_names[i], 1.0f, 0.0f, static_cast<PlayerPosition>(CENTER));
+    AddPlayer(player_names[i], 1.0f, 0.0f);
   }
   member_num_ = players_.size();
 }
@@ -115,10 +115,7 @@ void BattleField::AddPlayer(std::string name,
   member_num_ = players_.size();
 }
 
-void BattleField::AddPlayer(std::string name,
-                            float health,
-                            float energy,
-                            PlayerPosition position) {
+void BattleField::AddPlayer(std::string name, float health, float energy) {
   for (uint32_t i = 0; i < players_.size(); i++) {
     if (players_[i].GetName() == name) {
       std::cout << "Error: player " << name << " is already in the game"
@@ -126,7 +123,8 @@ void BattleField::AddPlayer(std::string name,
       return;
     }
   }
-  players_.push_back(Player(health, energy, name, position));
+  players_.push_back(Player(health, energy, name,
+                            static_cast<Game::PlayerPosition>(Game::CENTER)));
   member_num_ = players_.size();
 }
 
@@ -145,6 +143,8 @@ uint32_t BattleField::GetPlayerId(std::string name) {
       return i;
     }
   }
+  std::cout << "Error: player " << name
+            << " is not found. Return the first player." << std::endl;
   return 0;
 }
 
@@ -242,10 +242,13 @@ void BattleField::BattleFieldUpdate(uint32_t mode) {
       TurnUpdate();
       PrintBattleField(1);
       ActionUpdate();
+      RemoveDead(mode);
       PrintBattleField(1);
       PositionUpdate();
       EnergyUpdate();
+      RemoveDead(mode);
       HealthUpdate();
+      RemoveDead(mode);
       MemberNumUpdate();
     } break;
     case 3: {
@@ -257,10 +260,13 @@ void BattleField::BattleFieldUpdate(uint32_t mode) {
       }
       PrintBattleField(2);
       ActionUpdate();
+      RemoveDead(mode);
       PrintBattleField(3);
       PositionUpdate();
       EnergyUpdate();
+      RemoveDead(mode);
       HealthUpdate();
+      RemoveDead(mode);
       for (uint32_t i = 0; i < players_.size(); i++) {
         std::cout << players_[i].GetName() << ": health: " << std::showpos
                   << (players_[i].GetHealth() - healths[i])
@@ -275,10 +281,13 @@ void BattleField::BattleFieldUpdate(uint32_t mode) {
       TurnUpdate();
       PrintBattleField(2);
       ActionUpdate();
+      RemoveDead(mode);
       PrintBattleField(mode);
       PositionUpdate();
       EnergyUpdate();
+      RemoveDead(mode);
       HealthUpdate();
+      RemoveDead(mode);
       MemberNumUpdate();
   }
 }
@@ -286,17 +295,20 @@ void BattleField::BattleFieldUpdate(uint32_t mode) {
 void BattleField::BattleFieldUpdate(std::vector<std::string> player_actions,
                                     uint32_t mode) {
   TurnUpdate();
-  ActionUpdate(player_actions, mode);
+  ActionUpdate(player_actions);
+  RemoveDead(mode);
   if (mode == 0) {
     PrintBattleField(0);
   }
   PositionUpdate();
-  EnergyUpdate(mode);
-  HealthUpdate(mode);
+  EnergyUpdate();
+  RemoveDead(mode);
+  HealthUpdate();
+  RemoveDead(mode);
   MemberNumUpdate();
 }
 
-void BattleField::ActionUpdate(uint32_t print_mode) {
+void BattleField::ActionUpdate() {
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].ClearTargets();
     std::cout << players_[i].GetName() << "'s action name: ";
@@ -348,11 +360,9 @@ void BattleField::ActionUpdate(uint32_t print_mode) {
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
   }
-  RemoveDead(print_mode);
 }
 
-void BattleField::ActionUpdate(std::vector<std::string> player_actions,
-                               uint32_t print_mode) {
+void BattleField::ActionUpdate(std::vector<std::string> player_actions) {
   if (player_actions.size() > players_.size()) {
     std::cout << "Error: too many actions. Only the first " << players_.size()
               << " actions are used." << std::endl;
@@ -414,7 +424,33 @@ void BattleField::ActionUpdate(std::vector<std::string> player_actions,
   for (uint32_t i = 0; i < players_.size(); i++) {
     players_[i].SetAction();
   }
-  RemoveDead(print_mode);
+}
+
+void BattleField::ActionUpdate(
+    std::vector<uint32_t>
+        player_actions) {  // this function is designed for HDP-pro specifically
+  if (player_actions.size() > players_.size()) {
+    std::cout << "Error: too many actions. Only the first " << players_.size()
+              << " actions are used." << std::endl;
+  } else if (player_actions.size() < players_.size()) {
+    std::cout << "Error: too few actions. The last "
+              << players_.size() - player_actions.size()
+              << " players' actions are set as NONE." << std::endl;
+    for (uint32_t i = player_actions.size(); i < players_.size(); i++) {
+      player_actions.push_back(NONE);
+    }
+  }
+
+  for (uint32_t i = 0; i < players_.size(); i++) {
+    players_[i].ClearTargets();
+    ActionName action = static_cast<ActionName>(player_actions[i]);
+    players_[i].SetActionName(action);
+    players_[i].AddTarget("#ALL", 1);
+  }
+
+  for (uint32_t i = 0; i < players_.size(); i++) {
+    players_[i].SetAction();
+  }
 }
 
 void BattleField::PositionUpdate() {
@@ -423,7 +459,7 @@ void BattleField::PositionUpdate() {
   }
 }
 
-void BattleField::EnergyUpdate(uint32_t print_mode) {
+void BattleField::EnergyUpdate() {
   for (uint32_t i = 0; i < players_.size(); i++) {
     for (uint32_t j = 0; j < players_[i].GetTargetNum(); j++) {
       if (players_[i].GetTarget(j).first == "#ALL") {
@@ -457,10 +493,9 @@ void BattleField::EnergyUpdate(uint32_t print_mode) {
       players_[i].GoDie(TIMEOUTED);
     }
   }
-  RemoveDead(print_mode);
 }
 
-void BattleField::HealthUpdate(uint32_t print_mode) {
+void BattleField::HealthUpdate() {
   /**************** special cases: single-person actions: DUPLICATOR,
    * ARTIFACT_SOUL ********************/
   for (uint32_t i = 0; i < players_.size(); i++) {
@@ -483,9 +518,10 @@ void BattleField::HealthUpdate(uint32_t print_mode) {
 
   for (uint32_t i = 0; i < players_.size(); i++) {
     for (uint32_t j = 0; j < players_[i].GetTargetNum(); j++) {
-      if (players_[i].GetTarget(j).first == "#NONE") {
-        continue;
-      } else if (players_[i].GetTarget(j).first == "#ALL") {
+      // if (players_[i].GetTarget(j).first == "#NONE") {
+      //   continue;
+      // } else
+      if (players_[i].GetTarget(j).first == "#ALL") {
         for (uint32_t k = 0; k < players_[i].GetTarget(j).second; k++) {
           for (Player &it : players_) {
             if (it.GetName() != players_[i].GetName()) {
@@ -511,8 +547,6 @@ void BattleField::HealthUpdate(uint32_t print_mode) {
 
   referee_.DamageCommit();
   referee_.DamageLogClear();
-
-  RemoveDead(print_mode);
 }
 
 void BattleField::RemoveDead(uint32_t mode) {
@@ -537,7 +571,7 @@ void BattleField::RemoveDead(uint32_t mode) {
             std::cout << "the attack is rebounded." << std::endl;
             break;
           case BACKFIRED:
-            std::cout << "been backfired" << std::endl;
+            std::cout << "been backfired." << std::endl;
             break;
         }
       }

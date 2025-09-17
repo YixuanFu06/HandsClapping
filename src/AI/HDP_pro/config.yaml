@@ -1,0 +1,28 @@
+# model architecture
+max_health: 5
+max_energy: 15
+action_num: 38
+
+# training parameters
+device: cuda
+iter_per_epoch: 100
+epochs: 100
+lr: 0.01
+exploit_iter: 50
+weight_decay: 1e-5
+scheduler:
+  type: ReduceLROnPlateau
+  factor: 0.1
+  patience: 4
+  cooldown: 2
+  min_lr: 1e-5
+early_stopping:
+  patience: 6
+  min_delta: 1e-6
+
+# save paths
+model_name: best_hdp_model
+model_dir: model/
+log_dir: model/logs
+vis_dir: model/visualization
+initialization_dir: data/

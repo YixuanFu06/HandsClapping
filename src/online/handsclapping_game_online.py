@@ -81,7 +81,8 @@ def game_core(registered_clients, waiting_time):
             get_player_action_thread[i].join()
             player_actions[i] = action_name_queue[i].get()
 
-        battle_field.ActionUpdate(player_actions, 0)
+        battle_field.ActionUpdate(player_actions)
+        battle_field.RemoveDead()
 
         global_message = battle_field.GetBattleFieldMessage(0)
         send_global_message_thread = [None] * battle_field.GetMemberNum()
@@ -94,8 +95,10 @@ def game_core(registered_clients, waiting_time):
             print(f"[client] Global message received: {registered_clients[i][1]}")
 
         battle_field.PositionUpdate()
-        battle_field.EnergyUpdate(0)
-        battle_field.HealthUpdate(0)
+        battle_field.EnergyUpdate()
+        battle_field.RemoveDead()
+        battle_field.HealthUpdate()
+        battle_field.RemoveDead()
         battle_field.MemberNumUpdate()
 
         dead_players = []
